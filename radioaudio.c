@@ -274,7 +274,7 @@ cRDSReceiver::~cRDSReceiver()
     dsyslog("radio: additional RDS-Receiver stopped");
 }
 
-void cRDSReceiver::Receive(uchar *Data, int Length)
+void cRDSReceiver::Receive(const uchar *Data, int Length)
 {
     const int mframel = 263;  // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
     static unsigned char mtext[mframel+1];
@@ -431,6 +431,10 @@ cRadioAudio::cRadioAudio()
    : cAudio()
    , enabled(false)
    , first_packets(0)
+   , audiopid(0)
+   , bratefound(false)
+   , rdsdevice(NULL)
+   , bitrate(NULL)
 {
     RadioAudio = this;
     dsyslog("radio: new cRadioAudio");
@@ -635,6 +639,7 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len)
                                                     tmc[i-7] = mtext[i];
                                                 tmc_parser(tmc, i-6);
                                                 }
+                                            break;
                                 }
                             }
                         }
@@ -1179,7 +1184,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len)
                 printf("Rass-Error: Length=0 or not correct (MFL= %d, MEL= %d)\n", mtext[4], mtext[6]);
             return;
             }
-        // byte 7+8   = Service-ID zugehöriger Datenkanal
+        // byte 7+8   = Service-ID zugehÃ¶riger Datenkanal
         // byte 9-11  = Nummer aktuelles Paket, <PNR>
         uint plfd = mtext[11] | mtext[10]<<8 | mtext[9]<<16;
         // byte 12-14 = Anzahl Pakete, <NOP>
@@ -1193,7 +1198,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len)
             slidenumr = mtext[20] | mtext[19]<<8;
             // byte 21+22 = Element-Nummer im Slide, <INR>
             slideelem = mtext[22] | mtext[21]<<8;
-            // byte 23    = Slide-Steuerbyte, <Cntrl-Byte>: bit0 = Anzeige, bit1 = Speichern, bit2 = DarfAnzeige bei Senderwechsel, bit3 = Löschen
+            // byte 23    = Slide-Steuerbyte, <Cntrl-Byte>: bit0 = Anzeige, bit1 = Speichern, bit2 = DarfAnzeige bei Senderwechsel, bit3 = LÃ¶schen
             slideshow = mtext[23] & 0x01;
             slidesave = mtext[23] & 0x02;
             slidecan = mtext[23] & 0x04;
@@ -1205,7 +1210,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len)
                     printf("Rass-Error: Filetype '%d' unknown !\n", filetype);
                 //return;
                 }
-            // byte 25-28 = Dateilänge, <Item-Length>
+            // byte 25-28 = DateilÃ¤nge, <Item-Length>
             filemax  = mtext[28] | mtext[27]<<8 | mtext[26]<<16 | mtext[25]<<24;
             if (filemax >= 65536) {
                 if ((S_Verbose & 0x0f) >= 1)

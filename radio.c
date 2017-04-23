@@ -20,7 +20,7 @@
     #error This version of radio-plugin requires vdr >= 1.7.37
 #endif
 
-static const char *VERSION        = "1.0.0";
+static const char *VERSION        = "1.0.1";
 static const char *DESCRIPTION    = trNOOP("Radio Background-Image/RDS-Text");
 static const char *MAINMENUENTRY  = trNOOP("Show RDS-Radiotext");
 char *ConfigDir;
@@ -136,7 +136,12 @@ void cRadioCheck::Action(void)
             if (chan->Vpid()) {
                 isyslog("radio: channnel '%s' got Vpid= %d", chan->Name(), chan->Vpid());
                 IsRadioOrReplay = 0;
+#if VDRVERSNUM >= 20300
+                LOCK_CHANNELS_READ
+                Channels->SwitchTo(cDevice::CurrentChannel());
+#else
                 Channels.SwitchTo(cDevice::CurrentChannel());
+#endif
                 //cDevice::PrimaryDevice()->SwitchChannel(chan, true);
                 }
             else {  
@@ -146,8 +151,14 @@ void cRadioCheck::Action(void)
                     // Kanal-EPG PresentEvent
                     if (chan->Apid(0) > 0 && (chtid == PREMIERERADIO_TID || chtid == KDRADIO_TID
                                               || chtid == UMRADIO_TID1 || chtid == UMRADIO_TID2 || chtid == UMRADIO_TID3 || chtid == UMRADIO_TID4 || chtid == UMRADIO_TID5)) {
+#if VDRVERSNUM >= 20300
+                        LOCK_SCHEDULES_READ
+                        static cStateKey SchedulesStateKey;
+                        const cSchedules *scheds = cSchedules::GetSchedulesRead(SchedulesStateKey);
+#else
                         cSchedulesLock schedLock;
                         const cSchedules *scheds = cSchedules::Schedules(schedLock);
+#endif
                         if (scheds != NULL) {
                             const cSchedule *sched = scheds->GetSchedule(chan->GetChannelID());
                             if (sched != NULL) {
@@ -660,7 +671,12 @@ void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber, bool 
 
     char *image;
     if (cDevice::CurrentChannel() == ChannelNumber) {
+#if VDRVERSNUM >= 20300
+        LOCK_CHANNELS_READ
+        chan = ChannelNumber ? Channels->GetByNumber(ChannelNumber) : NULL;
+#else
         chan = ChannelNumber ? Channels.GetByNumber(ChannelNumber) : NULL;
+#endif
         if (chan != NULL && chan->Vpid() == 0 && chan->Apid(0) > 0) {
             asprintf(&image, "%s/%s.mpg", ConfigDir, chan->Name());
             if (!file_exists(image)) {

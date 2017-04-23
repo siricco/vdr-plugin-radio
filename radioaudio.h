@@ -81,7 +81,11 @@ private:
     bool rt_start;
     bool rt_bstuff;
 protected:
+#if VDRVERSNUM >= 20300
+    virtual void Receive(const uchar *Data, int Length);
+#else
     virtual void Receive(uchar *Data, int Length);
+#endif
 public:
     cRDSReceiver(int Pid);
     virtual ~cRDSReceiver(void);
