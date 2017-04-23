@@ -1,0 +1,24 @@
+#!/bin/bash
+# SRG-DRS Virus-Playlist
+# $1 = outfile
+
+### Variabel
+Name="SRG-DRS Virus [virus.ch]"
+###
+
+# get.., schnapp dir den neusten Eintrag aus der Liste; schneide ihn zu auf "titel von artist"
+all="`wget --quiet --tries=2 --timeout=5 -O - http://virus.ch/virus/ticker | grep -m1 date | cut -d '>' -f5 | cut -d '<' -f1`"
+
+# Titel, Artist
+title=${all/$' von '*/}
+artist=${all/*$' von '/}
+# temp. no Info
+artist=${artist:='---'}; title=${title:='---'}
+
+# write...
+if [ $1 ]; then
+        echo "$Name" > $1
+        echo "$Song" >> $1
+else
+        echo "$Name: Interpret/Titel =  $artist / $title"
+fi
