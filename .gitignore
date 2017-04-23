@@ -1,0 +1,11 @@
+syntax: glob
+*~
+*.orig
+*.o
+*.so
+.dependencies
+po/*.mo
+po/*.pot
+.project
+.includepath
+
