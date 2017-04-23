@@ -7,14 +7,143 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-05-31 20:15+0200\n"
+"POT-Creation-Date: 2017-04-22 12:07+0200\n"
 "PO-Revision-Date: 2008-06-15 22:39+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
-"Language: \n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Immagine sfondo per Radio/Testo RDS"
+
+msgid "Show RDS-Radiotext"
+msgstr "Mostra testi RDS"
+
+msgid "Off"
+msgstr "Disattivo"
+
+msgid "only Text"
+msgstr "solo testo"
+
+msgid "Text+TagInfo"
+msgstr "Testo+Scheda info"
+
+msgid "only, if some"
+msgstr "solo, se disp."
+
+msgid "always"
+msgstr "sempre"
+
+msgid "Top"
+msgstr "Alto"
+
+msgid "Bottom"
+msgstr "Basso"
+
+msgid "latest at Top"
+msgstr "ultimo in alto"
+
+msgid "latest at Bottom"
+msgstr "ultimo in basso"
+
+msgid "Black"
+msgstr "Nero"
+
+msgid "White"
+msgstr "Bianco"
+
+msgid "Red"
+msgstr "Rosso"
+
+msgid "Green"
+msgstr "Verde"
+
+msgid "Yellow"
+msgstr "Giallo"
+
+msgid "Magenta"
+msgstr "Magenta"
+
+msgid "Blue"
+msgstr "Blu"
+
+msgid "Cyan"
+msgstr "Ciano"
+
+msgid "Transparent"
+msgstr "Trasparente"
+
+msgid "about MainMenu"
+msgstr "info menu princ."
+
+msgid "Automatic"
+msgstr "Automatica"
+
+msgid "only Taginfo"
+msgstr "solo scheda info"
+
+msgid "Rass only"
+msgstr "Solo Rass"
+
+msgid "Rass+Text mixed"
+msgstr "Rass+testo misto"
+
+msgid "Activate"
+msgstr "Attiva"
+
+msgid "Use StillPicture-Function"
+msgstr "Utilizza funz. immagine princ."
+
+msgid "Hide MainMenuEntry"
+msgstr "Nascondi voce menu principale"
+
+msgid "RDSText Function"
+msgstr "Funzione testo RDS"
+
+msgid "RDSText OSD-Position"
+msgstr "Posizione OSD testo RDS"
+
+msgid "RDSText OSD-Titlerow"
+msgstr "Riga titolo OSD testo RDS"
+
+msgid "RDSText OSD-Rows (1-5)"
+msgstr "Righe OSD testo RDS (1-5)"
+
+msgid "RDSText OSD-Scrollmode"
+msgstr "Mod. scorr. OSD testo RDS"
+
+msgid "RDSText OSD-Taginfo"
+msgstr "Campo info OSD testo RDS"
+
+msgid "RDSText OSD-Skincolors used"
+msgstr "Colori interf. OSD testo RDS"
+
+msgid "RDSText OSD-Backgr.Color"
+msgstr "Colore sfondo OSD testo RDS"
+
+msgid "RDSText OSD-Backgr.Transp."
+msgstr "Trasp. sfondo OSD testo RDS"
+
+msgid "RDSText OSD-Foregr.Color"
+msgstr "Colore car. OSD testo RDS"
+
+msgid "RDSText OSD-Timeout (0-1440 min)"
+msgstr "Scad. testo RDS (0-1440 min)"
+
+msgid "RDSText OSD-Display"
+msgstr "Visualizz. OSD testo RDS"
+
+msgid "RDSText StatusMsg (lcdproc & co)"
+msgstr "Mess. stato testo RDS (lcdproc & co)"
+
+msgid "RDSText Rass-Function"
+msgstr "Funzione Rass testo RDS"
+
+msgid "External Info-Request"
+msgstr "Richiesta info esterna"
 
 msgid "unknown program type"
 msgstr "tipo programma sconosciuto"
@@ -216,135 +345,6 @@ msgstr "Attiva aggiornamenti"
 
 msgid "Back"
 msgstr "Indietro"
-
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Immagine sfondo per Radio/Testo RDS"
-
-msgid "Show RDS-Radiotext"
-msgstr "Mostra testi RDS"
-
-msgid "Off"
-msgstr "Disattivo"
-
-msgid "only Text"
-msgstr "solo testo"
-
-msgid "Text+TagInfo"
-msgstr "Testo+Scheda info"
-
-msgid "only, if some"
-msgstr "solo, se disp."
-
-msgid "always"
-msgstr "sempre"
-
-msgid "Top"
-msgstr "Alto"
-
-msgid "Bottom"
-msgstr "Basso"
-
-msgid "latest at Top"
-msgstr "ultimo in alto"
-
-msgid "latest at Bottom"
-msgstr "ultimo in basso"
-
-msgid "Black"
-msgstr "Nero"
-
-msgid "White"
-msgstr "Bianco"
-
-msgid "Red"
-msgstr "Rosso"
-
-msgid "Green"
-msgstr "Verde"
-
-msgid "Yellow"
-msgstr "Giallo"
-
-msgid "Magenta"
-msgstr "Magenta"
-
-msgid "Blue"
-msgstr "Blu"
-
-msgid "Cyan"
-msgstr "Ciano"
-
-msgid "Transparent"
-msgstr "Trasparente"
-
-msgid "about MainMenu"
-msgstr "info menu princ."
-
-msgid "Automatic"
-msgstr "Automatica"
-
-msgid "only Taginfo"
-msgstr "solo scheda info"
-
-msgid "Rass only"
-msgstr "Solo Rass"
-
-msgid "Rass+Text mixed"
-msgstr "Rass+testo misto"
-
-msgid "Activate"
-msgstr "Attiva"
-
-msgid "Use StillPicture-Function"
-msgstr "Utilizza funz. immagine princ."
-
-msgid "Hide MainMenuEntry"
-msgstr "Nascondi voce menu principale"
-
-msgid "RDSText Function"
-msgstr "Funzione testo RDS"
-
-msgid "RDSText OSD-Position"
-msgstr "Posizione OSD testo RDS"
-
-msgid "RDSText OSD-Titlerow"
-msgstr "Riga titolo OSD testo RDS"
-
-msgid "RDSText OSD-Rows (1-5)"
-msgstr "Righe OSD testo RDS (1-5)"
-
-msgid "RDSText OSD-Scrollmode"
-msgstr "Mod. scorr. OSD testo RDS"
-
-msgid "RDSText OSD-Taginfo"
-msgstr "Campo info OSD testo RDS"
-
-msgid "RDSText OSD-Skincolors used"
-msgstr "Colori interf. OSD testo RDS"
-
-msgid "RDSText OSD-Backgr.Color"
-msgstr "Colore sfondo OSD testo RDS"
-
-msgid "RDSText OSD-Backgr.Transp."
-msgstr "Trasp. sfondo OSD testo RDS"
-
-msgid "RDSText OSD-Foregr.Color"
-msgstr "Colore car. OSD testo RDS"
-
-msgid "RDSText OSD-Timeout (0-1440 min)"
-msgstr "Scad. testo RDS (0-1440 min)"
-
-msgid "RDSText OSD-Display"
-msgstr "Visualizz. OSD testo RDS"
-
-msgid "RDSText StatusMsg (lcdproc & co)"
-msgstr "Mess. stato testo RDS (lcdproc & co)"
-
-msgid "RDSText Rass-Function"
-msgstr "Funzione Rass testo RDS"
-
-msgid "External Info-Request"
-msgstr "Richiesta info esterna"
 
 #~ msgid "with <0>"
 #~ msgstr "con <0>"

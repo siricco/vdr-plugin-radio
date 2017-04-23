@@ -6,14 +6,143 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-05-31 20:15+0200\n"
+"POT-Creation-Date: 2017-04-22 12:07+0200\n"
 "PO-Revision-Date: 2007-09-14 16:12+0200\n"
 "Last-Translator: Michaël Nival, Patrice Staudt\n"
 "Language-Team: <vdr@linuxtv.org>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Image de fond pour les radio/RDS-Texte"
+
+msgid "Show RDS-Radiotext"
+msgstr "Afficher RDS"
+
+msgid "Off"
+msgstr "Off"
+
+msgid "only Text"
+msgstr "Seulement le texte"
+
+msgid "Text+TagInfo"
+msgstr "Texte+Tag d'info"
+
+msgid "only, if some"
+msgstr "Seulement, si disponible"
+
+msgid "always"
+msgstr "Toujours"
+
+msgid "Top"
+msgstr "Haut"
+
+msgid "Bottom"
+msgstr "Bas"
+
+msgid "latest at Top"
+msgstr "En haut"
+
+msgid "latest at Bottom"
+msgstr "En bas"
+
+msgid "Black"
+msgstr "Noir"
+
+msgid "White"
+msgstr "Blanc"
+
+msgid "Red"
+msgstr "Rouge"
+
+msgid "Green"
+msgstr "Vert"
+
+msgid "Yellow"
+msgstr "Jaune"
+
+msgid "Magenta"
+msgstr "Magenta"
+
+msgid "Blue"
+msgstr "Bleu"
+
+msgid "Cyan"
+msgstr "Cyan"
+
+msgid "Transparent"
+msgstr "Transparent"
+
+msgid "about MainMenu"
+msgstr "A propos de menu principal"
+
+msgid "Automatic"
+msgstr "Automatique"
+
+msgid "only Taginfo"
+msgstr "Seulement Tag Info"
+
+msgid "Rass only"
+msgstr "Rass seulement"
+
+msgid "Rass+Text mixed"
+msgstr "Texte par dessus Rass"
+
+msgid "Activate"
+msgstr "Activer"
+
+msgid "Use StillPicture-Function"
+msgstr "Utiliser fonction image de font"
+
+msgid "Hide MainMenuEntry"
+msgstr "Cacher l'entrée dans le menu principal"
+
+msgid "RDSText Function"
+msgstr "Fonction de RDS-Texte"
+
+msgid "RDSText OSD-Position"
+msgstr "Position OSD de RDS-Texte"
+
+msgid "RDSText OSD-Titlerow"
+msgstr "Titre OSD de RDS-Texte"
+
+msgid "RDSText OSD-Rows (1-5)"
+msgstr "Ligne OSD de RDS-Texte (1-5)"
+
+msgid "RDSText OSD-Scrollmode"
+msgstr "Mode Scroll OSD de RDS-Texte "
+
+msgid "RDSText OSD-Taginfo"
+msgstr "Tag info OSD de RDS-Texte"
+
+msgid "RDSText OSD-Skincolors used"
+msgstr "Couleur du skin utilisé de RDS-texte"
+
+msgid "RDSText OSD-Backgr.Color"
+msgstr "Couleur de fond OSD de RDS-Texte"
+
+msgid "RDSText OSD-Backgr.Transp."
+msgstr "Fond transparent OSD de RDS-Texte"
+
+msgid "RDSText OSD-Foregr.Color"
+msgstr "Couleur du texte OSD de RDS-Texte"
+
+msgid "RDSText OSD-Timeout (0-1440 min)"
+msgstr "Timeout OSD de RDS-Texte (0-1440 min)"
+
+msgid "RDSText OSD-Display"
+msgstr "Affichage OSD de RDS-Texte"
+
+msgid "RDSText StatusMsg (lcdproc & co)"
+msgstr "Statut message de RDS-Texte (lcdproc & co)"
+
+msgid "RDSText Rass-Function"
+msgstr "Fonction Rass de RDSTexte"
+
+msgid "External Info-Request"
+msgstr "Demande d'infos externe"
 
 msgid "unknown program type"
 msgstr "Type de programme inconnu"
@@ -216,135 +345,6 @@ msgstr "Démarrer actualisation"
 
 msgid "Back"
 msgstr "Retour"
-
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Image de fond pour les radio/RDS-Texte"
-
-msgid "Show RDS-Radiotext"
-msgstr "Afficher RDS"
-
-msgid "Off"
-msgstr "Off"
-
-msgid "only Text"
-msgstr "Seulement le texte"
-
-msgid "Text+TagInfo"
-msgstr "Texte+Tag d'info"
-
-msgid "only, if some"
-msgstr "Seulement, si disponible"
-
-msgid "always"
-msgstr "Toujours"
-
-msgid "Top"
-msgstr "Haut"
-
-msgid "Bottom"
-msgstr "Bas"
-
-msgid "latest at Top"
-msgstr "En haut"
-
-msgid "latest at Bottom"
-msgstr "En bas"
-
-msgid "Black"
-msgstr "Noir"
-
-msgid "White"
-msgstr "Blanc"
-
-msgid "Red"
-msgstr "Rouge"
-
-msgid "Green"
-msgstr "Vert"
-
-msgid "Yellow"
-msgstr "Jaune"
-
-msgid "Magenta"
-msgstr "Magenta"
-
-msgid "Blue"
-msgstr "Bleu"
-
-msgid "Cyan"
-msgstr "Cyan"
-
-msgid "Transparent"
-msgstr "Transparent"
-
-msgid "about MainMenu"
-msgstr "A propos de menu principal"
-
-msgid "Automatic"
-msgstr "Automatique"
-
-msgid "only Taginfo"
-msgstr "Seulement Tag Info"
-
-msgid "Rass only"
-msgstr "Rass seulement"
-
-msgid "Rass+Text mixed"
-msgstr "Texte par dessus Rass"
-
-msgid "Activate"
-msgstr "Activer"
-
-msgid "Use StillPicture-Function"
-msgstr "Utiliser fonction image de font"
-
-msgid "Hide MainMenuEntry"
-msgstr "Cacher l'entrée dans le menu principal"
-
-msgid "RDSText Function"
-msgstr "Fonction de RDS-Texte"
-
-msgid "RDSText OSD-Position"
-msgstr "Position OSD de RDS-Texte"
-
-msgid "RDSText OSD-Titlerow"
-msgstr "Titre OSD de RDS-Texte"
-
-msgid "RDSText OSD-Rows (1-5)"
-msgstr "Ligne OSD de RDS-Texte (1-5)"
-
-msgid "RDSText OSD-Scrollmode"
-msgstr "Mode Scroll OSD de RDS-Texte "
-
-msgid "RDSText OSD-Taginfo"
-msgstr "Tag info OSD de RDS-Texte"
-
-msgid "RDSText OSD-Skincolors used"
-msgstr "Couleur du skin utilisé de RDS-texte"
-
-msgid "RDSText OSD-Backgr.Color"
-msgstr "Couleur de fond OSD de RDS-Texte"
-
-msgid "RDSText OSD-Backgr.Transp."
-msgstr "Fond transparent OSD de RDS-Texte"
-
-msgid "RDSText OSD-Foregr.Color"
-msgstr "Couleur du texte OSD de RDS-Texte"
-
-msgid "RDSText OSD-Timeout (0-1440 min)"
-msgstr "Timeout OSD de RDS-Texte (0-1440 min)"
-
-msgid "RDSText OSD-Display"
-msgstr "Affichage OSD de RDS-Texte"
-
-msgid "RDSText StatusMsg (lcdproc & co)"
-msgstr "Statut message de RDS-Texte (lcdproc & co)"
-
-msgid "RDSText Rass-Function"
-msgstr "Fonction Rass de RDSTexte"
-
-msgid "External Info-Request"
-msgstr "Demande d'infos externe"
 
 #~ msgid "with <0>"
 #~ msgstr "avec <0>"

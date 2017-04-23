@@ -6,14 +6,143 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2013-05-31 20:15+0200\n"
+"POT-Creation-Date: 2017-04-22 12:07+0200\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Füley István\n"
 "Language-Team: <vdr@linuxtv.org>\n"
-"Language: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Rádió háttérkép/RDS-Text"
+
+msgid "Show RDS-Radiotext"
+msgstr "RDS-Text megjelenítése"
+
+msgid "Off"
+msgstr "ki"
+
+msgid "only Text"
+msgstr "csak Text"
+
+msgid "Text+TagInfo"
+msgstr "Text és Taginfo"
+
+msgid "only, if some"
+msgstr "csak, ha létezik"
+
+msgid "always"
+msgstr "mindig"
+
+msgid "Top"
+msgstr "fenn"
+
+msgid "Bottom"
+msgstr "lenn"
+
+msgid "latest at Top"
+msgstr "legfrisebbet felülre"
+
+msgid "latest at Bottom"
+msgstr "legfrisebbet alulra"
+
+msgid "Black"
+msgstr "fekete"
+
+msgid "White"
+msgstr "fehér"
+
+msgid "Red"
+msgstr "vörös"
+
+msgid "Green"
+msgstr "zöld"
+
+msgid "Yellow"
+msgstr "sárga"
+
+msgid "Magenta"
+msgstr "bíbor"
+
+msgid "Blue"
+msgstr "kék"
+
+msgid "Cyan"
+msgstr "cián"
+
+msgid "Transparent"
+msgstr "átlátszó"
+
+msgid "about MainMenu"
+msgstr "mint a fõmenüben"
+
+msgid "Automatic"
+msgstr "automatikus"
+
+msgid "only Taginfo"
+msgstr "csak Taginfo"
+
+msgid "Rass only"
+msgstr "csak Rass"
+
+msgid "Rass+Text mixed"
+msgstr "Text és Rass"
+
+msgid "Activate"
+msgstr "Aktív"
+
+msgid "Use StillPicture-Function"
+msgstr ""
+
+msgid "Hide MainMenuEntry"
+msgstr "Elrejtés a fõmenüben"
+
+msgid "RDSText Function"
+msgstr "RDS-Text funkció "
+
+msgid "RDSText OSD-Position"
+msgstr "Az RDS-Text OSD pozicíója"
+
+msgid "RDSText OSD-Titlerow"
+msgstr "RDS-Text OSD fejléc"
+
+msgid "RDSText OSD-Rows (1-5)"
+msgstr "RDS-Text OSD sorok száma (1-5)"
+
+msgid "RDSText OSD-Scrollmode"
+msgstr "RDS-Text OSD görgetésének módja"
+
+msgid "RDSText OSD-Taginfo"
+msgstr "RDS-Text OSD-Taginfo"
+
+msgid "RDSText OSD-Skincolors used"
+msgstr "Felhasznált RDS-Text színek"
+
+msgid "RDSText OSD-Backgr.Color"
+msgstr "RDS-Text háttérszín"
+
+msgid "RDSText OSD-Backgr.Transp."
+msgstr "RDS-Text háttér átlátszósága"
+
+msgid "RDSText OSD-Foregr.Color"
+msgstr "RDS-Text fontszín"
+
+msgid "RDSText OSD-Timeout (0-1440 min)"
+msgstr "RDS-Text idõtúllépés (0-1440 perc)"
+
+msgid "RDSText OSD-Display"
+msgstr "RDS-Text megjelenítés"
+
+msgid "RDSText StatusMsg (lcdproc & co)"
+msgstr "RDS-Text állapotüzenet (lcdproc, stb)"
+
+msgid "RDSText Rass-Function"
+msgstr "RDS Rass funkció"
+
+msgid "External Info-Request"
+msgstr ""
 
 msgid "unknown program type"
 msgstr "ismeretlen adástipus"
@@ -216,135 +345,6 @@ msgstr "Frissítés be"
 
 msgid "Back"
 msgstr "Vissza"
-
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Rádió háttérkép/RDS-Text"
-
-msgid "Show RDS-Radiotext"
-msgstr "RDS-Text megjelenítése"
-
-msgid "Off"
-msgstr "ki"
-
-msgid "only Text"
-msgstr "csak Text"
-
-msgid "Text+TagInfo"
-msgstr "Text és Taginfo"
-
-msgid "only, if some"
-msgstr "csak, ha létezik"
-
-msgid "always"
-msgstr "mindig"
-
-msgid "Top"
-msgstr "fenn"
-
-msgid "Bottom"
-msgstr "lenn"
-
-msgid "latest at Top"
-msgstr "legfrisebbet felülre"
-
-msgid "latest at Bottom"
-msgstr "legfrisebbet alulra"
-
-msgid "Black"
-msgstr "fekete"
-
-msgid "White"
-msgstr "fehér"
-
-msgid "Red"
-msgstr "vörös"
-
-msgid "Green"
-msgstr "zöld"
-
-msgid "Yellow"
-msgstr "sárga"
-
-msgid "Magenta"
-msgstr "bíbor"
-
-msgid "Blue"
-msgstr "kék"
-
-msgid "Cyan"
-msgstr "cián"
-
-msgid "Transparent"
-msgstr "átlátszó"
-
-msgid "about MainMenu"
-msgstr "mint a fõmenüben"
-
-msgid "Automatic"
-msgstr "automatikus"
-
-msgid "only Taginfo"
-msgstr "csak Taginfo"
-
-msgid "Rass only"
-msgstr "csak Rass"
-
-msgid "Rass+Text mixed"
-msgstr "Text és Rass"
-
-msgid "Activate"
-msgstr "Aktív"
-
-msgid "Use StillPicture-Function"
-msgstr ""
-
-msgid "Hide MainMenuEntry"
-msgstr "Elrejtés a fõmenüben"
-
-msgid "RDSText Function"
-msgstr "RDS-Text funkció "
-
-msgid "RDSText OSD-Position"
-msgstr "Az RDS-Text OSD pozicíója"
-
-msgid "RDSText OSD-Titlerow"
-msgstr "RDS-Text OSD fejléc"
-
-msgid "RDSText OSD-Rows (1-5)"
-msgstr "RDS-Text OSD sorok száma (1-5)"
-
-msgid "RDSText OSD-Scrollmode"
-msgstr "RDS-Text OSD görgetésének módja"
-
-msgid "RDSText OSD-Taginfo"
-msgstr "RDS-Text OSD-Taginfo"
-
-msgid "RDSText OSD-Skincolors used"
-msgstr "Felhasznált RDS-Text színek"
-
-msgid "RDSText OSD-Backgr.Color"
-msgstr "RDS-Text háttérszín"
-
-msgid "RDSText OSD-Backgr.Transp."
-msgstr "RDS-Text háttér átlátszósága"
-
-msgid "RDSText OSD-Foregr.Color"
-msgstr "RDS-Text fontszín"
-
-msgid "RDSText OSD-Timeout (0-1440 min)"
-msgstr "RDS-Text idõtúllépés (0-1440 perc)"
-
-msgid "RDSText OSD-Display"
-msgstr "RDS-Text megjelenítés"
-
-msgid "RDSText StatusMsg (lcdproc & co)"
-msgstr "RDS-Text állapotüzenet (lcdproc, stb)"
-
-msgid "RDSText Rass-Function"
-msgstr "RDS Rass funkció"
-
-msgid "External Info-Request"
-msgstr ""
 
 #~ msgid "with <0>"
 #~ msgstr "<0> bill."
