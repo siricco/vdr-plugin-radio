@@ -274,7 +274,11 @@ cRDSReceiver::~cRDSReceiver()
     dsyslog("radio: additional RDS-Receiver stopped");
 }
 
+#if VDRVERSNUM >= 20300
 void cRDSReceiver::Receive(const uchar *Data, int Length)
+#else
+void cRDSReceiver::Receive(uchar *Data, int Length)
+#endif
 {
     const int mframel = 263;  // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
     static unsigned char mtext[mframel+1];
