@@ -11,7 +11,11 @@ PLUGIN = radio
 
 ### The version number of this plugin (taken from the main source file):
 
-VERSION = $(shell grep 'static const char \*VERSION *=' $(PLUGIN).c | awk '{ print $$6 }' | sed -e 's/[";]//g')
+VERSION = $(shell grep 'static const char \*VERSION *=' $(PLUGIN).c | \
+			grep -v GIT \
+			awk '{ print $$6 }' | sed -e 's/[";]//g')
+
+GIT_REV = $(shell git describe --always 2>/dev/null)
 
 ### The directory environment:
 
@@ -49,7 +53,8 @@ SOFILE = libvdr-$(PLUGIN).so
 
 INCLUDES +=
 
-DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
+DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"' \
+	$(if $(GIT_REV), -DGIT_REV='"$(GIT_REV)"')
 
 ### The object files (add further files here):
 

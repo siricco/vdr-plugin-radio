@@ -20,7 +20,12 @@
     #error This version of radio-plugin requires vdr >= 1.7.37
 #endif
 
-static const char *VERSION        = "1.0.1";
+#ifndef GIT_REV
+static const char *VERSION = "1.0.1";
+#else
+static const char *VERSION = GIT_REV;
+#endif
+
 static const char *DESCRIPTION    = trNOOP("Radio Background-Image/RDS-Text");
 static const char *MAINMENUENTRY  = trNOOP("Show RDS-Radiotext");
 char *ConfigDir;
