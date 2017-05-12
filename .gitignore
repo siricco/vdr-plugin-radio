@@ -8,4 +8,5 @@ po/*.mo
 po/*.pot
 .project
 .includepath
+vdr-radio-*.tgz
 
