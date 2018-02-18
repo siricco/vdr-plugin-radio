@@ -77,6 +77,15 @@ struct RadioTextService_v1_0 {
     char *rds_text;
     char *rds_title;
     char *rds_artist;
+    struct tm *title_start;
+};
+
+struct RadioTextService_v1_1 {
+    int rds_info;       // 0= no / 1= Text / 2= Text + RTplus-Tags (Item,Artist)
+    int rds_pty;        // 0-31
+    char *rds_text;
+    char *rds_title;
+    char *rds_artist;
     time_t title_start;
 };
 
@@ -596,7 +605,8 @@ bool cPluginRadio::SetupParse(const char *Name, const char *Value)
 
 bool cPluginRadio::Service(const char *Id, void *Data)
 {
-    if (strcmp(Id,"RadioTextService-v1.0") == 0 && S_Activate > 0 && S_RtFunc >= 1) {
+    static struct tm tm_store;
+    if ((strcmp(Id,"RadioTextService-v1.0") == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
         if (Data) {
             RadioTextService_v1_0 *data = (RadioTextService_v1_0*)Data;
             data->rds_pty = RT_PTY;
@@ -605,13 +615,23 @@ bool cPluginRadio::Service(const char *Id, void *Data)
             data->rds_text = RT_Text[ind];
             data->rds_title = RTP_Title;
             data->rds_artist = RTP_Artist;
-            // struct tm tm_store;
-            // data->title_start = localtime_r(&RTP_Starttime, &tm_store);
-            data->title_start = RTP_Starttime;
-            }
-        return true;
+            data->title_start = localtime_r(&RTP_Starttime, &tm_store);
         }
-
+        return true;
+    }
+    else if ((strcmp(Id,"RadioTextService-v1.1") == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
+        if (Data) {
+            RadioTextService_v1_1 *data = (RadioTextService_v1_1*)Data;
+            data->rds_pty = RT_PTY;
+            data->rds_info = (RT_Info < 0) ? 0 : RT_Info;
+            int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
+            data->rds_text = RT_Text[ind];
+            data->rds_title = RTP_Title;
+            data->rds_artist = RTP_Artist;
+            data->title_start = RTP_Starttime;
+        }
+        return true;
+    }
     return false;
 }
 
