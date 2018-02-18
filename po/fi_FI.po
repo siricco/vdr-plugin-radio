@@ -3,349 +3,348 @@
 # This file is distributed under the same license as the VDR package.
 # Rolf Ahrenberg <rahrenbe@cc.hut.fi>, 2003
 #
-msgid ""
-msgstr ""
-"Project-Id-Version: VDR 1.5.7\n"
-"Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2017-04-22 12:07+0200\n"
-"PO-Revision-Date: 2007-08-13 19:21+0200\n"
-"Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
-"Language-Team: <vdr@linuxtv.org>\n"
-"Language: fi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
-"Content-Transfer-Encoding: 8bit\n"
+msgid   ""
+msgstr  "Project-Id-Version: VDR 1.5.7\n"
+        "Report-Msgid-Bugs-To: <see README>\n"
+        "POT-Creation-Date: 2017-04-22 12:07+0200\n"
+        "PO-Revision-Date: 2007-08-13 19:21+0200\n"
+        "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
+        "Language-Team: <vdr@linuxtv.org>\n"
+        "Language: fi\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Taustakuva ja RDS-teksti radiokanaville"
+msgid   "Radio Background-Image/RDS-Text"
+msgstr  "Taustakuva ja RDS-teksti radiokanaville"
 
-msgid "Show RDS-Radiotext"
-msgstr "N‰yt‰ RDS-teksti"
+msgid   "Show RDS-Radiotext"
+msgstr  "N√§yt√§ RDS-teksti"
 
-msgid "Off"
-msgstr "pois"
+msgid   "Off"
+msgstr  "pois"
 
-msgid "only Text"
-msgstr "vain teksti"
+msgid   "only Text"
+msgstr  "vain teksti"
 
-msgid "Text+TagInfo"
-msgstr "teksti+tunniste"
+msgid   "Text+TagInfo"
+msgstr  "teksti+tunniste"
 
-msgid "only, if some"
-msgstr "jos saatavilla"
+msgid   "only, if some"
+msgstr  "jos saatavilla"
 
-msgid "always"
-msgstr "aina"
+msgid   "always"
+msgstr  "aina"
 
-msgid "Top"
-msgstr "yl‰reuna"
+msgid   "Top"
+msgstr  "yl√§reuna"
 
-msgid "Bottom"
-msgstr "alareuna"
+msgid   "Bottom"
+msgstr  "alareuna"
 
-msgid "latest at Top"
-msgstr "ylˆsp‰in"
+msgid   "latest at Top"
+msgstr  "yl√∂sp√§in"
 
-msgid "latest at Bottom"
-msgstr "alasp‰in"
+msgid   "latest at Bottom"
+msgstr  "alasp√§in"
 
-msgid "Black"
-msgstr "musta"
+msgid   "Black"
+msgstr  "musta"
 
-msgid "White"
-msgstr "valkoinen"
+msgid   "White"
+msgstr  "valkoinen"
 
-msgid "Red"
-msgstr "punainen"
+msgid   "Red"
+msgstr  "punainen"
 
-msgid "Green"
-msgstr "vihre‰"
+msgid   "Green"
+msgstr  "vihre√§"
 
-msgid "Yellow"
-msgstr "keltainen"
+msgid   "Yellow"
+msgstr  "keltainen"
 
-msgid "Magenta"
-msgstr "magenta"
+msgid   "Magenta"
+msgstr  "magenta"
 
-msgid "Blue"
-msgstr "sininen"
+msgid   "Blue"
+msgstr  "sininen"
 
-msgid "Cyan"
-msgstr "syaani"
+msgid   "Cyan"
+msgstr  "syaani"
 
-msgid "Transparent"
-msgstr "l‰pin‰kyv‰"
+msgid   "Transparent"
+msgstr  "l√§pin√§kyv√§"
 
-msgid "about MainMenu"
-msgstr "p‰‰valikosta"
+msgid   "about MainMenu"
+msgstr  "p√§√§valikosta"
 
-msgid "Automatic"
-msgstr "automaattisesti"
+msgid   "Automatic"
+msgstr  "automaattisesti"
 
-msgid "only Taginfo"
-msgstr "vain tunniste"
+msgid   "only Taginfo"
+msgstr  "vain tunniste"
 
-msgid "Rass only"
-msgstr "vain Rass"
+msgid   "Rass only"
+msgstr  "vain Rass"
 
-msgid "Rass+Text mixed"
-msgstr "Teksti ja Rass"
+msgid   "Rass+Text mixed"
+msgstr  "Teksti ja Rass"
 
-msgid "Activate"
-msgstr "Aktiivinen"
+msgid   "Activate"
+msgstr  "Aktiivinen"
 
-msgid "Use StillPicture-Function"
-msgstr ""
+msgid   "Use StillPicture-Function"
+msgstr  ""
 
-msgid "Hide MainMenuEntry"
-msgstr "Piilota valinta p‰‰valikosta"
+msgid   "Hide MainMenuEntry"
+msgstr  "Piilota valinta p√§√§valikosta"
 
-msgid "RDSText Function"
-msgstr "RDS-tekstin toiminto"
+msgid   "RDSText Function"
+msgstr  "RDS-tekstin toiminto"
 
-msgid "RDSText OSD-Position"
-msgstr "RDS-tekstin sijainti"
+msgid   "RDSText OSD-Position"
+msgstr  "RDS-tekstin sijainti"
 
-msgid "RDSText OSD-Titlerow"
-msgstr "RDS-tekstin kappale"
+msgid   "RDSText OSD-Titlerow"
+msgstr  "RDS-tekstin kappale"
 
-msgid "RDSText OSD-Rows (1-5)"
-msgstr "RDS-tekstin rivim‰‰r‰"
+msgid   "RDSText OSD-Rows (1-5)"
+msgstr  "RDS-tekstin rivim√§√§r√§"
 
-msgid "RDSText OSD-Scrollmode"
-msgstr "RDS-tekstin vieritystapa"
+msgid   "RDSText OSD-Scrollmode"
+msgstr  "RDS-tekstin vieritystapa"
 
-msgid "RDSText OSD-Taginfo"
-msgstr "RDS-tekstin tunnistetiedot"
+msgid   "RDSText OSD-Taginfo"
+msgstr  "RDS-tekstin tunnistetiedot"
 
-msgid "RDSText OSD-Skincolors used"
-msgstr "K‰yt‰ RDS-tekstille ulkoasun v‰rej‰"
+msgid   "RDSText OSD-Skincolors used"
+msgstr  "K√§yt√§ RDS-tekstille ulkoasun v√§rej√§"
 
-msgid "RDSText OSD-Backgr.Color"
-msgstr "RDS-tekstin taustav‰ri"
+msgid   "RDSText OSD-Backgr.Color"
+msgstr  "RDS-tekstin taustav√§ri"
 
-msgid "RDSText OSD-Backgr.Transp."
-msgstr "RDS-tekstin taustan l‰pin‰kyvyys"
+msgid   "RDSText OSD-Backgr.Transp."
+msgstr  "RDS-tekstin taustan l√§pin√§kyvyys"
 
-msgid "RDSText OSD-Foregr.Color"
-msgstr "RDS-tekstin v‰ri"
+msgid   "RDSText OSD-Foregr.Color"
+msgstr  "RDS-tekstin v√§ri"
 
-msgid "RDSText OSD-Timeout (0-1440 min)"
-msgstr "RDS-tekstin odotusaika (0-1440min)"
+msgid   "RDSText OSD-Timeout (0-1440 min)"
+msgstr  "RDS-tekstin odotusaika (0-1440min)"
 
-msgid "RDSText OSD-Display"
-msgstr "RDS-tekstin esitys"
+msgid   "RDSText OSD-Display"
+msgstr  "RDS-tekstin esitys"
 
-msgid "RDSText StatusMsg (lcdproc & co)"
-msgstr "RDS-tekstin toiminto laajennoksille"
+msgid   "RDSText StatusMsg (lcdproc & co)"
+msgstr  "RDS-tekstin toiminto laajennoksille"
 
-msgid "RDSText Rass-Function"
-msgstr "K‰yt‰ RDS-tekstin Rass-toimintoa"
+msgid   "RDSText Rass-Function"
+msgstr  "K√§yt√§ RDS-tekstin Rass-toimintoa"
 
-msgid "External Info-Request"
-msgstr ""
+msgid   "External Info-Request"
+msgstr  ""
 
-msgid "unknown program type"
-msgstr "tuntematon ohjelmatyyppi"
+msgid   "unknown program type"
+msgstr  "tuntematon ohjelmatyyppi"
 
-msgid "News"
-msgstr "Uutiset"
+msgid   "News"
+msgstr  "Uutiset"
 
-msgid "Current affairs"
-msgstr "ajankohtaista"
+msgid   "Current affairs"
+msgstr  "ajankohtaista"
 
-msgid "Information"
-msgstr "tiedote"
+msgid   "Information"
+msgstr  "tiedote"
 
-msgid "Sport"
-msgstr "urheilua"
+msgid   "Sport"
+msgstr  "urheilua"
 
-msgid "Education"
-msgstr "opetusohjelmaa"
+msgid   "Education"
+msgstr  "opetusohjelmaa"
 
-msgid "Drama"
-msgstr "draamaa"
+msgid   "Drama"
+msgstr  "draamaa"
 
-msgid "Culture"
-msgstr "kulttuuria"
+msgid   "Culture"
+msgstr  "kulttuuria"
 
-msgid "Science"
-msgstr "tiedeohjelma"
+msgid   "Science"
+msgstr  "tiedeohjelma"
 
-msgid "Varied"
-msgstr "sekalaista"
+msgid   "Varied"
+msgstr  "sekalaista"
 
-msgid "Pop music"
-msgstr "pop-musiikkia"
+msgid   "Pop music"
+msgstr  "pop-musiikkia"
 
-msgid "Rock music"
-msgstr "rock-musiikkia"
+msgid   "Rock music"
+msgstr  "rock-musiikkia"
 
-msgid "M.O.R. music"
-msgstr "taukomusiikkia"
+msgid   "M.O.R. music"
+msgstr  "taukomusiikkia"
 
-msgid "Light classical"
-msgstr "kevytt‰ klassista"
+msgid   "Light classical"
+msgstr  "kevytt√§ klassista"
 
-msgid "Serious classical"
-msgstr "klassista"
+msgid   "Serious classical"
+msgstr  "klassista"
 
-msgid "Other music"
-msgstr "musiikkia"
+msgid   "Other music"
+msgstr  "musiikkia"
 
-msgid "Alarm"
-msgstr "H‰lytys"
+msgid   "Alarm"
+msgstr  "H√§lytys"
 
-msgid "ext. Info"
-msgstr ""
+msgid   "ext. Info"
+msgstr  ""
 
-msgid "RTplus"
-msgstr "RTplus"
+msgid   "RTplus"
+msgstr  "RTplus"
 
-msgid "Radiotext"
-msgstr "Radioteksti"
+msgid   "Radiotext"
+msgstr  "Radioteksti"
 
-msgid "  [waiting ...]"
-msgstr "  [odota ...]"
+msgid   "  [waiting ...]"
+msgstr  "  [odota ...]"
 
-msgid "Title :"
-msgstr "Kappale :"
+msgid   "Title :"
+msgstr  "Kappale :"
 
-msgid "Artist :"
-msgstr "Esitt‰j‰ :"
+msgid   "Artist :"
+msgstr  "Esitt√§j√§ :"
 
-msgid "Records"
-msgstr "Rass-tallenteet"
+msgid   "Records"
+msgstr  "Rass-tallenteet"
 
-msgid "Rass-Image(s) saved from Archiv "
-msgstr ""
+msgid   "Rass-Image(s) saved from Archiv "
+msgstr  ""
 
-msgid "Rass-Image(s) saved from Gallery"
-msgstr ""
+msgid   "Rass-Image(s) saved from Gallery"
+msgstr  ""
 
-msgid "Rass-Image saved"
-msgstr ""
+msgid   "Rass-Image saved"
+msgstr  ""
 
-msgid "Rass-Image failed"
-msgstr ""
+msgid   "Rass-Image failed"
+msgstr  ""
 
-msgid "Playlist"
-msgstr "Soittolista"
+msgid   "Playlist"
+msgstr  "Soittolista"
 
-msgid "Sports"
-msgstr "Urheilu"
+msgid   "Sports"
+msgstr  "Urheilu"
 
-msgid "Lottery"
-msgstr "Arvonta"
+msgid   "Lottery"
+msgstr  "Arvonta"
 
-msgid "Weather"
-msgstr "S‰‰"
+msgid   "Weather"
+msgstr  "S√§√§"
 
-msgid "Stockmarket"
-msgstr "Pˆrssikurssit"
+msgid   "Stockmarket"
+msgstr  "P√∂rssikurssit"
 
-msgid "Other"
-msgstr "Sekalaiset"
+msgid   "Other"
+msgstr  "Sekalaiset"
 
-msgid "extra Info  since"
-msgstr ""
+msgid   "extra Info  since"
+msgstr  ""
 
-msgid "RTplus Memory  since"
-msgstr "RTplus-muisti  alkaen"
+msgid   "RTplus Memory  since"
+msgstr  "RTplus-muisti  alkaen"
 
-msgid "Programme"
-msgstr "Ohjelma"
+msgid   "Programme"
+msgstr  "Ohjelma"
 
-msgid "Stat.Short"
-msgstr ""
+msgid   "Stat.Short"
+msgstr  ""
 
-msgid "Station"
-msgstr "Asema"
+msgid   "Station"
+msgstr  "Asema"
 
-msgid "Now"
-msgstr "Nyt"
+msgid   "Now"
+msgstr  "Nyt"
 
-msgid "...Part"
-msgstr "...osa"
+msgid   "...Part"
+msgstr  "...osa"
 
-msgid "Next"
-msgstr "Seuraavaksi"
+msgid   "Next"
+msgstr  "Seuraavaksi"
 
-msgid "Host"
-msgstr "Juontaja"
+msgid   "Host"
+msgstr  "Juontaja"
 
-msgid "Edit.Staff"
-msgstr "Henkilˆkunta"
+msgid   "Edit.Staff"
+msgstr  "Henkil√∂kunta"
 
-msgid "Homepage"
-msgstr "Kotisivu"
+msgid   "Homepage"
+msgstr  "Kotisivu"
 
-msgid "Interactivity"
-msgstr "Interaktiivinen"
+msgid   "Interactivity"
+msgstr  "Interaktiivinen"
 
-msgid "Phone-Hotline"
-msgstr "Suoralinja puhelimelle"
+msgid   "Phone-Hotline"
+msgstr  "Suoralinja puhelimelle"
 
-msgid "Phone-Studio"
-msgstr "Puhelin studioon"
+msgid   "Phone-Studio"
+msgstr  "Puhelin studioon"
 
 #, fuzzy
-msgid "SMS-Studio"
-msgstr "Puhelin studioon"
+msgid   "SMS-Studio"
+msgstr  "Puhelin studioon"
 
-msgid "Email-Hotline"
-msgstr "Suoralinja s‰hkˆpostille"
+msgid   "Email-Hotline"
+msgstr  "Suoralinja s√§hk√∂postille"
 
-msgid "Email-Studio"
-msgstr "S‰hkˆposti studioon"
+msgid   "Email-Studio"
+msgstr  "S√§hk√∂posti studioon"
 
-msgid "Info"
-msgstr "Lis‰tiedot"
+msgid   "Info"
+msgstr  "Lis√§tiedot"
 
-msgid "NewsLocal"
-msgstr "Paikallisuutiset"
+msgid   "NewsLocal"
+msgstr  "Paikallisuutiset"
 
-msgid "DateTime"
-msgstr "Ajankohtaista"
+msgid   "DateTime"
+msgstr  "Ajankohtaista"
 
-msgid "Traffic"
-msgstr "Liikenne"
+msgid   "Traffic"
+msgstr  "Liikenne"
 
-msgid "Advertising"
-msgstr "Mainos"
+msgid   "Advertising"
+msgstr  "Mainos"
 
-msgid "Url"
-msgstr "Linkki"
+msgid   "Url"
+msgstr  "Linkki"
 
-msgid "Exit"
-msgstr "Lopeta"
+msgid   "Exit"
+msgstr  "Lopeta"
 
-msgid "Info-File saved"
-msgstr ""
+msgid   "Info-File saved"
+msgstr  ""
 
-msgid "RTplus-File saved"
-msgstr "RTplus-tiedosto tallennettu"
+msgid   "RTplus-File saved"
+msgstr  "RTplus-tiedosto tallennettu"
 
-msgid "last seen Radiotext"
-msgstr "viimeksi n‰hty radioteksti"
+msgid   "last seen Radiotext"
+msgstr  "viimeksi n√§hty radioteksti"
 
-msgid "Time"
-msgstr "Kellonaika"
+msgid   "Time"
+msgstr  "Kellonaika"
 
-msgid "Title"
-msgstr "Kappale"
+msgid   "Title"
+msgstr  "Kappale"
 
-msgid "Artist"
-msgstr "Esitt‰j‰"
+msgid   "Artist"
+msgstr  "Esitt√§j√§"
 
-msgid "Refresh Off"
-msgstr "ƒl‰ p‰ivit‰"
+msgid   "Refresh Off"
+msgstr  "√Ñl√§ p√§ivit√§"
 
-msgid "Refresh On"
-msgstr "P‰ivit‰"
+msgid   "Refresh On"
+msgstr  "P√§ivit√§"
 
-msgid "Back"
-msgstr "Takaisin"
+msgid   "Back"
+msgstr  "Takaisin"
 
-#~ msgid "with <0>"
-#~ msgstr "'0'-n‰pp‰imell‰"
+#~ msgid        "with <0>"
+#~ msgstr       "'0'-n√§pp√§imell√§"

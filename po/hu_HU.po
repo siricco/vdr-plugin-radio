@@ -2,349 +2,348 @@
 # Copyright (C) 2007 Klaus Schmidinger <kls@cadsoft.de>
 # This file is distributed under the same license as the VDR package.
 #
-msgid ""
-msgstr ""
-"Project-Id-Version: VDR 1.5.7\n"
-"Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2017-04-22 12:07+0200\n"
-"PO-Revision-Date: 2007-08-13 19:21+0200\n"
-"Last-Translator: F¸ley Istv·n\n"
-"Language-Team: <vdr@linuxtv.org>\n"
-"Language: hu\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
-"Content-Transfer-Encoding: 8bit\n"
+msgid   ""
+msgstr  "Project-Id-Version: VDR 1.5.7\n"
+        "Report-Msgid-Bugs-To: <see README>\n"
+        "POT-Creation-Date: 2017-04-22 12:07+0200\n"
+        "PO-Revision-Date: 2007-08-13 19:21+0200\n"
+        "Last-Translator: F√ºley Istv√°n\n"
+        "Language-Team: <vdr@linuxtv.org>\n"
+        "Language: hu\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Radio Background-Image/RDS-Text"
-msgstr "R·diÛ h·ttÈrkÈp/RDS-Text"
+msgid   "Radio Background-Image/RDS-Text"
+msgstr  "R√°di√≥ h√°tt√©rk√©p/RDS-Text"
 
-msgid "Show RDS-Radiotext"
-msgstr "RDS-Text megjelenÌtÈse"
+msgid   "Show RDS-Radiotext"
+msgstr  "RDS-Text megjelen√≠t√©se"
 
-msgid "Off"
-msgstr "ki"
+msgid   "Off"
+msgstr  "ki"
 
-msgid "only Text"
-msgstr "csak Text"
+msgid   "only Text"
+msgstr  "csak Text"
 
-msgid "Text+TagInfo"
-msgstr "Text Ès Taginfo"
+msgid   "Text+TagInfo"
+msgstr  "Text √©s Taginfo"
 
-msgid "only, if some"
-msgstr "csak, ha lÈtezik"
+msgid   "only, if some"
+msgstr  "csak, ha l√©tezik"
 
-msgid "always"
-msgstr "mindig"
+msgid   "always"
+msgstr  "mindig"
 
-msgid "Top"
-msgstr "fenn"
+msgid   "Top"
+msgstr  "fenn"
 
-msgid "Bottom"
-msgstr "lenn"
+msgid   "Bottom"
+msgstr  "lenn"
 
-msgid "latest at Top"
-msgstr "legfrisebbet fel¸lre"
+msgid   "latest at Top"
+msgstr  "legfrisebbet fel√ºlre"
 
-msgid "latest at Bottom"
-msgstr "legfrisebbet alulra"
+msgid   "latest at Bottom"
+msgstr  "legfrisebbet alulra"
 
-msgid "Black"
-msgstr "fekete"
+msgid   "Black"
+msgstr  "fekete"
 
-msgid "White"
-msgstr "fehÈr"
+msgid   "White"
+msgstr  "feh√©r"
 
-msgid "Red"
-msgstr "vˆrˆs"
+msgid   "Red"
+msgstr  "v√∂r√∂s"
 
-msgid "Green"
-msgstr "zˆld"
+msgid   "Green"
+msgstr  "z√∂ld"
 
-msgid "Yellow"
-msgstr "s·rga"
+msgid   "Yellow"
+msgstr  "s√°rga"
 
-msgid "Magenta"
-msgstr "bÌbor"
+msgid   "Magenta"
+msgstr  "b√≠bor"
 
-msgid "Blue"
-msgstr "kÈk"
+msgid   "Blue"
+msgstr  "k√©k"
 
-msgid "Cyan"
-msgstr "ci·n"
+msgid   "Cyan"
+msgstr  "ci√°n"
 
-msgid "Transparent"
-msgstr "·tl·tszÛ"
+msgid   "Transparent"
+msgstr  "√°tl√°tsz√≥"
 
-msgid "about MainMenu"
-msgstr "mint a fımen¸ben"
+msgid   "about MainMenu"
+msgstr  "mint a f≈ëmen√ºben"
 
-msgid "Automatic"
-msgstr "automatikus"
+msgid   "Automatic"
+msgstr  "automatikus"
 
-msgid "only Taginfo"
-msgstr "csak Taginfo"
+msgid   "only Taginfo"
+msgstr  "csak Taginfo"
 
-msgid "Rass only"
-msgstr "csak Rass"
+msgid   "Rass only"
+msgstr  "csak Rass"
 
-msgid "Rass+Text mixed"
-msgstr "Text Ès Rass"
+msgid   "Rass+Text mixed"
+msgstr  "Text √©s Rass"
 
-msgid "Activate"
-msgstr "AktÌv"
+msgid   "Activate"
+msgstr  "Akt√≠v"
 
-msgid "Use StillPicture-Function"
-msgstr ""
+msgid   "Use StillPicture-Function"
+msgstr  ""
 
-msgid "Hide MainMenuEntry"
-msgstr "ElrejtÈs a fımen¸ben"
+msgid   "Hide MainMenuEntry"
+msgstr  "Elrejt√©s a f≈ëmen√ºben"
 
-msgid "RDSText Function"
-msgstr "RDS-Text funkciÛ "
+msgid   "RDSText Function"
+msgstr  "RDS-Text funkci√≥ "
 
-msgid "RDSText OSD-Position"
-msgstr "Az RDS-Text OSD pozicÌÛja"
+msgid   "RDSText OSD-Position"
+msgstr  "Az RDS-Text OSD pozic√≠√≥ja"
 
-msgid "RDSText OSD-Titlerow"
-msgstr "RDS-Text OSD fejlÈc"
+msgid   "RDSText OSD-Titlerow"
+msgstr  "RDS-Text OSD fejl√©c"
 
-msgid "RDSText OSD-Rows (1-5)"
-msgstr "RDS-Text OSD sorok sz·ma (1-5)"
+msgid   "RDSText OSD-Rows (1-5)"
+msgstr  "RDS-Text OSD sorok sz√°ma (1-5)"
 
-msgid "RDSText OSD-Scrollmode"
-msgstr "RDS-Text OSD gˆrgetÈsÈnek mÛdja"
+msgid   "RDSText OSD-Scrollmode"
+msgstr  "RDS-Text OSD g√∂rget√©s√©nek m√≥dja"
 
-msgid "RDSText OSD-Taginfo"
-msgstr "RDS-Text OSD-Taginfo"
+msgid   "RDSText OSD-Taginfo"
+msgstr  "RDS-Text OSD-Taginfo"
 
-msgid "RDSText OSD-Skincolors used"
-msgstr "Felhaszn·lt RDS-Text szÌnek"
+msgid   "RDSText OSD-Skincolors used"
+msgstr  "Felhaszn√°lt RDS-Text sz√≠nek"
 
-msgid "RDSText OSD-Backgr.Color"
-msgstr "RDS-Text h·ttÈrszÌn"
+msgid   "RDSText OSD-Backgr.Color"
+msgstr  "RDS-Text h√°tt√©rsz√≠n"
 
-msgid "RDSText OSD-Backgr.Transp."
-msgstr "RDS-Text h·ttÈr ·tl·tszÛs·ga"
+msgid   "RDSText OSD-Backgr.Transp."
+msgstr  "RDS-Text h√°tt√©r √°tl√°tsz√≥s√°ga"
 
-msgid "RDSText OSD-Foregr.Color"
-msgstr "RDS-Text fontszÌn"
+msgid   "RDSText OSD-Foregr.Color"
+msgstr  "RDS-Text fontsz√≠n"
 
-msgid "RDSText OSD-Timeout (0-1440 min)"
-msgstr "RDS-Text idıt˙llÈpÈs (0-1440 perc)"
+msgid   "RDSText OSD-Timeout (0-1440 min)"
+msgstr  "RDS-Text id≈ët√∫ll√©p√©s (0-1440 perc)"
 
-msgid "RDSText OSD-Display"
-msgstr "RDS-Text megjelenÌtÈs"
+msgid   "RDSText OSD-Display"
+msgstr  "RDS-Text megjelen√≠t√©s"
 
-msgid "RDSText StatusMsg (lcdproc & co)"
-msgstr "RDS-Text ·llapot¸zenet (lcdproc, stb)"
+msgid   "RDSText StatusMsg (lcdproc & co)"
+msgstr  "RDS-Text √°llapot√ºzenet (lcdproc, stb)"
 
-msgid "RDSText Rass-Function"
-msgstr "RDS Rass funkciÛ"
+msgid   "RDSText Rass-Function"
+msgstr  "RDS Rass funkci√≥"
 
-msgid "External Info-Request"
-msgstr ""
+msgid   "External Info-Request"
+msgstr  ""
 
-msgid "unknown program type"
-msgstr "ismeretlen ad·stipus"
+msgid   "unknown program type"
+msgstr  "ismeretlen ad√°stipus"
 
-msgid "News"
-msgstr "HÌrek"
+msgid   "News"
+msgstr  "H√≠rek"
 
-msgid "Current affairs"
-msgstr "aktu·lis"
+msgid   "Current affairs"
+msgstr  "aktu√°lis"
 
-msgid "Information"
-msgstr "inform·ciÛ"
+msgid   "Information"
+msgstr  "inform√°ci√≥"
 
-msgid "Sport"
-msgstr "sport"
+msgid   "Sport"
+msgstr  "sport"
 
-msgid "Education"
-msgstr "nevelÈs"
+msgid   "Education"
+msgstr  "nevel√©s"
 
-msgid "Drama"
-msgstr "r·diÛj·tÈk"
+msgid   "Drama"
+msgstr  "r√°di√≥j√°t√©k"
 
-msgid "Culture"
-msgstr "kult˙ra"
+msgid   "Culture"
+msgstr  "kult√∫ra"
 
-msgid "Science"
-msgstr "tudom·ny"
+msgid   "Science"
+msgstr  "tudom√°ny"
 
-msgid "Varied"
-msgstr "vegyes"
+msgid   "Varied"
+msgstr  "vegyes"
 
-msgid "Pop music"
-msgstr "pop zene"
+msgid   "Pop music"
+msgstr  "pop zene"
 
-msgid "Rock music"
-msgstr "rock zene"
+msgid   "Rock music"
+msgstr  "rock zene"
 
-msgid "M.O.R. music"
-msgstr "kˆnny˚zene"
+msgid   "M.O.R. music"
+msgstr  "k√∂nny≈±zene"
 
-msgid "Light classical"
-msgstr "kˆnny˚ klasszikus"
+msgid   "Light classical"
+msgstr  "k√∂nny≈± klasszikus"
 
-msgid "Serious classical"
-msgstr "komolyzene"
+msgid   "Serious classical"
+msgstr  "komolyzene"
 
-msgid "Other music"
-msgstr "egyÈb zene"
+msgid   "Other music"
+msgstr  "egy√©b zene"
 
-msgid "Alarm"
-msgstr "RiasztÛ"
+msgid   "Alarm"
+msgstr  "Riaszt√≥"
 
-msgid "ext. Info"
-msgstr ""
+msgid   "ext. Info"
+msgstr  ""
 
-msgid "RTplus"
-msgstr "RTplus"
+msgid   "RTplus"
+msgstr  "RTplus"
 
-msgid "Radiotext"
-msgstr "R·diÛtext"
+msgid   "Radiotext"
+msgstr  "R√°di√≥text"
 
-msgid "  [waiting ...]"
-msgstr "[v·rakoz·s...]"
+msgid   "  [waiting ...]"
+msgstr  "[v√°rakoz√°s...]"
 
-msgid "Title :"
-msgstr "CÌm :"
+msgid   "Title :"
+msgstr  "C√≠m :"
 
-msgid "Artist :"
-msgstr "ElıadÛ :"
+msgid   "Artist :"
+msgstr  "El≈ëad√≥ :"
 
-msgid "Records"
-msgstr "ArchÌvum"
+msgid   "Records"
+msgstr  "Arch√≠vum"
 
-msgid "Rass-Image(s) saved from Archiv "
-msgstr "Rass-kÈp(ek) elmentve az archÌvumbÛl"
+msgid   "Rass-Image(s) saved from Archiv "
+msgstr  "Rass-k√©p(ek) elmentve az arch√≠vumb√≥l"
 
-msgid "Rass-Image(s) saved from Gallery"
-msgstr "Rass-kÈp(ek) elmentve a galÈri·bÛl"
+msgid   "Rass-Image(s) saved from Gallery"
+msgstr  "Rass-k√©p(ek) elmentve a gal√©ri√°b√≥l"
 
-msgid "Rass-Image saved"
-msgstr "Rass-KÈp elmentve."
+msgid   "Rass-Image saved"
+msgstr  "Rass-K√©p elmentve."
 
-msgid "Rass-Image failed"
-msgstr "Sikertelen Rass-KÈp mentÈs"
+msgid   "Rass-Image failed"
+msgstr  "Sikertelen Rass-K√©p ment√©s"
 
-msgid "Playlist"
-msgstr "Playlist"
+msgid   "Playlist"
+msgstr  "Playlist"
 
-msgid "Sports"
-msgstr "Sport"
+msgid   "Sports"
+msgstr  "Sport"
 
-msgid "Lottery"
-msgstr "LottÛ"
+msgid   "Lottery"
+msgstr  "Lott√≥"
 
-msgid "Weather"
-msgstr "Idıj·r·s"
+msgid   "Weather"
+msgstr  "Id≈ëj√°r√°s"
 
-msgid "Stockmarket"
-msgstr "Bˆrze"
+msgid   "Stockmarket"
+msgstr  "B√∂rze"
 
-msgid "Other"
-msgstr "EgyÈb"
+msgid   "Other"
+msgstr  "Egy√©b"
 
-msgid "extra Info  since"
-msgstr ""
+msgid   "extra Info  since"
+msgstr  ""
 
-msgid "RTplus Memory  since"
-msgstr "RTplus innen kezdve"
+msgid   "RTplus Memory  since"
+msgstr  "RTplus innen kezdve"
 
-msgid "Programme"
-msgstr "PrograminfÛ"
+msgid   "Programme"
+msgstr  "Programinf√≥"
 
-msgid "Stat.Short"
-msgstr ""
+msgid   "Stat.Short"
+msgstr  ""
 
-msgid "Station"
-msgstr "R·diÛadÛ"
+msgid   "Station"
+msgstr  "R√°di√≥ad√≥"
 
-msgid "Now"
-msgstr "Most"
+msgid   "Now"
+msgstr  "Most"
 
-msgid "...Part"
-msgstr "...rÈsz"
+msgid   "...Part"
+msgstr  "...r√©sz"
 
-msgid "Next"
-msgstr "Kˆvetkezı"
+msgid   "Next"
+msgstr  "K√∂vetkez≈ë"
 
-msgid "Host"
-msgstr "M¸sorvezetı"
+msgid   "Host"
+msgstr  "M√ºsorvezet≈ë"
 
-msgid "Edit.Staff"
-msgstr "St·b"
+msgid   "Edit.Staff"
+msgstr  "St√°b"
 
-msgid "Homepage"
-msgstr "Honlap"
+msgid   "Homepage"
+msgstr  "Honlap"
 
-msgid "Interactivity"
-msgstr "Interaktivit·s"
+msgid   "Interactivity"
+msgstr  "Interaktivit√°s"
 
-msgid "Phone-Hotline"
-msgstr "Telefonos forrÛdrÛt"
+msgid   "Phone-Hotline"
+msgstr  "Telefonos forr√≥dr√≥t"
 
-msgid "Phone-Studio"
-msgstr "Telefon studiÛ"
+msgid   "Phone-Studio"
+msgstr  "Telefon studi√≥"
 
 #, fuzzy
-msgid "SMS-Studio"
-msgstr "Telefon studiÛ"
+msgid   "SMS-Studio"
+msgstr  "Telefon studi√≥"
 
-msgid "Email-Hotline"
-msgstr "E-mail forrÛdrÛt"
+msgid   "Email-Hotline"
+msgstr  "E-mail forr√≥dr√≥t"
 
-msgid "Email-Studio"
-msgstr "E-mail studiÛ"
+msgid   "Email-Studio"
+msgstr  "E-mail studi√≥"
 
-msgid "Info"
-msgstr "EgyÈb inform·ciÛ"
+msgid   "Info"
+msgstr  "Egy√©b inform√°ci√≥"
 
-msgid "NewsLocal"
-msgstr "Helyi hÌrek"
+msgid   "NewsLocal"
+msgstr  "Helyi h√≠rek"
 
-msgid "DateTime"
-msgstr "D·tum-Ûra"
+msgid   "DateTime"
+msgstr  "D√°tum-√≥ra"
 
-msgid "Traffic"
-msgstr "Forgalom"
+msgid   "Traffic"
+msgstr  "Forgalom"
 
-msgid "Advertising"
-msgstr "Rekl·m"
+msgid   "Advertising"
+msgstr  "Rekl√°m"
 
-msgid "Url"
-msgstr "Weblink"
+msgid   "Url"
+msgstr  "Weblink"
 
-msgid "Exit"
-msgstr "KilÈpÈs"
+msgid   "Exit"
+msgstr  "Kil√©p√©s"
 
-msgid "Info-File saved"
-msgstr ""
+msgid   "Info-File saved"
+msgstr  ""
 
-msgid "RTplus-File saved"
-msgstr "RTplus-file elmentve"
+msgid   "RTplus-File saved"
+msgstr  "RTplus-file elmentve"
 
-msgid "last seen Radiotext"
-msgstr "utolj·ra vett r·diÛtext"
+msgid   "last seen Radiotext"
+msgstr  "utolj√°ra vett r√°di√≥text"
 
-msgid "Time"
-msgstr "Idı"
+msgid   "Time"
+msgstr  "Id≈ë"
 
-msgid "Title"
-msgstr "CÌm"
+msgid   "Title"
+msgstr  "C√≠m"
 
-msgid "Artist"
-msgstr "ElıadÛ"
+msgid   "Artist"
+msgstr  "El≈ëad√≥"
 
-msgid "Refresh Off"
-msgstr "FrissÌtÈs ki"
+msgid   "Refresh Off"
+msgstr  "Friss√≠t√©s ki"
 
-msgid "Refresh On"
-msgstr "FrissÌtÈs be"
+msgid   "Refresh On"
+msgstr  "Friss√≠t√©s be"
 
-msgid "Back"
-msgstr "Vissza"
+msgid   "Back"
+msgstr  "Vissza"
 
-#~ msgid "with <0>"
-#~ msgstr "<0> bill."
+#~ msgid        "with <0>"
+#~ msgstr       "<0> bill."
