@@ -167,7 +167,7 @@ void cRadioImage::Stop(void) {
 
 void cRadioImage::Action(void)
 {
-    if ((S_Verbose && 0x0f) >= 2)
+    if ((S_Verbose & 0x0f) >= 2)
         printf("vdr-radio: image-showing starts\n");
 
     while (Running()) {
@@ -178,7 +178,7 @@ void cRadioImage::Action(void)
             }
         }
 
-    if ((S_Verbose && 0x0f) >= 2)
+    if ((S_Verbose & 0x0f) >= 2)
         printf("vdr-radio: image-showing ends\n");
 }
 
@@ -395,10 +395,11 @@ void cRDSReceiver::Receive(uchar *Data, int Length)
                                         case 0xcd46:    if ((S_Verbose & 0x20) > 0) {
                                                             unsigned char tmc[6];       // TMC Alert-C
                                                             int i;
-                                                            for (i=9; i<=(index-3); i++) 
+                                                            for (i=9; i<=(index-3); i++) {
                                                                 tmc[i-9] = mtext[i];
                                                                 tmc_parser(tmc, i-8);
                                                             }
+                                                        }
                                                         break;
                                         default:        if ((S_Verbose & 0x0f) >= 2)
                                                             printf("[RDS-ODA AID '%02x%02x' not used -> End]\n", mtext[7], mtext[8]);

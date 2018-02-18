@@ -77,7 +77,7 @@ struct RadioTextService_v1_0 {
     char *rds_text;
     char *rds_title;
     char *rds_artist;
-    struct tm *title_start;
+    time_t title_start;
 };
 
 
@@ -130,7 +130,7 @@ void cRadioCheck::Stop(void) {
 void cRadioCheck::Action(void)
 {
 
-    if ((S_Verbose && 0x0f) >= 2)
+    if ((S_Verbose & 0x0f) >= 2)
         printf("vdr-radio: background-checking starts\n");
 
     while (Running()) {
@@ -201,7 +201,7 @@ void cRadioCheck::Action(void)
             cRemote::CallPlugin("radio");
         }
 
-    if ((S_Verbose && 0x0f) >= 2)
+    if ((S_Verbose & 0x0f) >= 2)
         printf("vdr-radio: background-checking ends\n");
 }
 
@@ -605,8 +605,9 @@ bool cPluginRadio::Service(const char *Id, void *Data)
             data->rds_text = RT_Text[ind];
             data->rds_title = RTP_Title;
             data->rds_artist = RTP_Artist;
-            struct tm tm_store;
-            data->title_start = localtime_r(&RTP_Starttime, &tm_store);
+            // struct tm tm_store;
+            // data->title_start = localtime_r(&RTP_Starttime, &tm_store);
+            data->title_start = RTP_Starttime;
             }
         return true;
         }
