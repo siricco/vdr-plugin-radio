@@ -10,6 +10,7 @@
 #include <vdr/config.h>
 #include <vdr/interface.h>
 #include <vdr/transfer.h>
+#include <string>
 #include "getopt.h"
 #include "radioaudio.h"
 #include "radiotools.h"
@@ -83,9 +84,9 @@ struct RadioTextService_v1_0 {
 struct RadioTextService_v1_1 {
     int rds_info;       // 0= no / 1= Text / 2= Text + RTplus-Tags (Item,Artist)
     int rds_pty;        // 0-31
-    char *rds_text;
-    char *rds_title;
-    char *rds_artist;
+    std::string rds_text;
+    std::string rds_title;
+    std::string rds_artist;
     time_t title_start;
 };
 
