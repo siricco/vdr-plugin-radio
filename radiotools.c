@@ -32,14 +32,16 @@ bool enforce_directory(const char *path)
         if (mkdir(path, ACCESSPERMS)) {
             esyslog("radio: ERROR failed to create directory %s", path);
             return false;
-            }
         }
+    }
     else {
         if (!S_ISDIR(sbuf.st_mode)) {
-            esyslog("radio: ERROR failed to create directory %s: file exists but is not a directory", path);
+            esyslog(
+                    "radio: ERROR failed to create directory %s: file exists but is not a directory",
+                    path);
             return false;
-            }
         }
+    }
 
     return true;
 }
@@ -65,13 +67,15 @@ unsigned short crc16_ccitt(unsigned char *daten, int len, bool skipfirst)
     // with start 0xffff and result invers
     register unsigned short crc = 0xffff;
 
-    if (skipfirst) daten++;
+    if (skipfirst) {
+        daten++;
+    }
     while (len--) {
-    crc = (crc >> 8) | (crc << 8);
-    crc ^= *daten++;
-    crc ^= (crc & 0xff) >> 4;
-    crc ^= (crc << 8) << 4;
-    crc ^= ((crc & 0xff) << 4) << 1;
+        crc = (crc >> 8) | (crc << 8);
+        crc ^= *daten++;
+        crc ^= (crc & 0xff) >> 4;
+        crc ^= (crc << 8) << 4;
+        crc ^= ((crc & 0xff) << 4) << 1;
     }
 
 #if crc_timetest
@@ -93,12 +97,12 @@ const char *entitystr[EntityChars]  = { "&apos;",   "&amp;",    "&quot;",  "&gt"
                                         "&Ograve;", "&Oacute;", "&Ocirc;", "&Otilde;", "&ograve;", "&oacute;", "&ocirc;", "&otilde;",
                                         "&Ugrave;", "&Uacute;", "&Ucirc;", "&Ntilde;", "&ugrave;", "&uacute;", "&ucirc;", "&ntilde;" };
 const char *entitychar[EntityChars] = { "'",        "&",        "\"",      ">",        "<",         "c",        "*",      " ",
-                                        "Ä",        "ä",        "Ö",       "ö",        "Ü",         "ü",        "ß",      "°",
-                                        "À",        "Á",        "Â",       "Ã",        "à",         "á",        "â",      "ã",
-                                        "È",        "É",        "Ê",       "Ë",        "è",         "é",        "ê",      "ë",
-                                        "Ì",        "Í",        "Î",       "Ï",        "ì",         "í",        "î",      "ï",
-                                        "Ò",        "Ó",        "Ô",       "Õ",        "ò",         "ó",        "ô",      "õ", 
-                                        "Ù",        "Ú",        "Û",       "Ñ",        "ù",         "ú",        "û",      "ñ" };
+                                        "ï¿½",        "ï¿½",        "ï¿½",       "ï¿½",        "ï¿½",         "ï¿½",        "ï¿½",      "ï¿½",
+                                        "ï¿½",        "ï¿½",        "ï¿½",       "ï¿½",        "ï¿½",         "ï¿½",        "ï¿½",      "ï¿½",
+                                        "ï¿½",        "ï¿½",        "ï¿½",       "ï¿½",        "ï¿½",         "ï¿½",        "ï¿½",      "ï¿½",
+                                        "ï¿½",        "ï¿½",        "ï¿½",       "ï¿½",        "ï¿½",         "ï¿½",        "ï¿½",      "ï¿½",
+                                        "ï¿½",        "ï¿½",        "ï¿½",       "ï¿½",        "ï¿½",         "ï¿½",        "ï¿½",      "ï¿½", 
+                                        "ï¿½",        "ï¿½",        "ï¿½",       "ï¿½",        "ï¿½",         "ï¿½",        "ï¿½",      "ï¿½" };
 
 char *rds_entitychar(char *text)
 {
@@ -143,42 +147,46 @@ const char *xhtmlstr[XhtmlChars]  = {   "&#039;", "&#038;", "&#034;", "&#062;", 
 /*  hex todo:                   "&#x27;", "&#x26;", */
 /*  see *entitychar[] 
 const char *xhtmlychar[EntityChars] = { "'",    "&",      "\"",     ">",      "<",      "c",      "*",      " ",
-                                        "Ä",    "ä",      "Ö",      "ö",      "Ü",      "ü",      "ß",      "°",
-                                        "À",    "Á",      "Â",      "Ã",      "à",      "á",      "â",      "ã",
-                                        "È",    "É",      "Ê",      "Ë",      "è",      "é",      "ê",      "ë",
-                                        "Ì",    "Í",      "Î",      "Ï",      "ì",      "í",      "î",      "ï",
-                                        "Ò",    "Ó",      "Ô",      "Õ",      "ò",      "ó",      "ô",      "õ", 
-                                        "Ù",    "Ú",      "Û",      "Ñ",      "ù",      "ú",      "û",      "ñ" };
+                                        "ï¿½",    "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",
+                                        "ï¿½",    "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",
+                                        "ï¿½",    "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",
+                                        "ï¿½",    "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",
+                                        "ï¿½",    "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½", 
+                                        "ï¿½",    "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½",      "ï¿½" };
 */
 
 char *xhtml2text(char *text)
 {
     int i = 0, l, lof, lre, space;
     char *temp;
-    
+
     while (i < XhtmlChars) {
         if ((temp = strstr(text, xhtmlstr[i])) != NULL) {
-            if ((S_Verbose & 0x0f) >= 2)
+            if ((S_Verbose & 0x0f) >= 2) {
                 printf("XHTML-Char: %s\n", text);
+            }
             l = strlen(xhtmlstr[i]);
-            lof = (temp-text);
+            lof = (temp - text);
             if (strlen(text) < RT_MEL) {
                 lre = strlen(text) - lof - l;
                 space = 1;
-                }
-            else {
-                lre =  RT_MEL - 1 - lof - l;
-                space = 0;
-                }
-            memmove(text+lof, entitychar[i], 1);
-            memmove(text+lof+1, temp+l, lre);
-            if (space != 0)
-                memmove(text+lof+1+lre, "     ", l-1);
             }
-        else i++;
+            else {
+                lre = RT_MEL - 1 - lof - l;
+                space = 0;
+            }
+            memmove(text + lof, entitychar[i], 1);
+            memmove(text + lof + 1, temp + l, lre);
+            if (space != 0) {
+                memmove(text + lof + 1 + lre, "     ", l - 1);
+            }
         }
+        else {
+            i++;
+        }
+    }
 
-    rds_entitychar(text); 
+    rds_entitychar(text);
     return text;
 }
 
@@ -187,9 +195,9 @@ char *xhtml2text(char *text)
 char *rtrim(char *text)
 {
     char *s = text + strlen(text) - 1;
-    while (s >= text && (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r'))
+    while (s >= text && (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r')) {
         *s-- = 0;
-
+    }
     return text;
 }
 
@@ -212,25 +220,31 @@ char *audiobitrate(const unsigned char *data)
     //printf("vdr-radio: audioheader = <%02x %02x %02x %02x>\n", data[hl], data[hl+1], data[hl+2], data[hl+3]);
 
     char *temp;
-    if (data[hl] == 0xff && (data[hl+1] & 0xe0) == 0xe0) {  // syncword o.k.
-        int layer = (data[hl+1] & 0x06) >> 1;       // Layer description
+    if (data[hl] == 0xff && (data[hl + 1] & 0xe0) == 0xe0) {  // syncword o.k.
+        int layer = (data[hl + 1] & 0x06) >> 1;       // Layer description
         if (layer > 0) {
-            switch ((data[hl+1] & 0x18) >> 3) {     // Audio Version ID
-                case 0x00:  asprintf(&temp, "V2.5");
-                            break;
-                case 0x01:  asprintf(&temp, "Vres");
-                            break;
-                case 0x02:  asprintf(&temp, "V2");
-                            break;
-                case 0x03:  asprintf(&temp, "%s", bitrates[3-layer][data[hl+2] >> 4]);
-                            break;
-                }
+            switch ((data[hl + 1] & 0x18) >> 3) {     // Audio Version ID
+            case 0x00:
+                asprintf(&temp, "V2.5");
+                break;
+            case 0x01:
+                asprintf(&temp, "Vres");
+                break;
+            case 0x02:
+                asprintf(&temp, "V2");
+                break;
+            case 0x03:
+                asprintf(&temp, "%s", bitrates[3 - layer][data[hl + 2] >> 4]);
+                break;
             }
-        else
+        }
+        else {
             asprintf(&temp, "Lres");
         }
-    else
+    }
+    else {
         asprintf(&temp, "???");
+    }
 
     return temp;
 }
@@ -1770,137 +1784,171 @@ const char *tmc_mglabel[16] = {
 int tmc_mgsize[16] = { 3, 3, 5, 5, 5, 8, 8, 8, 8, 11, 16, 16, 16, 16, 0, 0 };
     
 // TMC, Alert-C Coding
-void tmc_parser(unsigned char *data, int len)   
-{
+void tmc_parser(unsigned char *data, int len) {
     static char lastdata[6];
-    
+
     if (len < 6) {
-    printf("TMC Length only '%d' bytes (<6).\n", len);
-    return;
-        }
+        printf("TMC Length only '%d' bytes (<6).\n", len);
+        return;
+    }
 
     if (memcmp(data, lastdata, 6) == 0) {
-    printf("TMC Repeating.\n");
-    return; 
-        }
+        printf("TMC Repeating.\n");
+        return;
+    }
     memcpy(lastdata, data, 6);
-    
+
     // Buffer = data[0], todo or not :D
-    
+
     // check Encrypted-Service, TMC Pro ?
     if ((data[1] & 0x1f) == 0x00) { // Type+DP = '00000'
-    printf("TMC Encrypted Service detected, TMC-Pro?\n");
-    return; 
-        }
+        printf("TMC Encrypted Service detected, TMC-Pro?\n");
+        return;
+    }
 
-    int type = (data[1] & 0x18)>>3;     // Type = User-,TuningInformation & Multi-,Singlegroup Message
-    int dp = data[1] & 0x07;            // Duration+Persistance or Continuity Index
-    int da = (data[2] & 0x80)>>7;       // DiversionAdvice or GroupIndicator
-    int di = (data[2] & 0x40)>>6;       // Direction (-/+) or 2.GroupIndicator
-    int ex = (data[2] & 0x38)>>3;       // Extent
-    int ev = (data[2] & 0x07)<<8 | data[3]; // Event
-    int lo = data[4]<<8 | data[5];      // Location
-    
+    int type = (data[1] & 0x18) >> 3; // Type = User-,TuningInformation & Multi-,Singlegroup Message
+    int dp = data[1] & 0x07;         // Duration+Persistance or Continuity Index
+    int da = (data[2] & 0x80) >> 7;       // DiversionAdvice or GroupIndicator
+    int di = (data[2] & 0x40) >> 6;       // Direction (-/+) or 2.GroupIndicator
+    int ex = (data[2] & 0x38) >> 3;       // Extent
+    int ev = (data[2] & 0x07) << 8 | data[3]; // Event
+    int lo = data[4] << 8 | data[5];      // Location
+
     switch (type) {
     case 0: // Multigroup-Message
-            printf("TMC Multi-Group Message, ");
-            if (da == 1) {
+        printf("TMC Multi-Group Message, ");
+        if (da == 1) {
             printf("First:\n");
-            printf("    CI: '%d', Direction: %s, Extent: '%d'\n", dp, tmc_direction[di], ex);
+            printf("    CI: '%d', Direction: %s, Extent: '%d'\n", dp,
+                    tmc_direction[di], ex);
             printf("    Event:    '%d' = %s\n", ev, tmc_event[ev]);
             printf("    Location: '%d' > LT not available yet :-(\n", lo);
-                }
-            else {
-            int gsi = (data[2] & 0x30)>>4;          // GroupSequenceIdentifier
+        }
+        else {
+            int gsi = (data[2] & 0x30) >> 4;          // GroupSequenceIdentifier
             printf("Subsequent:\n");
-            printf("    CI: '%d', 2.GI: '%d', GSI: '%d', Block_0x: '%02x%02x%02x%02x'\n", dp, di, gsi, data[2]&0xf, data[3], data[4], data[5]);
+            printf(
+                    "    CI: '%d', 2.GI: '%d', GSI: '%d', Block_0x: '%02x%02x%02x%02x'\n",
+                    dp, di, gsi, data[2] & 0xf, data[3], data[4], data[5]);
             if (di == 0) {
                 printf("    SecondGroupIndicator = 0 -> todo, exit here.\n\n");
                 return;
-               }            
-            unsigned int block = (data[2]&0x0f)<<24 | data[3]<<16 | data[4]<<8 | data[5];
+            }
+            unsigned int block = (data[2] & 0x0f) << 24 | data[3] << 16
+                    | data[4] << 8 | data[5];
             int lc = 1;
             int rbits = 28;
             while (rbits > 0) {
-            int lb = block>>(rbits-4);
-            rbits -= 4;
-            if (lb <= 0)
-                return;
-            block = block & ((unsigned long int)(pow(2,rbits)) - 1);
-            rbits -= tmc_mgsize[lb];
-            int val = block>>(rbits);
-            printf("    #%d: Label '%02d' = %s", lc, lb, tmc_mglabel[lb]);
-            if (val > 0) {
+                int lb = block >> (rbits - 4);
+                rbits -= 4;
+                if (lb <= 0)
+                    return;
+                block = block & ((unsigned long int) (pow(2, rbits)) - 1);
+                rbits -= tmc_mgsize[lb];
+                int val = block >> (rbits);
+                printf("    #%d: Label '%02d' = %s", lc, lb, tmc_mglabel[lb]);
+                if (val > 0) {
                     switch (lb) {
-                    case 0:  printf(", Value '%d' min.?\n", val);
-                     break;
-                    case 2:  printf(", Value '%d' km?\n", val);
-                         break;
-                    case 3:  printf(", Value '%d' km/h?\n", val);
-                         break;
-                    case 9:  printf(", Value '%d' = %s\n", val, tmc_event[val]);
-                     break;
+                    case 0:
+                        printf(", Value '%d' min.?\n", val);
+                        break;
+                    case 2:
+                        printf(", Value '%d' km?\n", val);
+                        break;
+                    case 3:
+                        printf(", Value '%d' km/h?\n", val);
+                        break;
+                    case 9:
+                        printf(", Value '%d' = %s\n", val, tmc_event[val]);
+                        break;
                     case 11:
-                    case 13: printf(", Value '%d' > LT not available yet :-(\n", val);
-                     break;
-                    case 14:  
-                    case 15: printf("  ---\n");
-                     break;
-                    default: printf(", Value '%d'\n", val);
-                        }
+                    case 13:
+                        printf(", Value '%d' > LT not available yet :-(\n",
+                                val);
+                        break;
+                    case 14:
+                    case 15:
+                        printf("  ---\n");
+                        break;
+                    default:
+                        printf(", Value '%d'\n", val);
                     }
-                else {
-                if (block > 0) 
-                    printf(", rest block_0x '%04x'\n", (int)block);
-                else
-                    printf(", ...\n");
-                    }
-                block = block & ((unsigned int)(pow(2,rbits)) - 1);
-                lc++;
                 }
+                else {
+                    if (block > 0) {
+                        printf(", rest block_0x '%04x'\n", (int) block);
+                    }
+                    else {
+                        printf(", ...\n");
+                    }
+                }
+                block = block & ((unsigned int) (pow(2, rbits)) - 1);
+                lc++;
             }
+        }
         break;
     case 1: // Singlegroup-Message
         printf("TMC Single-Group Message:\n");
-        printf("    Duration: %s, Diversion: '%d', Direction: %s, Extent: '%d'\n", tmc_duration[dp], da, tmc_direction[di], ex);
+        printf("    Duration: %s, Diversion: '%d', Direction: %s, Extent: '%d'\n",
+                tmc_duration[dp], da, tmc_direction[di], ex);
         printf("    Event:    '%d' = %s\n", ev, tmc_event[ev]);
         printf("    Location: '%d' > LT not available yet :-(\n", lo);
-            break;  
+        break;
     case 2:
     case 3: // System,Tuning
         printf("TMC Tuning/System Information:\n");
         switch (data[1] & 0x0f) {
-            case 9:  printf("    LTN: '%d', MGS: '%d', SID: '%d' %04x.\n", data[2]>>2, (data[2] & 0x03)<<2 | data[3]>>6, data[3] & 0x3f, lo);
-                 break;
-            default: printf("    todo, exit.\n");
-                }
+        case 9:
+            printf("    LTN: '%d', MGS: '%d', SID: '%d' %04x.\n", data[2] >> 2,
+                    (data[2] & 0x03) << 2 | data[3] >> 6, data[3] & 0x3f, lo);
+            break;
+        default:
+            printf("    todo, exit.\n");
         }
+    }
 }
 
-const char* ptynr2string(int nr)
-{
+const char* ptynr2string(int nr) {
     switch (nr) {
-        // Source: http://www.ebu.ch/trev_255-beale.pdf
-        case  0: return tr("unknown program type");
-        case  1: return tr("News");
-        case  2: return tr("Current affairs");
-        case  3: return tr("Information");
-        case  4: return tr("Sport");
-        case  5: return tr("Education");
-        case  6: return tr("Drama");
-        case  7: return tr("Culture");
-        case  8: return tr("Science");
-        case  9: return tr("Varied");
-        case 10: return tr("Pop music");
-        case 11: return tr("Rock music");
-        case 12: return tr("M.O.R. music");
-        case 13: return tr("Light classical");
-        case 14: return tr("Serious classical");
-        case 15: return tr("Other music");
+    // Source: http://www.ebu.ch/trev_255-beale.pdf
+    case 0:
+        return tr("unknown program type");
+    case 1:
+        return tr("News");
+    case 2:
+        return tr("Current affairs");
+    case 3:
+        return tr("Information");
+    case 4:
+        return tr("Sport");
+    case 5:
+        return tr("Education");
+    case 6:
+        return tr("Drama");
+    case 7:
+        return tr("Culture");
+    case 8:
+        return tr("Science");
+    case 9:
+        return tr("Varied");
+    case 10:
+        return tr("Pop music");
+    case 11:
+        return tr("Rock music");
+    case 12:
+        return tr("M.O.R. music");
+    case 13:
+        return tr("Light classical");
+    case 14:
+        return tr("Serious classical");
+    case 15:
+        return tr("Other music");
         // 16-30 "Spares"
-        case 31: return tr("Alarm");
-        default: return "?";
-        }
+    case 31:
+        return tr("Alarm");
+    default:
+        return "?";
+    }
 }
 
 //--------------- End -----------------------------------------------------------------

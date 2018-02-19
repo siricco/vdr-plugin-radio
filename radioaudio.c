@@ -939,8 +939,7 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
             // byte 8   = MEL (MessageElementLength, max. 64+1 byte @ RT)
             if (mtext[8] == 0 || mtext[8] > RT_MEL || mtext[8] > leninfo - 4) {
                 if ((S_Verbose & 0x0f) >= 1) {
-                    printf(
-                            "RT-Error: Length=0 or not correct (MFL= %d, MEL= %d)\n",
+                    printf("RT-Error: Length=0 or not correct (MFL= %d, MEL= %d)\n",
                             mtext[4], mtext[8]);
                 }
                 return;
@@ -1031,7 +1030,8 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                                 "RTp-Error (tag#%d = Typ/Start/Len): %d/%d/%d (Start+Length > 'RT-MEL' !)\n",
                                 i + 1, rtp_typ[i], rtp_start[i], rtp_len[i]);
                     }
-                } else {
+                }
+                else {
                     char temptext[RT_MEL];
                     memset(temptext, 0x20, RT_MEL - 1);
                     memmove(temptext, plustext + rtp_start[i], rtp_len[i] + 1);
@@ -1048,15 +1048,17 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                             if (memcmp(RTP_Title, temptext, RT_MEL - 1) != 0
                                     || (mtext[10] & 0x10) != RTP_ItemToggle) {
                                 memcpy(RTP_Title, temptext, RT_MEL - 1);
-                                if (RT_PlusShow && rtp_itime.Elapsed() > 1000)
+                                if (RT_PlusShow && rtp_itime.Elapsed() > 1000) {
                                     rtp_idiffs = (int) rtp_itime.Elapsed()
                                             / 1000;
+                                }
                                 if (!rtp_content.item_New) {
                                     RTP_Starttime = time(NULL);
                                     rtp_itime.Set(0);
                                     sprintf(RTP_Artist, "---");
-                                    if (++rtp_content.item_Index >= MAX_RTPC)
+                                    if (++rtp_content.item_Index >= MAX_RTPC) {
                                         rtp_content.item_Index = 0;
+                                    }
                                     rtp_content.item_Start[rtp_content.item_Index] =
                                             time(NULL);    // todo: replay-mode
                                     rtp_content.item_Artist[rtp_content.item_Index] =
@@ -1064,10 +1066,11 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                                 }
                                 rtp_content.item_New =
                                         (!rtp_content.item_New) ? true : false;
-                                if (rtp_content.item_Index >= 0)
+                                if (rtp_content.item_Index >= 0) {
                                     asprintf(
                                             &rtp_content.item_Title[rtp_content.item_Index],
                                             "%s", rtrim(rtp_content.temptext));
+                                }
                                 RT_PlusShow = RT_MsgShow = rtp_itoggle = true;
                             }
                         }
@@ -1080,15 +1083,17 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                             if (memcmp(RTP_Artist, temptext, RT_MEL - 1) != 0
                                     || (mtext[10] & 0x10) != RTP_ItemToggle) {
                                 memcpy(RTP_Artist, temptext, RT_MEL - 1);
-                                if (RT_PlusShow && rtp_itime.Elapsed() > 1000)
+                                if (RT_PlusShow && rtp_itime.Elapsed() > 1000) {
                                     rtp_idiffs = (int) rtp_itime.Elapsed()
                                             / 1000;
+                                }
                                 if (!rtp_content.item_New) {
                                     RTP_Starttime = time(NULL);
                                     rtp_itime.Set(0);
                                     sprintf(RTP_Title, "---");
-                                    if (++rtp_content.item_Index >= MAX_RTPC)
+                                    if (++rtp_content.item_Index >= MAX_RTPC) {
                                         rtp_content.item_Index = 0;
+                                    }
                                     rtp_content.item_Start[rtp_content.item_Index] =
                                             time(NULL);    // todo: replay-mode
                                     rtp_content.item_Title[rtp_content.item_Index] =
@@ -1096,10 +1101,11 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                                 }
                                 rtp_content.item_New =
                                         (!rtp_content.item_New) ? true : false;
-                                if (rtp_content.item_Index >= 0)
+                                if (rtp_content.item_Index >= 0) {
                                     asprintf(
                                             &rtp_content.item_Artist[rtp_content.item_Index],
                                             "%s", rtrim(rtp_content.temptext));
+                                }
                                 RT_PlusShow = RT_MsgShow = rtp_itoggle = true;
                             }
                         }
@@ -1113,22 +1119,25 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                                 rtrim(rtp_content.temptext));
                         break;
                     case 14:    // Info_Stockmarket
-                        if (++rtp_content.info_StockIndex >= MAX_RTPC)
+                        if (++rtp_content.info_StockIndex >= MAX_RTPC) {
                             rtp_content.info_StockIndex = 0;
+                        }
                         asprintf(
                                 &rtp_content.info_Stock[rtp_content.info_StockIndex],
                                 "%s", rtrim(rtp_content.temptext));
                         break;
                     case 15:    // Info_Sport
-                        if (++rtp_content.info_SportIndex >= MAX_RTPC)
+                        if (++rtp_content.info_SportIndex >= MAX_RTPC) {
                             rtp_content.info_SportIndex = 0;
+                        }
                         asprintf(
                                 &rtp_content.info_Sport[rtp_content.info_SportIndex],
                                 "%s", rtrim(rtp_content.temptext));
                         break;
                     case 16:    // Info_Lottery
-                        if (++rtp_content.info_LotteryIndex >= MAX_RTPC)
+                        if (++rtp_content.info_LotteryIndex >= MAX_RTPC) {
                             rtp_content.info_LotteryIndex = 0;
+                        }
                         asprintf(
                                 &rtp_content.info_Lottery[rtp_content.info_LotteryIndex],
                                 "%s", rtrim(rtp_content.temptext));
@@ -1138,8 +1147,9 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                                 rtrim(rtp_content.temptext));
                         break;
                     case 25:    // Info_Weather
-                        if (++rtp_content.info_WeatherIndex >= MAX_RTPC)
+                        if (++rtp_content.info_WeatherIndex >= MAX_RTPC) {
                             rtp_content.info_WeatherIndex = 0;
+                        }
                         asprintf(
                                 &rtp_content.info_Weather[rtp_content.info_WeatherIndex],
                                 "%s", rtrim(rtp_content.temptext));
@@ -1161,8 +1171,9 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
                                 rtrim(rtp_content.temptext));
                         break;
                     case 30:    // Info_Other
-                        if (++rtp_content.info_OtherIndex >= MAX_RTPC)
+                        if (++rtp_content.info_OtherIndex >= MAX_RTPC) {
                             rtp_content.info_OtherIndex = 0;
+                        }
                         asprintf(
                                 &rtp_content.info_Other[rtp_content.info_OtherIndex],
                                 "%s", rtrim(rtp_content.temptext));
@@ -1511,7 +1522,8 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                                 if (slidenumr == 0) {
                                     Rass_Flags[0][0] = !slidedel;
                                     (RT_Info > 0) ? : RT_Info = 0; // open RadioTextOsd for ArchivTip
-                                } else {
+                                }
+                                else {
                                     int islide = (int) floor(slidenumr / 1000);
                                     for (int i = 3; i >= 0; i--) {
                                         if (fmod(slidenumr, pow(10, i)) == 0) {
@@ -1888,12 +1900,15 @@ void cRadioTextOsd::ShowText(void) {
                             fcolor, bcolor);
                     osd->DrawBitmap(Setup.OSDWidth - 48, inloff - 1, radio,
                             fcolor, bcolor);
-                } else
+                }
+                else {
                     osd->DrawBitmap(Setup.OSDWidth - 84, inloff, rds, bcolor,
                             fcolor);
-                if (ARec_Record)
+                }
+                if (ARec_Record) {
                     osd->DrawBitmap(Setup.OSDWidth - 140, inloff, arec, bcolor,
                             0xFFFC1414);  // FG=Red
+                }
                 else {
                     inloff = (ftitel->Height() + 9 - ftext->Height()) / 2;
                     osd->DrawText(4, inloff, RadioAudio->bitrate, fcolor,
@@ -1901,9 +1916,10 @@ void cRadioTextOsd::ShowText(void) {
                             ftext->Height(), taRight);
                 }
             }
-        } else
+        } else {
             osd->DrawRectangle(0, 0, Setup.OSDWidth - 1, ftitel->Height() + 9,
                     0x00000000);
+        }
         // Body
         bcolor =
                 (S_RtSkinColor > 0) ?
@@ -1917,30 +1933,36 @@ void cRadioTextOsd::ShowText(void) {
         osd->DrawEllipse(0, bheight - 6, 5, bheight - 1, 0x00000000, -3);
         osd->DrawEllipse(Setup.OSDWidth - 6, bheight - 6, Setup.OSDWidth - 1,
                 bheight - 1, 0x00000000, -4);
-        if (S_RtOsdTitle == 1)
+        if (S_RtOsdTitle == 1) {
             osd->DrawRectangle(5, ftitel->Height() + 9, Setup.OSDWidth - 6,
                     ftitel->Height() + 9, fcolor);
+        }
         if (RT_MsgShow) {
             // RT-Text roundloop
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
             if (S_RtOsdLoop == 1) { // latest bottom
-                for (int i = ind + 1; i < S_RtOsdRows; i++)
+                for (int i = ind + 1; i < S_RtOsdRows; i++) {
                     osd->DrawText(5, yoff + fheight * (ii++),
                             Convert(RT_Text[i]), fcolor, clrTransparent, ftext,
                             Setup.OSDWidth - 4, ftext->Height());
-                for (int i = 0; i <= ind; i++)
+                }
+                for (int i = 0; i <= ind; i++) {
                     osd->DrawText(5, yoff + fheight * (ii++),
                             Convert(RT_Text[i]), fcolor, clrTransparent, ftext,
                             Setup.OSDWidth - 4, ftext->Height());
-            } else {          // latest top
-                for (int i = ind; i >= 0; i--)
+                }
+            }
+            else {          // latest top
+                for (int i = ind; i >= 0; i--) {
                     osd->DrawText(5, yoff + fheight * (ii++),
                             Convert(RT_Text[i]), fcolor, clrTransparent, ftext,
                             Setup.OSDWidth - 4, ftext->Height());
-                for (int i = S_RtOsdRows - 1; i > ind; i--)
+                }
+                for (int i = S_RtOsdRows - 1; i > ind; i--) {
                     osd->DrawText(5, yoff + fheight * (ii++),
                             Convert(RT_Text[i]), fcolor, clrTransparent, ftext,
                             Setup.OSDWidth - 4, ftext->Height());
+                }
             }
             // + RT-Plus or PS-Text = 2 rows
             if ((S_RtOsdTags == 1 && RT_PlusShow) || S_RtOsdTags >= 2) {
@@ -1962,14 +1984,17 @@ void cRadioTextOsd::ShowText(void) {
                     osd->DrawText(fwidth, 3 + yoff + fheight * (ii++),
                             Convert(RTP_Artist), fcolor, clrTransparent, ftext,
                             Setup.OSDWidth - 4, ftext->Height());
-                } else {
+                }
+                else {
                     char *temp;
                     asprintf(&temp, "%s", "");
                     int ind = (RDS_PSIndex == 0) ? 11 : RDS_PSIndex - 1;
-                    for (int i = ind + 1; i < 12; i++)
+                    for (int i = ind + 1; i < 12; i++) {
                         asprintf(&temp, "%s%s ", temp, RDS_PSText[i]);
-                    for (int i = 0; i <= ind; i++)
+                    }
+                    for (int i = 0; i <= ind; i++) {
                         asprintf(&temp, "%s%s ", temp, RDS_PSText[i]);
+                    }
                     snprintf(stext[1], 6 * 9, "%s", temp);
                     snprintf(stext[2], 6 * 9, "%s", temp + (6 * 9));
                     free(temp);
@@ -2002,8 +2027,9 @@ int cRadioTextOsd::RassImage(int QArchiv, int QKey, bool DirUp) {
     int i;
 
     if (QKey >= 0 && QKey <= 9) {
-        if (QArchiv == 0)
+        if (QArchiv == 0) {
             (Rass_Flags[QKey][0]) ? QArchiv = QKey * 1000 : QArchiv = 0;
+        }
         else if (QArchiv > 0) {
             if (floor(QArchiv / 1000) == QKey) {
                 for (i = 3; i >= 0; i--) {
@@ -2014,21 +2040,25 @@ int cRadioTextOsd::RassImage(int QArchiv, int QKey, bool DirUp) {
                         QArchiv += QKey * (int) pow(10, --i) :
                         QArchiv = QKey * 1000;
                 (Rass_Flags[QKey][3 - i]) ? : QArchiv = QKey * 1000;
-            } else
+            }
+            else {
                 (Rass_Flags[QKey][0]) ? QArchiv = QKey * 1000 : QArchiv = 0;
+            }
         }
     }
     // Gallery
     else if (QKey > 9 && Rass_GalCount >= 0) {
-        if (QArchiv < Rass_GalStart || QArchiv > Rass_GalEnd)
+        if (QArchiv < Rass_GalStart || QArchiv > Rass_GalEnd) {
             QArchiv = Rass_GalStart - 1;
+        }
         if (DirUp) {
             for (i = QArchiv + 1; i <= Rass_GalEnd; i++) {
                 if (Rass_Gallery[i])
                     break;
             }
             QArchiv = (i <= Rass_GalEnd) ? i : Rass_GalStart;
-        } else {
+        }
+        else {
             for (i = QArchiv - 1; i >= Rass_GalStart; i--) {
                 if (Rass_Gallery[i])
                     break;
@@ -2039,10 +2069,12 @@ int cRadioTextOsd::RassImage(int QArchiv, int QKey, bool DirUp) {
 
     // show mpeg-still
     char *image;
-    if (QArchiv >= 0)
+    if (QArchiv >= 0) {
         asprintf(&image, "%s/Rass_%d.mpg", DataDir, QArchiv);
-    else
+    }
+    else {
         asprintf(&image, "%s/Rass_show.mpg", DataDir);
+    }
     RadioImage->SetBackgroundImage(image);
     free(image);
 
@@ -2097,14 +2129,18 @@ void cRadioTextOsd::RassOsd(void) {
         for (int i = 1; i <= 9; i++) {
             // Pages
             if (Rass_Flags[i][0] && Rass_Flags[i][1] && Rass_Flags[i][2]
-                    && Rass_Flags[i][3])
+                    && Rass_Flags[i][3]) {
                 qosd->DrawBitmap(48, (i * 24) + offs, pages4, bcolor, fcolor);
-            else if (Rass_Flags[i][0] && Rass_Flags[i][1] && Rass_Flags[i][2])
+            }
+            else if (Rass_Flags[i][0] && Rass_Flags[i][1] && Rass_Flags[i][2]) {
                 qosd->DrawBitmap(48, (i * 24) + offs, pages3, bcolor, fcolor);
-            else if (Rass_Flags[i][0] && Rass_Flags[i][1])
+            }
+            else if (Rass_Flags[i][0] && Rass_Flags[i][1]) {
                 qosd->DrawBitmap(48, (i * 24) + offs, pages2, bcolor, fcolor);
-            else if (Rass_Flags[i][0])
+            }
+            else if (Rass_Flags[i][0]) {
                 qosd->DrawBitmap(48, (i * 24) + offs, page1, bcolor, fcolor);
+            }
             // Marker
             if (floor(Rass_Archiv / 1000) == i) {
                 qosd->DrawBitmap(28, (i * 24) + offs, marker, bcolor, fcolor);
@@ -2213,8 +2249,9 @@ void cRadioTextOsd::RassImgSave(const char *size, int pos) {
                         DataDir, RT_Titel, i, ts->tm_mon + 1, ts->tm_mday);
                 asprintf(&cmd, "ffmpeg -i \"%s\" -s %s -f mjpeg -y \"%s\"",
                         infile, size, outfile);
-                if ((error = system(cmd)))
+                if ((error = system(cmd))) {
                     i = Rass_GalEnd + 1;
+                }
             }
         }
         asprintf(&cmd, "%s", tr("Rass-Image(s) saved from Gallery"));
@@ -2237,8 +2274,10 @@ void cRadioTextOsd::RassImgSave(const char *size, int pos) {
     if (error) {
         asprintf(&cmd, "%s: %s", tr("Rass-Image failed"), outfile);
         Skins.Message(mtError, cmd, Setup.OSDMessageTime);
-    } else
+    }
+    else {
         Skins.Message(mtInfo, cmd, Setup.OSDMessageTime);
+    }
 
     free(outfile);
     free(cmd);
@@ -2369,7 +2408,7 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
         return state;
 
     // Key pressed ...
-    if (Key != kNone && Key < k_Release) {
+    if ((Key != kNone) && (Key < k_Release)) {
         if (osd) {              // Radiotext, -plus Osd
             switch (Key) {
             case kBack:
@@ -2387,7 +2426,8 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
                 LastKey = (Key == kChanUp || Key == kChanDn) ? kNone : Key;
                 return osEnd;
             }
-        } else if (qosd && Rass_Archiv >= 0) {    // Rass-Archiv Osd
+        }
+        else if (qosd && Rass_Archiv >= 0) {    // Rass-Archiv Osd
             int i, pos;
             pos = (Rass_Archiv > 0 && Rass_Archiv <= RASS_GALMAX) ?
                     10 : (int) floor(Rass_Archiv / 1000);
@@ -2395,8 +2435,9 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
             // back to Slideshow
             case kBlue:
             case kBack:
-                if (!RT_Replay)
+                if (!RT_Replay) {
                     Rass_Archiv = RassImage(-1, 0, false);
+                }
                 else {
                     Rass_Archiv = -1;
                     RadioImage->SetBackgroundImage(ReplayFile);
@@ -2429,8 +2470,9 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
                         RassOsd();
                         return osContinue;
                     }
-                    if (++i > 10)
+                    if (++i > 10) {
                         i = 0;
+                    }
                 }
                 break;
             case kUp:
@@ -2441,8 +2483,9 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
                         RassOsd();
                         return osContinue;
                     }
-                    if (--i < 0)
+                    if (--i < 0) {
                         i = 10;
+                    }
                 }
                 break;
             case kRed:
@@ -2458,7 +2501,8 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
                 LastKey = (Key == kChanUp || Key == kChanDn) ? kNone : Key;
                 return osEnd;
             }
-        } else if (qosd && Rass_Archiv == -1) {   // Rass-Slideshow Osd
+        }
+        else if (qosd && Rass_Archiv == -1) {   // Rass-Slideshow Osd
             switch (Key) {
             // close
             case kBack:
@@ -2479,7 +2523,8 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
                 LastKey = (Key == kChanUp || Key == kChanDn) ? kNone : Key;
                 return osEnd;
             }
-        } else {                  // no RT && no Rass
+        }
+        else {                  // no RT && no Rass
             Hide();
             LastKey = (Key == kChanUp || Key == kChanDn) ? kNone : Key;
             return osEnd;
@@ -2491,13 +2536,16 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
         RT_OsdTO = true;
         Hide();
         return osEnd;
-    } else if (Rass_Archiv >= 0)
+    }
+    else if (Rass_Archiv >= 0) {
         RassOsd();
+    }
     else if (RT_MsgShow && !rtclosed
             && (!Rass_Flags[0][0] || S_RassText >= 2 || rassclosed)) { // Rass_Show == -1
         RassOsdClose();
         ShowText();
-    } else if (Rass_Flags[0][0] && !rassclosed
+    }
+    else if (Rass_Flags[0][0] && !rassclosed
             && (S_RassText < 2 || rtclosed)) {
         RTOsdClose();
         RassOsdTip();

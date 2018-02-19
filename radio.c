@@ -23,7 +23,7 @@
 #endif
 
 #ifndef GIT_REV
-static const char *VERSION = "1.0.1";
+static const char *VERSION = "1.1.0";
 #else
 static const char *VERSION = GIT_REV;
 #endif
@@ -97,22 +97,23 @@ cRadioCheck::cRadioCheck(void)
 }
 
 cRadioCheck::~cRadioCheck() {
-    if (Running())
+    if (Running()) {
         Stop();
+    }
 }
 
 void cRadioCheck::Init(void) {
     if (RadioCheck == NULL) {
         RadioCheck = new cRadioCheck;
         RadioCheck->Start();
-        }
+    }
 }
 
 void cRadioCheck::Exit(void) {
     if (RadioCheck != NULL) {
         RadioCheck->Stop();
         DELETENULL(RadioCheck);
-        }
+    }
 }
 
 void cRadioCheck::Stop(void) {
@@ -121,17 +122,18 @@ void cRadioCheck::Stop(void) {
 
 void cRadioCheck::Action(void)
 {
-
-    if ((S_Verbose & 0x0f) >= 2)
+    if ((S_Verbose & 0x0f) >= 2) {
         printf("vdr-radio: background-checking starts\n");
+    }
 
     while (Running()) {
         cCondWait::SleepMs(2000);
-    
+
         // check Live-Radio
-        if (IsRadioOrReplay == 1 && chan != NULL) {
+        if ((IsRadioOrReplay == 1) && (chan != NULL)) {
             if (chan->Vpid()) {
-                isyslog("radio: channnel '%s' got Vpid= %d", chan->Name(), chan->Vpid());
+                isyslog("radio: channnel '%s' got Vpid= %d", chan->Name(),
+                        chan->Vpid());
                 IsRadioOrReplay = 0;
 #if VDRVERSNUM >= 20300
                 LOCK_CHANNELS_READ
@@ -140,61 +142,91 @@ void cRadioCheck::Action(void)
                 Channels.SwitchTo(cDevice::CurrentChannel());
 #endif
                 //cDevice::PrimaryDevice()->SwitchChannel(chan, true);
-                }
-            else {  
-                if ((InfoTimeout-=2) <= 0) {
+            } else {
+                if ((InfoTimeout -= 2) <= 0) {
                     InfoTimeout = 20;
                     int chtid = chan->Tid();
                     // Kanal-EPG PresentEvent
-                    if (chan->Apid(0) > 0 && (chtid == PREMIERERADIO_TID || chtid == KDRADIO_TID
-                                              || chtid == UMRADIO_TID1 || chtid == UMRADIO_TID2 || chtid == UMRADIO_TID3 || chtid == UMRADIO_TID4 || chtid == UMRADIO_TID5)) {
+                    if (chan->Apid(0) > 0
+                            && (chtid == PREMIERERADIO_TID
+                                    || chtid == KDRADIO_TID
+                                    || chtid == UMRADIO_TID1
+                                    || chtid == UMRADIO_TID2
+                                    || chtid == UMRADIO_TID3
+                                    || chtid == UMRADIO_TID4
+                                    || chtid == UMRADIO_TID5)) {
 #if VDRVERSNUM >= 20300
                         LOCK_SCHEDULES_READ
                         static cStateKey SchedulesStateKey;
-                        const cSchedules *scheds = cSchedules::GetSchedulesRead(SchedulesStateKey);
+                        const cSchedules *scheds = cSchedules::GetSchedulesRead(
+                                SchedulesStateKey);
 #else
                         cSchedulesLock schedLock;
                         const cSchedules *scheds = cSchedules::Schedules(schedLock);
 #endif
                         if (scheds != NULL) {
-                            const cSchedule *sched = scheds->GetSchedule(chan->GetChannelID());
+                            const cSchedule *sched = scheds->GetSchedule(
+                                    chan->GetChannelID());
                             if (sched != NULL) {
-                                const cEvent *present = sched->GetPresentEvent();
+                                const cEvent *present =
+                                        sched->GetPresentEvent();
                                 if (present != NULL) {
-                                    if (chtid == PREMIERERADIO_TID)     // Premiere
-                                        InfoTimeout = epg_premiere(present->Title(), present->Description(), present->StartTime(), present->EndTime());
-                                    else if (chtid == KDRADIO_TID)      // Kabel Deutschland
-                                        InfoTimeout = epg_kdg(present->Description(), present->StartTime(), present->EndTime());
-                                    else                                // Unity Media Kabel
-                                        InfoTimeout = epg_unitymedia(present->Description(), present->StartTime(), present->EndTime());
-                                    InfoRequest = true;
+                                    if (chtid == PREMIERERADIO_TID) { // Premiere
+                                        InfoTimeout = epg_premiere(
+                                                present->Title(),
+                                                present->Description(),
+                                                present->StartTime(),
+                                                present->EndTime());
                                     }
-                                else
-                                    dsyslog("radio: no event.present (Tid= %d, Apid= %d)", chtid, chan->Apid(0));
+                                    else if (chtid == KDRADIO_TID) {// Kabel Deutschland
+                                        InfoTimeout = epg_kdg(
+                                                present->Description(),
+                                                present->StartTime(),
+                                                present->EndTime());
+                                    }
+                                    else {
+                                        // Unity Media Kabel
+                                        InfoTimeout = epg_unitymedia(
+                                                present->Description(),
+                                                present->StartTime(),
+                                                present->EndTime());
+                                    }
+                                    InfoRequest = true;
                                 }
-                            else
-                                dsyslog("radio: no schedule (Tid= %d, Apid= %d)", chtid, chan->Apid(0));
+                                else {
+                                    dsyslog("radio: no event.present (Tid= %d, Apid= %d)",
+                                            chtid, chan->Apid(0));
+                                }
+                            }
+                            else {
+                                dsyslog("radio: no schedule (Tid= %d, Apid= %d)",
+                                        chtid, chan->Apid(0));
                             }
                         }
+                    }
                     // Artist/Title with external script?
-                    else if (chan->Apid(0) > 0 && DoInfoReq) {  
+                    else if (chan->Apid(0) > 0 && DoInfoReq) {
                         InfoTimeout = info_request(chtid, chan->Apid(0));
                         InfoRequest = (InfoTimeout > 0);
-                        }
                     }
                 }
             }
-
-        // temp. OSD-CloseTimeout
-        (RT_OsdTOTemp > 0) ? RT_OsdTOTemp -= 2 : RT_OsdTOTemp = 0;  // in sec like this cycletime
-
-        // Radiotext-Autodisplay
-        if ((S_RtDispl == 2) && (RT_Info >= 0) && !RT_OsdTO && (RT_OsdTOTemp == 0) && RT_ReOpen && !Skins.IsOpen() && !cOsd::IsOpen())
-            cRemote::CallPlugin("radio");
         }
 
-    if ((S_Verbose & 0x0f) >= 2)
+        // temp. OSD-CloseTimeout
+        (RT_OsdTOTemp > 0) ? RT_OsdTOTemp -= 2 : RT_OsdTOTemp = 0; // in sec like this cycletime
+
+        // Radiotext-Autodisplay
+        if ((S_RtDispl == 2) && (RT_Info >= 0) && !RT_OsdTO
+                && (RT_OsdTOTemp == 0) && RT_ReOpen && !Skins.IsOpen()
+                && !cOsd::IsOpen()) {
+            cRemote::CallPlugin("radio");
+        }
+    }
+
+    if ((S_Verbose & 0x0f) >= 2) {
         printf("vdr-radio: background-checking ends\n");
+    }
 }
 
 
@@ -501,10 +533,12 @@ bool cPluginRadio::Start(void)
         DataDir = strdup("/tmp/vdr-radio.XXXXXX");
         mkdtemp(DataDir);
         }
-    if (!LiveFileParam)
+    if (!LiveFileParam) {
         asprintf(&LiveFile, "%s/radio.mpg", ConfigDir);
-    if (!ReplayFileParam)
+    }
+    if (!ReplayFileParam) {
         asprintf(&ReplayFile, "%s/replay.mpg", ConfigDir);
+    }
 
     cRadioCheck::Init();    
 
@@ -515,9 +549,9 @@ void cPluginRadio::Stop(void)
 {
     cRadioCheck::Exit();
 
-    if (IsRadioOrReplay > 0) 
+    if (IsRadioOrReplay > 0) {
         radioAudio->DisableRadioTextProcessing();
-    
+    }
     radioImage->Exit();
 }
 
@@ -532,16 +566,16 @@ cOsdObject *cPluginRadio::MainMenuAction(void)
 /*  if (!cDevice::PrimaryDevice()->Transferring() && !cDevice::PrimaryDevice()->Replaying()) {
         //cRemote::CallPlugin("radio"); // try again later <-- disabled, looping if activate over menu @ tv in dvb-livemode
         }   */
-    if (S_Activate > 0 && S_RtFunc > 0 && S_RtDispl > 0 && IsRadioOrReplay > 0) {
+    if (S_Activate > 0 && S_RtFunc > 0 && S_RtDispl > 0
+            && IsRadioOrReplay > 0) {
         if (!RTplus_Osd) {
             cRadioTextOsd *rtosd = new cRadioTextOsd();
             return rtosd;
-            }
-        else {
+        } else {
             cRTplusOsd *rtposd = new cRTplusOsd();
             return rtposd;
-            }
         }
+    }
 
     return NULL;
 }
@@ -640,45 +674,47 @@ const char **cPluginRadio::SVDRPHelpPages(void)
 cString cPluginRadio::SVDRPCommand(const char *Command, const char *Option, int &ReplyCode)
 {
     if (strcasecmp(Command, "RTINFO") == 0) {
-    // we use the default reply code here
+        // we use the default reply code here
         if (RT_Info == 2) {
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
-            return cString::sprintf(" Radiotext: %s\n RT-Title : %s\n RT-Artist: %s\n", RT_Text[ind], RTP_Title, RTP_Artist);
-            }
-        else if (RT_Info == 1) {
+            return cString::sprintf(
+                    " Radiotext: %s\n RT-Title : %s\n RT-Artist: %s\n",
+                    RT_Text[ind], RTP_Title, RTP_Artist);
+        } else if (RT_Info == 1) {
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
-            return cString::sprintf(" Radiotext: %s\n",     RT_Text[ind]);
-            }
-        else
+            return cString::sprintf(" Radiotext: %s\n", RT_Text[ind]);
+        } else
             return cString::sprintf(" Radiotext not available (yet)\n");
-        }
-    else if (strcasecmp(Command, "RTCLOSE") == 0) {
+    } else if (strcasecmp(Command, "RTCLOSE") == 0) {
         // we use the default reply code here
         if (RT_OsdTO)
             return cString::sprintf("RT-OSD already closed");
         else {
             RT_OsdTO = true;
             return cString::sprintf("RT-OSD will be closed now");
-            }
         }
-    else if (strcasecmp(Command, "RTTCLOSE") == 0) {
+    } else if (strcasecmp(Command, "RTTCLOSE") == 0) {
         // we use the default reply code here
         RT_OsdTOTemp = 2 * Setup.OSDMessageTime;
         return cString::sprintf("RT-OSD will be temporarily closed");
-        }
+    }
 
     return NULL;
 }
 
-void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber, bool LiveView)
-{
-    if (Device != cDevice::PrimaryDevice()) return;
+void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber,
+                                 bool LiveView) {
+    if (Device != cDevice::PrimaryDevice()) {
+        return;
+    }
 
     IsRadioOrReplay = Radio_CA = 0;
     radioAudio->DisableRadioTextProcessing();
     InfoTimeout = 3;
 
-    if (S_Activate == false) return;
+    if (S_Activate == false) {
+        return;
+    }
 
     char *image;
     if (cDevice::CurrentChannel() == ChannelNumber) {
@@ -691,30 +727,37 @@ void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber, bool 
         if (chan != NULL && chan->Vpid() == 0 && chan->Apid(0) > 0) {
             asprintf(&image, "%s/%s.mpg", ConfigDir, chan->Name());
             if (!file_exists(image)) {
-                dsyslog("radio: channel-image not found '%s' (Channelname= %s)", image, chan->Name());
+                dsyslog("radio: channel-image not found '%s' (Channelname= %s)",
+                        image, chan->Name());
                 free(image);
                 asprintf(&image, "%s", LiveFile);
-                if (!file_exists(image))
-                    dsyslog("radio: live-image not found '%s' (Channelname= %s)", image, chan->Name());
+                if (!file_exists(image)) {
+                    dsyslog("radio: live-image not found '%s' (Channelname= %s)",
+                            image, chan->Name());
                 }
-            dsyslog("radio: [ChannelSwitch # Apid= %d, Ca= %d] channelname '%s', use image '%s'", chan->Apid(0), chan->Ca(0), chan->Name(), image);
-            if ((Radio_CA = chan->Ca(0)) == 0 || S_Encrypted == 1)
+            }
+            dsyslog("radio: [ChannelSwitch # Apid= %d, Ca= %d] channelname '%s', use image '%s'",
+                    chan->Apid(0), chan->Ca(0), chan->Name(), image);
+            if ((Radio_CA = chan->Ca(0)) == 0 || S_Encrypted == 1) {
                 cDevice::PrimaryDevice()->ForceTransferMode();
+            }
             radioImage->SetBackgroundImage(image);
             radioAudio->EnableRadioTextProcessing(chan->Name(), chan->Apid(0), false);
             free(image);
             IsRadioOrReplay = 1;
             DoInfoReq = (S_ExtInfo > 0);
-            }
         }
+    }
 }
 
-void cPluginRadio::Replaying(const cControl *Control, const char *Name, const char *FileName, bool On)
-{
+void cPluginRadio::Replaying(const cControl *Control, const char *Name,
+        const char *FileName, bool On) {
     IsRadioOrReplay = 0;
     radioAudio->DisableRadioTextProcessing();
 
-    if (S_Activate == false) return;
+    if (S_Activate == false) {
+        return;
+    }
 
     bool isRadio = false;
 
@@ -727,31 +770,35 @@ void cPluginRadio::Replaying(const cControl *Control, const char *Name, const ch
             cUnbufferedFile *f = fn.Open();
             if (f) {
                 uchar b[4] = { 0x00, 0x00, 0x00, 0x00 };
-                ReadFrame(f, b, sizeof (b), sizeof (b));
+                ReadFrame(f, b, sizeof(b), sizeof(b));
                 fn.Close();
-                isRadio = (b[0] == 0x00) && (b[1] == 0x00) && (b[2] == 0x01) && (0xc0 <= b[3] && b[3] <= 0xdf);
-                }
+                isRadio = (b[0] == 0x00) && (b[1] == 0x00) && (b[2] == 0x01)
+                        && (0xc0 <= b[3] && b[3] <= 0xdf);
             }
+        }
         // check VDR TS-Recordings
         asprintf(&vdrfile, "%s/info", FileName);
         if (file_exists(vdrfile)) {
             cRecordingInfo rfi(FileName);
             if (rfi.Read()) {
-                if (rfi.FramesPerSecond() > 0 && rfi.FramesPerSecond() < 18) // max. seen 13.88 @ ARD-RadioTP 320k
+                if (rfi.FramesPerSecond() > 0 && rfi.FramesPerSecond() < 18) {// max. seen 13.88 @ ARD-RadioTP 320k
                     isRadio = true;
                 }
             }
-        free(vdrfile);
         }
+        free(vdrfile);
+    }
 
     if (isRadio) {
-        if (!file_exists(ReplayFile))
+        if (!file_exists(ReplayFile)) {
             dsyslog("radio: replay-image not found '%s'", ReplayFile);
-        else
+        }
+        else {
             radioImage->SetBackgroundImage(ReplayFile);
+        }
         radioAudio->EnableRadioTextProcessing(Name, 0, true);
         IsRadioOrReplay = 2;
-        }
+    }
 }
 
 
