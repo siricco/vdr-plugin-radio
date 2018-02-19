@@ -1,5 +1,17 @@
 VDR Plugin 'radio' Revision History
 -----------------------------------
+
+2018-02-xx: Version 1.x.x
+            Ulrich Eckhardt  <uli-vdr@uli-eckhardt.de>
+- Enhancements for osd2web by JÃ¶rg Wendel
+- Add new service identifier RadioTextService-v1.1
+- Convert all *.po to UTF-8
+- Bugfixes from JÃ¶rg Wendel
+- Fix compile problems on VDR 2.2.0
+
+2017-04-23: Version 1.0.1
+- Compiles with VDR 2.3.x
+
 2013-05-31: Version 1.0.0
             U.Hanke <egal@gmx.info>
 - Security-patch formatstrings, thanks to Tobias Grimm
@@ -39,7 +51,7 @@ VDR Plugin 'radio' Revision History
         U.Hanke <egal@gmx.info>
 - new transponder (TID) for premiere radio-channels (+ epg fixed)
 - create/checks temp. data-dir /tmp/vdr-radio.xxxxxx if not specified,
-  thanks to Tobias Grimm & Thomas Günther
+  thanks to Tobias Grimm & Thomas Gï¿½nther
 - cleanup for gcc-4.2.1 (some const char*)
 - debug print cleanups -> dsyslog
 - update for RT+Specification 2.1, RT+Classes changed
@@ -81,7 +93,7 @@ VDR Plugin 'radio' Revision History
 - first implementation of tmc-parser Alert-C coding
   (start with --verbose=32 or greater and watch console-output)
 - some changes like RDS-ODA IDs for RT+ & TMC_Alert-C
-- add hungarian-translation text, thanks to Füley István
+- add hungarian-translation text, thanks to Fï¿½ley Istvï¿½n
 - add Skin-Themes: Soppalusikka-Blackberry/Citron, 
   Enigma-WineRed/AppleGreen/WomansLike/YellowSun,
   Elchi_Plugin, EgalsTry~default/~blue
@@ -101,7 +113,7 @@ VDR Plugin 'radio' Revision History
   slideshow with mpeg-stills as backgroundimage & save datafiles,
   archiv with OSD & Navigation
 - Bugfix: now stopping correct rds-receiver on multiple tunerdevices,
-  thanks to Reinhard Nißl
+  thanks to Reinhard Niï¿½l
 
 2006-08-14: Version 0.1.4
         U.Hanke <egal@gmx.info>
@@ -114,11 +126,11 @@ VDR Plugin 'radio' Revision History
         U.Hanke <egal@gmx.info>
 - add Service/OSD-Symbol from audiorecorder for title-recording
 - exchange localtime() with thread-safe localtime_r()
-- add french-translation text, thanks to Michaël Nival
+- add french-translation text, thanks to Michaï¿½l Nival
 
 2006-04-27: Version 0.1.2
         U.Hanke <egal@gmx.info>
-- Bugfix in fopen for DataDir-files, thanks to Thomas Günther
+- Bugfix in fopen for DataDir-files, thanks to Thomas Gï¿½nther
 - New command-options --live/--replay = mpegfile for default-mpegs @ live-/replaymode,
   (mpegfile as absolute incl. Path), suggested by Tobias Grimm
 - Add -fPIC to compiler-flags, thanks to Tobias Grimm
@@ -141,12 +153,12 @@ VDR Plugin 'radio' Revision History
 - Makefile-Defines for vdr-patches
 - RTplus-Memory with seperate OSDs added
 - detecting radio in file @ replaymode,
-  thanks to Reinhard Nißl for providing the patch
+  thanks to Reinhard Niï¿½l for providing the patch
 - cleanup code, vdr < 1.3.43 no longer supported
 - no more own tansferthread -> changing to audiothread,
   radiotext @ replaymode now possible,
   better handling of transfer-start,
-  thanks to Reinhard Nißl for providing all the patches
+  thanks to Reinhard Niï¿½l for providing all the patches
 
 2006-01-09: Version 0.0.9
         U.Hanke <egal@gmx.info>

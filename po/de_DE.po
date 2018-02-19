@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-02-18 15:40+0100\n"
+"POT-Creation-Date: 2018-02-19 13:55+0100\n"
 "PO-Revision-Date: 2007-09-20 15:30+0200\n"
 "Last-Translator: Uwe Hanke <egal@egal-vdr.de>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -15,57 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "unknown program type"
-msgstr "Unbekannte Programmart"
-
-msgid "News"
-msgstr "Nachrichten"
-
-msgid "Current affairs"
-msgstr "Aktuelles"
-
-msgid "Information"
-msgstr "Info"
-
-msgid "Sport"
-msgstr "Sport"
-
-msgid "Education"
-msgstr "Bildung"
-
-msgid "Drama"
-msgstr "Hörspiel"
-
-msgid "Culture"
-msgstr "Kultur"
-
-msgid "Science"
-msgstr "Wissenschaft"
-
-msgid "Varied"
-msgstr "Diverses"
-
-msgid "Pop music"
-msgstr "Popmusik"
-
-msgid "Rock music"
-msgstr "Rockmusik"
-
-msgid "M.O.R. music"
-msgstr "Easy Listening u.ä."
-
-msgid "Light classical"
-msgstr "Leichte Klassik"
-
-msgid "Serious classical"
-msgstr "Ernste Klassik"
-
-msgid "Other music"
-msgstr "Sonstige Musik"
-
-msgid "Alarm"
-msgstr "Alarm (!)"
 
 msgid "ext. Info"
 msgstr "zus. Info"
@@ -172,6 +121,9 @@ msgstr "EMail-Studio"
 msgid "Info"
 msgstr "weitere Information"
 
+msgid "News"
+msgstr "Nachrichten"
+
 msgid "NewsLocal"
 msgstr "Nachricht.Lokal"
 
@@ -180,6 +132,9 @@ msgstr "Datum-Zeit"
 
 msgid "Traffic"
 msgstr "Verkehr"
+
+msgid "Alarm"
+msgstr "Alarm (!)"
 
 msgid "Advertising"
 msgstr "Hinweis/Reklame"
@@ -345,6 +300,51 @@ msgstr "RDSText Rass-Funktion"
 
 msgid "External Info-Request"
 msgstr "Externe Info-Abfrage"
+
+msgid "unknown program type"
+msgstr "Unbekannte Programmart"
+
+msgid "Current affairs"
+msgstr "Aktuelles"
+
+msgid "Information"
+msgstr "Info"
+
+msgid "Sport"
+msgstr "Sport"
+
+msgid "Education"
+msgstr "Bildung"
+
+msgid "Drama"
+msgstr "Hörspiel"
+
+msgid "Culture"
+msgstr "Kultur"
+
+msgid "Science"
+msgstr "Wissenschaft"
+
+msgid "Varied"
+msgstr "Diverses"
+
+msgid "Pop music"
+msgstr "Popmusik"
+
+msgid "Rock music"
+msgstr "Rockmusik"
+
+msgid "M.O.R. music"
+msgstr "Easy Listening u.ä."
+
+msgid "Light classical"
+msgstr "Leichte Klassik"
+
+msgid "Serious classical"
+msgstr "Ernste Klassik"
+
+msgid "Other music"
+msgstr "Sonstige Musik"
 
 #~ msgid "with <0>"
 #~ msgstr "mit  <0>"

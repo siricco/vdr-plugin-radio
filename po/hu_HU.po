@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-02-18 15:40+0100\n"
+"POT-Creation-Date: 2018-02-19 13:55+0100\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Füley István\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -14,57 +14,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "unknown program type"
-msgstr "ismeretlen adástipus"
-
-msgid "News"
-msgstr "Hírek"
-
-msgid "Current affairs"
-msgstr "aktuális"
-
-msgid "Information"
-msgstr "információ"
-
-msgid "Sport"
-msgstr "sport"
-
-msgid "Education"
-msgstr "nevelés"
-
-msgid "Drama"
-msgstr "rádiójáték"
-
-msgid "Culture"
-msgstr "kultúra"
-
-msgid "Science"
-msgstr "tudomány"
-
-msgid "Varied"
-msgstr "vegyes"
-
-msgid "Pop music"
-msgstr "pop zene"
-
-msgid "Rock music"
-msgstr "rock zene"
-
-msgid "M.O.R. music"
-msgstr "könnyűzene"
-
-msgid "Light classical"
-msgstr "könnyű klasszikus"
-
-msgid "Serious classical"
-msgstr "komolyzene"
-
-msgid "Other music"
-msgstr "egyéb zene"
-
-msgid "Alarm"
-msgstr "Riasztó"
 
 msgid "ext. Info"
 msgstr ""
@@ -172,6 +121,9 @@ msgstr "E-mail studió"
 msgid "Info"
 msgstr "Egyéb információ"
 
+msgid "News"
+msgstr "Hírek"
+
 msgid "NewsLocal"
 msgstr "Helyi hírek"
 
@@ -180,6 +132,9 @@ msgstr "Dátum-óra"
 
 msgid "Traffic"
 msgstr "Forgalom"
+
+msgid "Alarm"
+msgstr "Riasztó"
 
 msgid "Advertising"
 msgstr "Reklám"
@@ -345,6 +300,51 @@ msgstr "RDS Rass funkció"
 
 msgid "External Info-Request"
 msgstr ""
+
+msgid "unknown program type"
+msgstr "ismeretlen adástipus"
+
+msgid "Current affairs"
+msgstr "aktuális"
+
+msgid "Information"
+msgstr "információ"
+
+msgid "Sport"
+msgstr "sport"
+
+msgid "Education"
+msgstr "nevelés"
+
+msgid "Drama"
+msgstr "rádiójáték"
+
+msgid "Culture"
+msgstr "kultúra"
+
+msgid "Science"
+msgstr "tudomány"
+
+msgid "Varied"
+msgstr "vegyes"
+
+msgid "Pop music"
+msgstr "pop zene"
+
+msgid "Rock music"
+msgstr "rock zene"
+
+msgid "M.O.R. music"
+msgstr "könnyűzene"
+
+msgid "Light classical"
+msgstr "könnyű klasszikus"
+
+msgid "Serious classical"
+msgstr "komolyzene"
+
+msgid "Other music"
+msgstr "egyéb zene"
 
 #~ msgid "with <0>"
 #~ msgstr "<0> bill."
