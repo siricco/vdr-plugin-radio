@@ -79,49 +79,6 @@ unsigned char rds_addchar[128] = { 0xe1, 0xe0, 0xe9, 0xe8, 0xed, 0xec, 0xf3,
         0xf3, 0xf4, 0xfd, 0xf5, 0xf8, 0xfe, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe,
         0xff };
 
-const char* ptynr2string(int nr) {
-    switch (nr) {
-    // Source: http://www.ebu.ch/trev_255-beale.pdf
-    case 0:
-        return tr("unknown program type");
-    case 1:
-        return tr("News");
-    case 2:
-        return tr("Current affairs");
-    case 3:
-        return tr("Information");
-    case 4:
-        return tr("Sport");
-    case 5:
-        return tr("Education");
-    case 6:
-        return tr("Drama");
-    case 7:
-        return tr("Culture");
-    case 8:
-        return tr("Science");
-    case 9:
-        return tr("Varied");
-    case 10:
-        return tr("Pop music");
-    case 11:
-        return tr("Rock music");
-    case 12:
-        return tr("M.O.R. music");
-    case 13:
-        return tr("Light classical");
-    case 14:
-        return tr("Serious classical");
-    case 15:
-        return tr("Other music");
-        // 16-30 "Spares"
-    case 31:
-        return tr("Alarm");
-    default:
-        return "?";
-    }
-}
-
 // announce text/items for lcdproc & other
 void radioStatusMsg(void) {
     if (!RT_MsgShow || S_RtMsgItems <= 0)
@@ -429,8 +386,8 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
                                 int i;
                                 for (i = 9; i <= (index - 3); i++) {
                                     tmc[i - 9] = mtext[i];
-                                    tmc_parser(tmc, i - 8);
                                 }
+                                tmc_parser(tmc, i - 8);
                             }
                             break;
                         default:
