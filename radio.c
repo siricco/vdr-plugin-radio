@@ -419,7 +419,7 @@ cPluginRadio::cPluginRadio(void)
     DataDirParam = false;
     LiveFileParam = false;
     ReplayFileParam = false;
-    
+
     rt_color[0] = 0xFF000000;   //Black
     rt_color[1] = 0xFFFCFCFC;   //White
     rt_color[2] = 0xFFFC1414;   //Red
@@ -470,7 +470,7 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
             { "verbose",    required_argument, NULL, 'v' },
             { NULL }
     };
-    
+
     int c;
     while ((c = getopt_long(argc, argv, "f:d:l:r:e:v:", long_options, NULL)) != -1) {
     switch (c) {
@@ -522,12 +522,12 @@ bool cPluginRadio::Start(void)
     if (!radioImage)
         return false;
     radioImage->Init();
-    
+
     radioAudio = new cRadioAudio;
     if (!radioAudio)
         return false;
- 
-    if (!ConfigDirParam) 
+
+    if (!ConfigDirParam)
         ConfigDir = strdup(ConfigDirectory(Name()));
     if (!DataDirParam) {
         DataDir = strdup("/tmp/vdr-radio.XXXXXX");
@@ -540,7 +540,7 @@ bool cPluginRadio::Start(void)
         asprintf(&ReplayFile, "%s/replay.mpg", ConfigDir);
     }
 
-    cRadioCheck::Init();    
+    cRadioCheck::Init();
 
     return true;
 }
@@ -558,7 +558,7 @@ void cPluginRadio::Stop(void)
 void cPluginRadio::Housekeeping(void)
 {
     // Perform any cleanup or other regular tasks.
-}   
+}
 
 cOsdObject *cPluginRadio::MainMenuAction(void)
 {
@@ -623,7 +623,7 @@ bool cPluginRadio::SetupParse(const char *Name, const char *Value)
 bool cPluginRadio::Service(const char *Id, void *Data)
 {
     static struct tm tm_store;
-    if ((strcmp(Id,"RadioTextService-v1.0") == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
+    if ((strcmp(Id, RADIO_TEXT_SERVICE0) == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
         if (Data) {
             RadioTextService_v1_0 *data = (RadioTextService_v1_0*)Data;
             data->rds_pty = RT_PTY;
@@ -636,7 +636,7 @@ bool cPluginRadio::Service(const char *Id, void *Data)
         }
         return true;
     }
-    else if ((strcmp(Id,"RadioTextService-v1.1") == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
+    else if ((strcmp(Id, RADIO_TEXT_SERVICE1) == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
         if (Data) {
             cCharSetConv conf(RT_Charset == 0 ? "ISO-8859-1" : 0);
             RadioTextService_v1_1 *data = (RadioTextService_v1_1*)Data;

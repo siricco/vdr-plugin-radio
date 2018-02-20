@@ -8,6 +8,8 @@
 #ifndef __RADIO_SERVICE_H
 #define __RADIO_SERVICE_H
 
+#include <string>
+
 // --- Service Interface -------------------------------------------------------
 
 struct RadioTextService_v1_0 {
@@ -28,5 +30,9 @@ struct RadioTextService_v1_1 {
    std::string rds_artist;
    time_t title_start;
 };
+
+#define RADIO_TEXT_SERVICE0   "RadioTextService-v1.0"
+#define RADIO_TEXT_SERVICE1   "RadioTextService-v1.1"
+#define RADIO_TEXT_UPDATE     "RadioTextUpdate-v1.0"
 
 #endif // __RADIO_SERVICE_H

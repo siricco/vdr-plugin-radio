@@ -11,6 +11,7 @@
 #include "radioaudio.h"
 #include "radioskin.h"
 #include "radiotools.h"
+#include "service.h"
 #include <math.h>
 
 // OSD-Symbols
@@ -81,6 +82,7 @@ unsigned char rds_addchar[128] = { 0xe1, 0xe0, 0xe9, 0xe8, 0xed, 0xec, 0xf3,
 
 // announce text/items for lcdproc & other
 void radioStatusMsg(void) {
+    cPluginManager::CallAllServices(RADIO_TEXT_UPDATE, 0);
     if (!RT_MsgShow || S_RtMsgItems <= 0)
         return;
 
@@ -934,7 +936,7 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext, int len) {
 
     // byte 5 = MEC (Message Element Code, 0x0a for RT, 0x46 for RTplus)
         if (mtext[5] == 0x0a) {
-            // byte 6+7 = DSN+PSN (DataSetNumber+ProgramServiceNumber, 
+            // byte 6+7 = DSN+PSN (DataSetNumber+ProgramServiceNumber,
             //                     ignore here, always 0x00 ?)
             // byte 8   = MEL (MessageElementLength, max. 64+1 byte @ RT)
             if (mtext[8] == 0 || mtext[8] > RT_MEL || mtext[8] > leninfo - 4) {
@@ -1360,7 +1362,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
 
     // byte 1+2 = ADD (10bit SiteAdress + 6bit EncoderAdress)
     // byte 3   = SQC (Sequence Counter 0x00 = not used)
-    // byte 4   = MFL (Message Field Length), 
+    // byte 4   = MFL (Message Field Length),
     if (len >= mtext[4] + 7) {    // check complete length
     // byte 5   = MEC (0xda for Rass)
     // byte 6   = MEL
@@ -2156,7 +2158,7 @@ void cRadioTextOsd::RassOsd(void) {
                     clrTransparent, ftext, 97, fh);
             free(temp);
         }
-        // Marker gallery/index 
+        // Marker gallery/index
         if (!mark) {
             if (Rass_Archiv > 0 && Rass_Archiv <= RASS_GALMAX)
                 qosd->DrawBitmap(30, 240 + offs, marker, bcolor, fcolor);
