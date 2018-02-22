@@ -648,6 +648,7 @@ bool cPluginRadio::Service(const char *Id, void *Data)
             data->rds_title = conf.Convert(RTP_Title);
             data->rds_artist = conf.Convert(RTP_Artist);
             data->title_start = RTP_Starttime;
+            data->bitrate = radioAudio->bitrate;
         }
         return true;
     }

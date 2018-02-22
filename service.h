@@ -29,6 +29,7 @@ struct RadioTextService_v1_1 {
    std::string rds_title;
    std::string rds_artist;
    time_t title_start;
+   std::string bitrate;
 };
 
 #define RADIO_TEXT_SERVICE0   "RadioTextService-v1.0"
