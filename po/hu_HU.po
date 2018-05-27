@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-02-19 13:55+0100\n"
+"POT-Creation-Date: 2018-05-27 14:19+0200\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Füley István\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -14,163 +14,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "ext. Info"
-msgstr ""
-
-msgid "RTplus"
-msgstr "RTplus"
-
-msgid "Radiotext"
-msgstr "Rádiótext"
-
-msgid "  [waiting ...]"
-msgstr "[várakozás...]"
-
-msgid "Title :"
-msgstr "Cím :"
-
-msgid "Artist :"
-msgstr "Előadó :"
-
-msgid "Records"
-msgstr "Archívum"
-
-msgid "Rass-Image(s) saved from Archiv "
-msgstr "Rass-kép(ek) elmentve az archívumból"
-
-msgid "Rass-Image(s) saved from Gallery"
-msgstr "Rass-kép(ek) elmentve a galériából"
-
-msgid "Rass-Image saved"
-msgstr "Rass-Kép elmentve."
-
-msgid "Rass-Image failed"
-msgstr "Sikertelen Rass-Kép mentés"
-
-msgid "Playlist"
-msgstr "Playlist"
-
-msgid "Sports"
-msgstr "Sport"
-
-msgid "Lottery"
-msgstr "Lottó"
-
-msgid "Weather"
-msgstr "Időjárás"
-
-msgid "Stockmarket"
-msgstr "Börze"
-
-msgid "Other"
-msgstr "Egyéb"
-
-msgid "extra Info  since"
-msgstr ""
-
-msgid "RTplus Memory  since"
-msgstr "RTplus innen kezdve"
-
-msgid "Programme"
-msgstr "Programinfó"
-
-msgid "Stat.Short"
-msgstr ""
-
-msgid "Station"
-msgstr "Rádióadó"
-
-msgid "Now"
-msgstr "Most"
-
-msgid "...Part"
-msgstr "...rész"
-
-msgid "Next"
-msgstr "Következő"
-
-msgid "Host"
-msgstr "Müsorvezető"
-
-msgid "Edit.Staff"
-msgstr "Stáb"
-
-msgid "Homepage"
-msgstr "Honlap"
-
-msgid "Interactivity"
-msgstr "Interaktivitás"
-
-msgid "Phone-Hotline"
-msgstr "Telefonos forródrót"
-
-msgid "Phone-Studio"
-msgstr "Telefon studió"
-
-#, fuzzy
-msgid "SMS-Studio"
-msgstr "Telefon studió"
-
-msgid "Email-Hotline"
-msgstr "E-mail forródrót"
-
-msgid "Email-Studio"
-msgstr "E-mail studió"
-
-msgid "Info"
-msgstr "Egyéb információ"
-
-msgid "News"
-msgstr "Hírek"
-
-msgid "NewsLocal"
-msgstr "Helyi hírek"
-
-msgid "DateTime"
-msgstr "Dátum-óra"
-
-msgid "Traffic"
-msgstr "Forgalom"
-
-msgid "Alarm"
-msgstr "Riasztó"
-
-msgid "Advertising"
-msgstr "Reklám"
-
-msgid "Url"
-msgstr "Weblink"
-
-msgid "Exit"
-msgstr "Kilépés"
-
-msgid "Info-File saved"
-msgstr ""
-
-msgid "RTplus-File saved"
-msgstr "RTplus-file elmentve"
-
-msgid "last seen Radiotext"
-msgstr "utoljára vett rádiótext"
-
-msgid "Time"
-msgstr "Idő"
-
-msgid "Title"
-msgstr "Cím"
-
-msgid "Artist"
-msgstr "Előadó"
-
-msgid "Refresh Off"
-msgstr "Frissítés ki"
-
-msgid "Refresh On"
-msgstr "Frissítés be"
-
-msgid "Back"
-msgstr "Vissza"
 
 msgid "Radio Background-Image/RDS-Text"
 msgstr "Rádió háttérkép/RDS-Text"
@@ -301,8 +144,44 @@ msgstr "RDS Rass funkció"
 msgid "External Info-Request"
 msgstr ""
 
+msgid "ext. Info"
+msgstr ""
+
+msgid "RTplus"
+msgstr "RTplus"
+
+msgid "Radiotext"
+msgstr "Rádiótext"
+
+msgid "  [waiting ...]"
+msgstr "[várakozás...]"
+
+msgid "Title :"
+msgstr "Cím :"
+
+msgid "Artist :"
+msgstr "Előadó :"
+
+msgid "Records"
+msgstr "Archívum"
+
+msgid "Rass-Image(s) saved from Archiv "
+msgstr "Rass-kép(ek) elmentve az archívumból"
+
+msgid "Rass-Image(s) saved from Gallery"
+msgstr "Rass-kép(ek) elmentve a galériából"
+
+msgid "Rass-Image saved"
+msgstr "Rass-Kép elmentve."
+
+msgid "Rass-Image failed"
+msgstr "Sikertelen Rass-Kép mentés"
+
 msgid "unknown program type"
 msgstr "ismeretlen adástipus"
+
+msgid "News"
+msgstr "Hírek"
 
 msgid "Current affairs"
 msgstr "aktuális"
@@ -345,6 +224,127 @@ msgstr "komolyzene"
 
 msgid "Other music"
 msgstr "egyéb zene"
+
+msgid "Alarm"
+msgstr "Riasztó"
+
+msgid "last seen Radiotext"
+msgstr "utoljára vett rádiótext"
+
+msgid "Playlist"
+msgstr "Playlist"
+
+msgid "Time"
+msgstr "Idő"
+
+msgid "Title"
+msgstr "Cím"
+
+msgid "Artist"
+msgstr "Előadó"
+
+msgid "Sports"
+msgstr "Sport"
+
+msgid "Lottery"
+msgstr "Lottó"
+
+msgid "Weather"
+msgstr "Időjárás"
+
+msgid "Stockmarket"
+msgstr "Börze"
+
+msgid "Other"
+msgstr "Egyéb"
+
+msgid "Refresh Off"
+msgstr "Frissítés ki"
+
+msgid "Refresh On"
+msgstr "Frissítés be"
+
+msgid "Back"
+msgstr "Vissza"
+
+msgid "extra Info  since"
+msgstr ""
+
+msgid "RTplus Memory  since"
+msgstr "RTplus innen kezdve"
+
+msgid "Programme"
+msgstr "Programinfó"
+
+msgid "Stat.Short"
+msgstr ""
+
+msgid "Station"
+msgstr "Rádióadó"
+
+msgid "Now"
+msgstr "Most"
+
+msgid "...Part"
+msgstr "...rész"
+
+msgid "Next"
+msgstr "Következő"
+
+msgid "Host"
+msgstr "Müsorvezető"
+
+msgid "Edit.Staff"
+msgstr "Stáb"
+
+msgid "Homepage"
+msgstr "Honlap"
+
+msgid "Interactivity"
+msgstr "Interaktivitás"
+
+msgid "Phone-Hotline"
+msgstr "Telefonos forródrót"
+
+msgid "Phone-Studio"
+msgstr "Telefon studió"
+
+#, fuzzy
+msgid "SMS-Studio"
+msgstr "Telefon studió"
+
+msgid "Email-Hotline"
+msgstr "E-mail forródrót"
+
+msgid "Email-Studio"
+msgstr "E-mail studió"
+
+msgid "Info"
+msgstr "Egyéb információ"
+
+msgid "NewsLocal"
+msgstr "Helyi hírek"
+
+msgid "DateTime"
+msgstr "Dátum-óra"
+
+msgid "Traffic"
+msgstr "Forgalom"
+
+msgid "Advertising"
+msgstr "Reklám"
+
+msgid "Url"
+msgstr "Weblink"
+
+msgid "Exit"
+msgstr "Kilépés"
+
+msgid "Info-File saved"
+msgstr ""
+
+msgid "RTplus-File saved"
+msgstr "RTplus-file elmentve"
 
 #~ msgid "with <0>"
 #~ msgstr "<0> bill."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-02-19 13:55+0100\n"
+"POT-Creation-Date: 2018-05-27 14:19+0200\n"
 "PO-Revision-Date: 2008-06-15 22:39+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -15,162 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "ext. Info"
-msgstr "Info esterne"
-
-msgid "RTplus"
-msgstr "RTplus"
-
-msgid "Radiotext"
-msgstr "Radio testo"
-
-msgid "  [waiting ...]"
-msgstr "  [attendere ...]"
-
-msgid "Title :"
-msgstr "Titolo  :"
-
-msgid "Artist :"
-msgstr "Artista :"
-
-msgid "Records"
-msgstr "Archivio"
-
-msgid "Rass-Image(s) saved from Archiv "
-msgstr "Immagini Rass salvate dall'Archivio"
-
-msgid "Rass-Image(s) saved from Gallery"
-msgstr "Immagini Rass salvate dalla Galleria"
-
-msgid "Rass-Image saved"
-msgstr "Immagine Rass salvata"
-
-msgid "Rass-Image failed"
-msgstr "Immagine Rass fallita"
-
-msgid "Playlist"
-msgstr "Lista esecuzione"
-
-msgid "Sports"
-msgstr "Sport"
-
-msgid "Lottery"
-msgstr "Lotteria"
-
-msgid "Weather"
-msgstr "Meteo"
-
-msgid "Stockmarket"
-msgstr "Borse"
-
-msgid "Other"
-msgstr "Altro"
-
-msgid "extra Info  since"
-msgstr "Info extra  da"
-
-msgid "RTplus Memory  since"
-msgstr "Memoria RTplus da"
-
-msgid "Programme"
-msgstr "Programma"
-
-msgid "Stat.Short"
-msgstr "Brevi statistiche"
-
-msgid "Station"
-msgstr "Stazione"
-
-msgid "Now"
-msgstr "Adesso"
-
-msgid "...Part"
-msgstr "...Dettaglio"
-
-msgid "Next"
-msgstr "Prossimo"
-
-msgid "Host"
-msgstr "Animatore"
-
-msgid "Edit.Staff"
-msgstr "Staff"
-
-msgid "Homepage"
-msgstr "Pagina princ."
-
-msgid "Interactivity"
-msgstr "Interattività"
-
-msgid "Phone-Hotline"
-msgstr "Telefono assistenza"
-
-msgid "Phone-Studio"
-msgstr "Telefono studio"
-
-msgid "SMS-Studio"
-msgstr "SMS studio"
-
-msgid "Email-Hotline"
-msgstr "Email assistenza"
-
-msgid "Email-Studio"
-msgstr "Email studio"
-
-msgid "Info"
-msgstr "Informazioni"
-
-msgid "News"
-msgstr "Notizie"
-
-msgid "NewsLocal"
-msgstr "Notizie locali"
-
-msgid "DateTime"
-msgstr "Data-Ora"
-
-msgid "Traffic"
-msgstr "Traffico"
-
-msgid "Alarm"
-msgstr "Allarme"
-
-msgid "Advertising"
-msgstr "Pubblicità"
-
-msgid "Url"
-msgstr "Sito web"
-
-msgid "Exit"
-msgstr "Esci"
-
-msgid "Info-File saved"
-msgstr "Info file salvate"
-
-msgid "RTplus-File saved"
-msgstr "File RTplus salvato"
-
-msgid "last seen Radiotext"
-msgstr "ultimo radio testo letto"
-
-msgid "Time"
-msgstr "Ora"
-
-msgid "Title"
-msgstr "Titolo"
-
-msgid "Artist"
-msgstr "Artista"
-
-msgid "Refresh Off"
-msgstr "Disattiva aggiornamenti"
-
-msgid "Refresh On"
-msgstr "Attiva aggiornamenti"
-
-msgid "Back"
-msgstr "Indietro"
 
 msgid "Radio Background-Image/RDS-Text"
 msgstr "Immagine sfondo per Radio/Testo RDS"
@@ -301,8 +145,44 @@ msgstr "Funzione Rass testo RDS"
 msgid "External Info-Request"
 msgstr "Richiesta info esterna"
 
+msgid "ext. Info"
+msgstr "Info esterne"
+
+msgid "RTplus"
+msgstr "RTplus"
+
+msgid "Radiotext"
+msgstr "Radio testo"
+
+msgid "  [waiting ...]"
+msgstr "  [attendere ...]"
+
+msgid "Title :"
+msgstr "Titolo  :"
+
+msgid "Artist :"
+msgstr "Artista :"
+
+msgid "Records"
+msgstr "Archivio"
+
+msgid "Rass-Image(s) saved from Archiv "
+msgstr "Immagini Rass salvate dall'Archivio"
+
+msgid "Rass-Image(s) saved from Gallery"
+msgstr "Immagini Rass salvate dalla Galleria"
+
+msgid "Rass-Image saved"
+msgstr "Immagine Rass salvata"
+
+msgid "Rass-Image failed"
+msgstr "Immagine Rass fallita"
+
 msgid "unknown program type"
 msgstr "tipo programma sconosciuto"
+
+msgid "News"
+msgstr "Notizie"
 
 msgid "Current affairs"
 msgstr "Attualità"
@@ -345,6 +225,126 @@ msgstr "Classica seria"
 
 msgid "Other music"
 msgstr "Altra musica"
+
+msgid "Alarm"
+msgstr "Allarme"
+
+msgid "last seen Radiotext"
+msgstr "ultimo radio testo letto"
+
+msgid "Playlist"
+msgstr "Lista esecuzione"
+
+msgid "Time"
+msgstr "Ora"
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Artist"
+msgstr "Artista"
+
+msgid "Sports"
+msgstr "Sport"
+
+msgid "Lottery"
+msgstr "Lotteria"
+
+msgid "Weather"
+msgstr "Meteo"
+
+msgid "Stockmarket"
+msgstr "Borse"
+
+msgid "Other"
+msgstr "Altro"
+
+msgid "Refresh Off"
+msgstr "Disattiva aggiornamenti"
+
+msgid "Refresh On"
+msgstr "Attiva aggiornamenti"
+
+msgid "Back"
+msgstr "Indietro"
+
+msgid "extra Info  since"
+msgstr "Info extra  da"
+
+msgid "RTplus Memory  since"
+msgstr "Memoria RTplus da"
+
+msgid "Programme"
+msgstr "Programma"
+
+msgid "Stat.Short"
+msgstr "Brevi statistiche"
+
+msgid "Station"
+msgstr "Stazione"
+
+msgid "Now"
+msgstr "Adesso"
+
+msgid "...Part"
+msgstr "...Dettaglio"
+
+msgid "Next"
+msgstr "Prossimo"
+
+msgid "Host"
+msgstr "Animatore"
+
+msgid "Edit.Staff"
+msgstr "Staff"
+
+msgid "Homepage"
+msgstr "Pagina princ."
+
+msgid "Interactivity"
+msgstr "Interattività"
+
+msgid "Phone-Hotline"
+msgstr "Telefono assistenza"
+
+msgid "Phone-Studio"
+msgstr "Telefono studio"
+
+msgid "SMS-Studio"
+msgstr "SMS studio"
+
+msgid "Email-Hotline"
+msgstr "Email assistenza"
+
+msgid "Email-Studio"
+msgstr "Email studio"
+
+msgid "Info"
+msgstr "Informazioni"
+
+msgid "NewsLocal"
+msgstr "Notizie locali"
+
+msgid "DateTime"
+msgstr "Data-Ora"
+
+msgid "Traffic"
+msgstr "Traffico"
+
+msgid "Advertising"
+msgstr "Pubblicità"
+
+msgid "Url"
+msgstr "Sito web"
+
+msgid "Exit"
+msgstr "Esci"
+
+msgid "Info-File saved"
+msgstr "Info file salvate"
+
+msgid "RTplus-File saved"
+msgstr "File RTplus salvato"
 
 #~ msgid "with <0>"
 #~ msgstr "con <0>"
