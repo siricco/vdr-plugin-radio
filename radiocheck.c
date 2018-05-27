@@ -150,11 +150,14 @@ void cRadioCheck::Action(void)
 
         // temp. OSD-CloseTimeout
         (RT_OsdTOTemp > 0) ? RT_OsdTOTemp -= 2 : RT_OsdTOTemp = 0; // in sec like this cycletime
-
+// TODO
+esyslog("%s %d cOsd::IsOpen %d Skins.IsOpen %d", __FILE__, __LINE__,
+        cOsd::IsOpen(), Skins.IsOpen());
         // Radiotext-Autodisplay
         if ((S_RtDispl == 2) && (RT_Info >= 0) && !RT_OsdTO
                 && (RT_OsdTOTemp == 0) && RT_ReOpen && !Skins.IsOpen()
                 && !cOsd::IsOpen()) {
+esyslog("CallPlugin(radio)"); // TODO
             cRemote::CallPlugin("radio");
         }
     }

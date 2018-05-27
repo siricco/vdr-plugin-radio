@@ -12,6 +12,7 @@
 #include "radioskin.h"
 #include "radiotools.h"
 #include "service.h"
+#include "radiotextosd.h"
 #include <math.h>
 
 // OSD-Symbols

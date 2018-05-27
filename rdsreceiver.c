@@ -6,6 +6,7 @@
 #include "radiotools.h"
 #include "service.h"
 #include <math.h>
+#include "rdsreceiver.h"
 
 extern bool RdsLogo;
 extern cRadioAudio *RadioAudio;

@@ -11,6 +11,8 @@
 #include "radioaudio.h"
 #include "radioskin.h"
 #include "radiotools.h"
+#include "radiotextosd.h"
+#include "rdsreceiver.h"
 #include "service.h"
 #include <math.h>
 

@@ -16,6 +16,7 @@
 #include <vdr/osd.h>
 #include <vdr/menu.h>
 #include <vdr/receiver.h>
+#include "radioimage.h"
 
 extern char *ConfigDir;
 extern char *DataDir;
@@ -60,41 +61,6 @@ extern bool InfoRequest;
 
 void radioStatusMsg(void);
 
-// seperate thread for showing RadioImages
-class cRadioImage: public cThread {
-private:
-    char *imagepath;
-    bool imageShown;
-    void Show (const char *file);
-    void send_pes_packet(unsigned char *data, int len, int timestamp);
-protected:
-    virtual void Action(void);
-    void Stop(void);
-public:
-    cRadioImage(void);
-    virtual ~cRadioImage();
-    static void Init(void);
-    static void Exit(void);
-    void SetBackgroundImage(const char *Image);
-};
-
-// RDS-Receiver for seperate Data-Pids
-class cRDSReceiver : public cReceiver {
-private:
-    int pid;
-    bool rt_start;
-    bool rt_bstuff;
-protected:
-#if VDRVERSNUM >= 20300
-    virtual void Receive(const uchar *Data, int Length);
-#else
-    virtual void Receive(uchar *Data, int Length);
-#endif
-public:
-    cRDSReceiver(int Pid);
-    virtual ~cRDSReceiver(void);
-};
-
 class cRadioAudio : public cAudio {
 private:
     bool enabled;
@@ -121,68 +87,6 @@ public:
     void RadiotextDecode(uchar *Data, int Length);
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
 };
-
-class cRadioTextOsd : public cOsdObject, public cCharSetConv {
-private:
-    cOsd *osd;
-    cOsd *qosd;
-    cOsd *qiosd;
-    const cFont *ftitel;
-    const cFont *ftext;
-    int fheight;
-    int bheight;
-    eKeys LastKey;
-    cTimeMs osdtimer;
-    void rtp_print(void);
-    bool rtclosed;
-    bool rassclosed;
-    static cBitmap rds, arec, rass, radio;
-    static cBitmap index, marker, page1, pages2, pages3, pages4, pageE;
-    static cBitmap no0, no1, no2, no3, no4, no5, no6, no7, no8, no9, bok;
-public:
-    cRadioTextOsd();
-    ~cRadioTextOsd();
-    virtual void Hide(void);
-    virtual void Show(void);
-    void ShowText(void);
-    void RTOsdClose(void);
-    int RassImage(int QArchiv, int QKey, bool DirUp);
-    void RassOsd(void);
-    void RassOsdTip(void);
-    void RassOsdClose(void);
-    void RassImgSave(const char *size, int pos);
-    virtual eOSState ProcessKey(eKeys Key);
-    virtual bool IsMenu(void) const { return false; }
-};
-
-class cRTplusOsd : public cOsdMenu, public cCharSetConv {
-private:
-    int bcount;
-    int helpmode;
-    const char *listtyp[7];
-    char *btext[7];
-    int rtptyp(char *btext);
-    void rtp_fileprint(void);
-public:
-    cRTplusOsd(void);
-    virtual ~cRTplusOsd();
-    virtual void Load(void);
-    virtual void Update(void);
-    virtual eOSState ProcessKey(eKeys Key); 
-};
-
-class cRTplusList : public cOsdMenu, public cCharSetConv {
-private:
-    int typ;
-    bool refresh;
-public:
-    cRTplusList(int Typ = 0);
-    ~cRTplusList();
-    virtual void Load(void);
-    virtual void Update(void);
-    virtual eOSState ProcessKey(eKeys Key); 
-};
-
 
 // Radiotext-Memory RT+Classes 2.1
 #define MAX_RTPC 50

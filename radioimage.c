@@ -1,6 +1,7 @@
 #include <vdr/remote.h>
 #include <vdr/status.h>
 #include <vdr/plugin.h>
+#include "radioimage.h"
 #include "radioaudio.h"
 #include "radioskin.h"
 #include "radiotools.h"

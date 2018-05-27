@@ -19,6 +19,9 @@
 #include "service.h"
 #include "menusetupradio.h"
 #include "radiocheck.h"
+#include "radioimage.h"
+#include "radiotextosd.h"
+#include "rtplusosd.h"
 
 #if VDRVERSNUM < 10737
     #error This version of radio-plugin requires vdr >= 1.7.37

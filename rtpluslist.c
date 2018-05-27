@@ -4,6 +4,7 @@
 #include "radioaudio.h"
 #include "radioskin.h"
 #include "radiotools.h"
+#include "rtpluslist.h"
 #include "service.h"
 #include <math.h>
 
