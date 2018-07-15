@@ -15,7 +15,6 @@ char *rds_entitychar(char *text);
 char *xhtml2text(char *text);
 char *rtrim(char *text);
 char *audiobitrate(const unsigned char *data);
-void tmc_parser(unsigned char *data, int len);		// Alert-c
 const char* ptynr2string(int nr);
 
 #endif //__RADIO_TOOLS_H

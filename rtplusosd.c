@@ -30,8 +30,6 @@ cRTplusOsd::cRTplusOsd(void) :
 
     Load();
     Display();
-// TODO
-dsyslog("%s %d cRTplusOsd::cRTplusOsd ", __FILE__, __LINE__);
 }
 
 cRTplusOsd::~cRTplusOsd() {

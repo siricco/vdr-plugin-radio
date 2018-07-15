@@ -73,6 +73,7 @@ private:
     void RadiotextCheckTS(const uchar *Data, int Length);
     void AudioRecorderService(void);
     void RassDecode(uchar *Data, int Length);
+    bool CrcOk(uchar *data);
 protected:
     virtual void Play(const uchar *Data, int Length, uchar Id);
     virtual void PlayTs(const uchar *Data, int Length);
@@ -84,7 +85,7 @@ public:
     char *bitrate;
     void EnableRadioTextProcessing(const char *Titel, int apid, bool replay = false);
     void DisableRadioTextProcessing();
-    void RadiotextDecode(uchar *Data, int Length);
+    void RadiotextDecode(uchar *Data);
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
 };
 

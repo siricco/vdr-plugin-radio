@@ -29,7 +29,7 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
 #else
         void cRDSReceiver::Receive(uchar *Data, int Length)
 #endif
-        {
+{
     const int mframel = 263; // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
     static unsigned char mtext[mframel + 1];
     static int index;
@@ -42,10 +42,10 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
     }
 
     int offset;
-    if (Data[1] & 0x40) {                      // 1.TS-Frame, payload-unit-start
-        offset = (Data[3] & 0x20) ? Data[4] + 11 : 10; // Header + ADFL + 6 byte: PES-Startcode, -StreamID, -PacketLength
-        if (Data[offset - 3] == 0xbd) { // StreamID = Private stream 1 (for rds)
-            offset += 3;                     // 3 byte: Extension + Headerlength
+    if (Data[1] & 0x40) {                               // 1.TS-Frame, payload-unit-start
+        offset = (Data[3] & 0x20) ? Data[4] + 11 : 10;  // Header + ADFL + 6 byte: PES-Startcode, -StreamID, -PacketLength
+        if (Data[offset - 3] == 0xbd) {                 // StreamID = Private stream 1 (for rds)
+            offset += 3;                                // 3 byte: Extension + Headerlength
             offset += Data[offset - 1];
         } else {
             return;
@@ -81,7 +81,7 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
             rt_bstuff = false;
             mec = 0;
             if ((S_Verbose & 0x0f) >= 2) {
-                printf("\nRDS-Start: ");
+                printf("\nrdsreceiver: RDS-Start: ");
             }
         }
 
@@ -137,19 +137,19 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
             if (index >= mframel) { // max. rdslength, garbage ?
                 rt_start = false;
                 if ((S_Verbose & 0x0f) >= 2) {
-                    printf("(RDS-Error: too long, garbage ?)\n");
+                    printf("rdsreceiver: (RDS-Error: too long %d, garbage ?)\n", index);
                 }
             }
         }
 
-        if (rt_start && val == 0xff) {  // End
+        if (rt_start && (val == 0xff)) {  // End
             rt_start = false;
             if ((S_Verbose & 0x0f) >= 2) {
                 printf("(RDS-End)\n");
             }
             if (index < 9) {        // min. rdslength, garbage ?
                 if ((S_Verbose & 0x0f) >= 1) {
-                    printf("RDS-Error: too short -> garbage ?\n");
+                    printf("rdsreceiver: RDS-Error: too short -> garbage ?\n");
                 }
             } else {
                 // crc16-check
@@ -157,29 +157,18 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
                 if (crc16 != (mtext[index - 2] << 8) + mtext[index - 1]) {
                     if ((S_Verbose & 0x0f) >= 1) {
                         printf(
-                                "RDS-Error: wrong CRC # calc = %04x <> transmit = %02x%02x\n",
+                                "rdsreceiver: RDS-Error: wrong CRC # calc = %04x <> transmit = %02x%02x\n",
                                 crc16, mtext[index - 2], mtext[index - 1]);
                     }
                 } else {
                     switch (mec) {
                     case 0x0a:
-                        RadioAudio->RadiotextDecode(mtext, index);  // Radiotext
+                        RadioAudio->RadiotextDecode(mtext);  // Radiotext
                         break;
                     case 0x46:
                         switch ((mtext[7] << 8) + mtext[8]) {          // ODA-ID
                         case 0x4bd7:
-                            RadioAudio->RadiotextDecode(mtext, index);  // RT+
-                            break;
-                        case 0x0d45:
-                        case 0xcd46:
-                            if ((S_Verbose & 0x20) > 0) {
-                                unsigned char tmc[6];       // TMC Alert-C
-                                int i;
-                                for (i = 9; i <= (index - 3); i++) {
-                                    tmc[i - 9] = mtext[i];
-                                }
-                                tmc_parser(tmc, i - 8);
-                            }
+                            RadioAudio->RadiotextDecode(mtext);  // RT+
                             break;
                         default:
                             if ((S_Verbose & 0x0f) >= 2) {
@@ -201,16 +190,6 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
                         break;
                     case 0x02:
                         RadioAudio->RDS_PsPtynDecode(false, mtext, index); // PS
-                        break;
-                    case 0x30:
-                        if ((S_Verbose & 0x20) > 0) {             // TMC Alert-C
-                            unsigned char tmc[6];
-                            int i;
-                            for (i = 7; i <= (index - 3); i++) {
-                                tmc[i - 7] = mtext[i];
-                            }
-                            tmc_parser(tmc, i - 6);
-                        }
                         break;
                     }
                 }

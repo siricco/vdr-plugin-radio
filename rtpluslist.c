@@ -32,8 +32,7 @@ void cRTplusList::Load(void) {
     struct tm *ts, tm_store;
     int ind, lfd = 0;
     char ctitle[80];
-    // TODO
-    dsyslog("%s %d cRTplusList::Load", __FILE__, __LINE__);
+
     ts = localtime_r(&rtp_content.start, &tm_store);
     switch (typ) {
     case 0:

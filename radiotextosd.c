@@ -93,8 +93,6 @@ cRadioTextOsd::cRadioTextOsd() :
     LastKey = kNone;
     fheight = 0;
     bheight = 0;
-// TODO
-dsyslog("%s %d cRadioTextOsd::cRadioTextOsd", __FILE__, __LINE__);
 }
 
 cRadioTextOsd::~cRadioTextOsd() {
