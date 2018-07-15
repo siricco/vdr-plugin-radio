@@ -36,7 +36,6 @@ Folgende Script-Beispiele (www-Abfragen) werden mitgeliefert
   - ffn digital			= radioinfo-1113-354
   - Hit Radio FFH		= radioinfo-1113-1024
   - planet radio		= radioinfo-1113-1030
-  - harmony.fm			= radioinfo-1113-1036
   - oe3 orf				= radioinfo-1115-433
   - Truckradio			= radioinfo-1115-442
   - MDR Jump			= radioinfo-1093-541
@@ -54,9 +53,11 @@ Folgende Script-Beispiele (www-Abfragen) werden mitgeliefert
  [Astra 23.5]
   - Truckradio			= radioinfo-15027-5120
 
+Removed:
+#   - harmony.fm			= radioinfo-1113-1036
 
 Weitere erfolgreich getestete Scripte werden gerne übernommen :-)
-
+Ulrich Eckhardt  <uli-vdr@uli-eckhardt.de>
 
 Viel Spaß...
 Uwe <egal at egal-vdr dot de>
