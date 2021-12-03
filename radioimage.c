@@ -62,6 +62,11 @@ void cRadioImage::Show(const char *file) {
     int fd;
     struct stat st;
     struct video_still_picture sp;
+
+#if 1  // 1 for xineliboutput -> no stillpicture, but sound
+    return;
+#endif
+
     if ((fd = open(file, O_RDONLY)) >= 0) {
         fstat(fd, &st);
         sp.iFrame = (char *) malloc(st.st_size);

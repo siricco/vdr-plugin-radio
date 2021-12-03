@@ -58,7 +58,7 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
         return;
     }
     // print TS-RawData with RDS
-    if ((S_Verbose & 0x02) == 0x02) {
+    if ((S_Verbose & 0x0f) >= 3) {
         printf("\n\nTS-Data(%d):\n", Length);
         int cnt = 0;
         for (int a = 0; a < Length; a++) {
