@@ -5,6 +5,7 @@
  *
  */
  
+#include <ctype.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
@@ -84,6 +85,43 @@ unsigned short crc16_ccitt(unsigned char *daten, int len, bool skipfirst)
 #endif    
 
     return ~(crc);
+}
+
+/* ----------------------------------------------------------------------------------------------------------- */
+
+#define HEXDUMP_COLS 16
+void hexdump(const void *Data, int Len)
+{
+  if (!Data || Len <= 0)
+     return;
+
+  char hex[(3 * HEXDUMP_COLS) + 1];
+  char ascii[HEXDUMP_COLS + 1];
+
+  uint8_t *p = (uint8_t *)Data;
+  int ofs = 0;
+  while (Len) {
+        char *h = hex;
+        int i = Len > HEXDUMP_COLS ? HEXDUMP_COLS : Len;
+
+        *h = 0;
+        int j = 0;
+
+        while(j < i) {
+            uint8_t c = *p++;
+            h += sprintf(h, "%02x ", c);
+            ascii[j++] = isprint(c) ? c : '.';
+            }
+        ascii[j] = '\0';
+
+        for (; j < HEXDUMP_COLS; j++)
+            h += sprintf(h, "   ");
+
+        dsyslog("0x%06x: %s  %s", ofs, hex, ascii);
+
+        Len -= i;
+        ofs += i;
+        }
 }
 
 /* ----------------------------------------------------------------------------------------------------------- */
@@ -202,6 +240,51 @@ char *rtrim(char *text)
 }
 
 /* ----------------------------------------------------------------------------------------------------------- */
+
+bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize) {
+    uint32_t info = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
+    if (info == *mpaFrameInfo)
+        return false; // unchanged
+
+    int A = (info >> 21) & 0x7FF;
+    int B = (info >> 19) & 0x3;
+    int C = (info >> 17) & 0x3;
+    int D = (info >> 16) & 0x1;
+    int E = (info >> 12) & 0xF;
+    int F = (info >> 10) & 0x3;
+    int G = (info >>  9) & 0x1;
+
+    int mpa_sr[4] = { 44100, 48000, 32000, 0 }; // v1, v2/2, v2.5/4
+
+    int mpa_br11[16] = { 0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0 };
+    int mpa_br12[16] = { 0, 32, 48, 56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384, 0 };
+    int mpa_br13[16] = { 0, 32, 40, 48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 0 };
+
+    int mpa_br21[16] = { 0, 32, 48, 56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256, 0 };
+    int mpa_br22[16] = { 0,  8, 16, 24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, 0 };
+
+    //dsyslog("%08X : A=%X B=%d C=%d D=%d E=%d F=%d G=%d", info, A, B, C, D, E, F, G);
+    int ver = (B == 0) ? 25 : (B == 2) ? 20 : (B == 3) ? 10 : 0;
+
+    int MPver = 4 - B; // 1,2,x,2.5
+    int MPlay = 4 - C; // 1,2,3,x
+    int BR = (MPver == 1) ?
+                (MPlay == 1) ? mpa_br11[E] : (MPlay == 2) ? mpa_br12[E] : (MPlay == 3) ? mpa_br13[E] : 0 :
+             (MPver == 2 || MPver == 4) ?
+                (MPlay == 1) ? mpa_br21[E] : (MPlay == 2 || MPlay == 3) ? mpa_br22[E] : 0 : 0;
+
+    int SR = mpa_sr[F];
+    if      (B == 2) { SR /= 2; }
+    else if (B == 0) { SR /= 4; }
+
+    int FrameSize = BR ? (MPlay == 1) ? (12 * BR * 1000 / SR + G) * 4 : (144 * BR * 1000 / SR + G) : 0; // Ver.1,Lay.2 -> 960 bytes
+    dsyslog("MPEG V %d L %d BR %d SR %d FSize %d", MPver, MPlay, BR, SR, FrameSize);
+
+    *mpaFrameInfo = info;
+    *frameSize = FrameSize;
+
+    return true;
+}
 
 const char *bitrates[5][16] = {
     // MPEG 1, Layer 1-3

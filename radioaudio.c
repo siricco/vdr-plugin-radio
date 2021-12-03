@@ -154,6 +154,11 @@ void cRadioImage::Show(const char *file) {
     int fd;
     struct stat st;
     struct video_still_picture sp;
+
+#if 1  // 1 for xineliboutput -> no stillpicture, but sound
+    return;
+#endif
+
     if ((fd = open(file, O_RDONLY)) >= 0) {
         fstat(fd, &st);
         sp.iFrame = (char *) malloc(st.st_size);
@@ -269,7 +274,7 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
         return;
     }
     // print TS-RawData with RDS
-    if ((S_Verbose & 0x02) == 0x02) {
+    if ((S_Verbose & 0x0f) >= 3) {
         printf("\n\nTS-Data(%d):\n", Length);
         int cnt = 0;
         for (int a = 0; a < Length; a++) {
@@ -693,83 +698,251 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
     }
 }
 
-void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
-    static int pesfound = 0;
-    const int mframel = 263; // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
-    static unsigned char mtext[mframel + 1], lastframe[TS_SIZE - 4];
-    static int rt_start = 0, rt_bstuff = 0;
-    static int index;
-    static int mec = 0;
-    int i, ii, val;
+enum eStreamType
+{
+    st_NONE,
+    st_MPEG,
+    st_LATM
+};
 
-    /* TS-Frame && Payload, correct AudioPID ? */
-    if ((data[0] != 0x47) || !(data[3] & 0x10)) { // || audiopid != ((data[1] & 0x1f)<<8) + data[2])) {
-        pesfound = 0;
-        return;
-    }
+int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt) {
 
-    if ((S_Verbose & 0x02) == 0x02) {
-        printf("\nTS-Data(%d):\n", len);
-        int cnt = 0;
-        for (int a = 0; a < len; a++) {
-            printf("%02x ", data[a]);
-            cnt++;
-            if (cnt > 15) {
-                printf("\n");
-                cnt = 0;
-            }
-        }
-        printf("(TS-End)\n");
-    }
+    // 'Data Stream Element' <DSE> reverse scanning:
+    //
+    // AAC-LATM frames contain one or more elements and are always terminated by element-id <TERM>.
+    // element/frame format: <other>+<DSE>?<FIL>?<[TERM>
+    // element IDs (3 bits): <DSE>=4 (100), <FIL>=6 (110), <TERM>=7 (111)
+    // To find a <DSE>
+    // - count the required bitwise shift to byte-align <TERM> ('111' -> 1110_0000 / 0xE0).
+    // - byte-align all data in front of <TERM> and search for <DSE> ('100' -> 1000_0000 / 0x80) with matching length-field
+    // - if no <DSE> but a potential <FIL> was detected (0x6x), adjust the shift, skip over <FIL> and search once again for <DSE>
+    //
+    // The <DSE> may held RDS-data - complete or splitted over multiple frames, in the order [0xfe,...,0xff]).
+    //
+    // Assumptions to keep the code simple:
+    // only short <FIL> elements, RDS data is originaly not(!) byte-aligned after the <DSE> header, <DSE> Len < 255 bytes
 
-    int offset = TS_SIZE - 1;
-    int rdsl = 0, afdl = 0;
-    if ((data[1] & 0x40) == 0x40) {                                // 1.TS-Frame
-        offset = ((data[3] & 0x20) >> 4) ? data[4] + 5 : 4;       // Header+ADFL
-        if (data[offset] == 0x00 && data[offset + 1] == 0x00
-                && data[offset + 2] == 0x01 && // PES-Startcode
-                data[offset + 3] >= 0xc0 && data[offset + 3] <= 0xdf) { // PES-Audiostream MP1/2
-            pesfound = 1;
-            if (!bratefound) {
-                bitrate = audiobitrate(data + offset);
-                bratefound = true;
-            }
-            return;
-        }
-    }
-    // RDS DataSync = 0xfd @ audio-end
-    else if (pesfound && data[3] == 0x3f && data[offset] == 0xfd) { // last TS-Frame
-        rdsl = data[offset - 1];
-        pesfound = 0;
-    } else if (pesfound) {                                  // TS-Frames between
-        afdl = ((data[3] & 0x20) >> 4) ? data[4] + 1 : 0; // AdaptationField-Length
-        // search for PES-Change
-        for (i = afdl + 3; i < TS_SIZE - 4; i++) {
-            if (data[i] == 0xfd && data[i + 1] == 0xff
-                    && ((data[i + 2] & 0xf0) == 0xf0)
-                    && ((data[i + 3] & 0x04) == 0x04)) {
-                // && ((data[i+4] & 0x0f) != 0x0f))
-                offset = i;
-                rdsl = data[offset - 1];
+    const uchar *p = plBuffer + plBufferCnt - 1; // start at the end of the frame
+    while (!*p) { p--; }                // last byte with non-zero bits
+    uint16_t tmp = (p[-1] << 8) | p[0]; // read 16 bits
+
+    // find required bit-shifting to byte-align <TERM>
+    int rs = 0;
+    while   (tmp & 0x1F)  { tmp <<= 1; rs--; }
+    while (!(tmp & 0x20)) { tmp >>= 1; rs++; }
+
+    if ((tmp & 0xFF) == 0xE0) { // <TERM>, 8-bit header -> search for <DSE>
+        int eLen, eCnt = -1;
+
+        while (p > plBuffer) {
+            const uchar *fill = NULL;
+            eLen = -2;
+            eCnt++;
+
+            if (rs < 0)
+                rs += 8; // next data is at current byte-pos
+            else
+                p--;     // next data is at byte-pos -1
+
+            int i;
+            for (i = 0; i < RDS_CHUNKSIZE && p > plBuffer; i++, p--) { // store reversed, as in MPEG-1 TS
+                tmp = (p[-1] << 8) | p[0];
+                uchar eCh = (tmp >> rs) & 0xFF;
+                rdsChunk[i] = eCh;
+
+                if (i < 0xF && (eCh & 0xF) == i && (eCh & 0x70) == 0x60 && eCnt == 0) { // potential short <FIL>, 7-bit header
+                    fill = p;
+                    //dsyslog("%s: <FIL> (ID-byte %02X)", __func__, eCh & 0x7F); hexdump(rdsChunk, i + 1);
+                    }
+                if (eCh == 0x80 && eLen == (i - 1)) { // <DSE> with matching len-field
+                    fill = NULL;
+                    if (eLen == 3 && rdsChunk[i-2] == 0xBC && rdsChunk[i-3] == 0xC0 && rdsChunk[i-4] == 0x0) {
+                        dsyslog("%s: skip MPEG-4 ancillary data (sync %02X, len %d.)", __func__, rdsChunk[i-2], eLen);
+                        break;// skip this known <DSE> and search next
+                        }
+                    if (eCnt > 0 && eLen >= 0) { // second pass
+                        ;//dsyslog("%s: <DSE>[%d]", __func__, eCnt); hexdump(rdsChunk, eLen + 2);
+                        }
+                    return eLen; // <DSE> found
+                    }
+                eLen = eCh;
+                }
+
+            if (fill) { // skip <FIL> and search for <DSE> again
+                p = fill;
+                rs--; // adjust shift
+                }
+            else if (i >= RDS_CHUNKSIZE)
                 break;
             }
         }
-    } else {
-        /* no PES-Audio MPEG-1/2 found */
-        return;
-    }
-
-    if (rdsl <= 0) {    // save payload of last frame with no PES-Change
-        for (i = TS_SIZE - 1, ii = 0; i > 3; i--) {
-            lastframe[ii++] = data[i];
+    else {
+        dsyslog("%s: AAC-LATM - no <TERM> found (0x%02X)", __func__, tmp & 0xFF);
         }
+    return -1;
+}
+
+void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
+    static int pesfound = 0;
+    #define MSG_SIZE 263 // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
+    static unsigned char mtext[MSG_SIZE + 1], lastframe[TS_SIZE - 4];
+    static int rt_start = 0, rt_bstuff = 0;
+    static int index;
+    static int mec = 0;
+
+    static int streamType = st_NONE;
+    static int pPesLen = 0;
+    static int frameSize = 0;
+    static int pFrameSize = 0;
+    static uint32_t mpaFrameInfo = 0;
+
+    #define PAYLOAD_BUFSIZE (2*TS_SIZE)
+    static uchar plBuffer[PAYLOAD_BUFSIZE];
+    static int plBufferCnt = 0;
+    static uchar buFrameHeader[4];
+    static int buFrameHeaderCnt = -1;
+    static int lastApid = -1;
+
+    /* TS-Frame && Payload, correct AudioPID ? */
+    if (data[0] != 0x47) {
+        pesfound = 0;
         return;
-    }
+        }
+    if ((audiopid && TsPid(data) != audiopid) || !TsHasPayload(data))
+        return;
+
+    if ((S_Verbose & 0x0f) >= 3) {
+        dsyslog("TS-Data(%d):", len);
+        hexdump(data, len);
+        dsyslog("(TS-End)");
+        }
+
+    if (audiopid != lastApid) { // channel switch
+        lastApid = audiopid;
+        pesfound = 0;
+        }
+
+    int offset = TsPayloadOffset(data);                         // Header+ADFL
+    int payloadLen = TS_SIZE - offset;
+    int rdsl = 0, afdl = offset;
+    const uchar *rdsData;
+
+    if (TsPayloadStart(data)) {                                 // 1.TS-Frame
+        streamType == st_NONE;
+        plBufferCnt = 0;
+        buFrameHeaderCnt = -1;
+
+        if (data[offset] == 0x00 && data[offset + 1] == 0x00
+                && data[offset + 2] == 0x01 && // PES-Startcode
+                data[offset + 3] >= 0xc0 && data[offset + 3] <= 0xdf) { // PES-Audiostream MP1/2
+
+            int pesLen = (data[offset + 4] << 8) + data[offset + 5];
+            pPesLen = pesLen + 6; // from payload start
+
+            int hl = 8 + data[offset + 8] + 1;
+            int i = offset + hl;
+            if (data[i] == 0x56 && (data[i + 1] & 0xE0) == 0xE0) {
+                streamType = st_LATM;
+                frameSize = ((data[i + 1] & 0x1F) << 8) + data[i + 2];
+                pFrameSize = frameSize + hl + 3; // from payload start
+                }
+            else if (data[i] == 0xFF && (data[i + 1] & 0xE0) == 0xE0) {
+                ParseMpaFrameHeader(data+i, &mpaFrameInfo, &frameSize);
+                streamType = st_MPEG;
+                pFrameSize = frameSize + hl; // from payload start
+                if (!bratefound) {
+                    bitrate = audiobitrate(data + offset);
+                    bratefound = true;
+                    }
+                }
+            else
+                dsyslog("%s: unhandled streamType 0x%02X%02X", __func__, data[i], data[i + 1]);
+            }
+        pesfound = (streamType != st_NONE);
+        }
+
+    if (!pesfound)
+        return; /* no PES-Audio MPEG-1/2 found */
+
+    //dsyslog("offset %d fs %d ps %d pll %d - PUSI %d", offset, pFrameSize, pPesLen, payloadLen, TsPayloadStart(data));
+
+    if (streamType == st_LATM) {
+        // complete and parse new frame header
+        if (buFrameHeaderCnt >= 0) {
+            plBufferCnt = 0;
+            for (int p = offset; p < TS_SIZE && buFrameHeaderCnt < 3; p++) {
+                buFrameHeader[buFrameHeaderCnt++] = data[p];
+                }
+            if (buFrameHeaderCnt == 3) {
+                frameSize = ((buFrameHeader[1] & 0x1F) << 8) + buFrameHeader[2];
+                pFrameSize += frameSize + 3;
+                buFrameHeaderCnt = -1;
+                }
+            else {
+                pFrameSize -= payloadLen;
+                return; // need more data
+                }
+            }
+
+        if (pFrameSize <= payloadLen) { // end of frame
+            if (pPesLen > payloadLen) { // more frames - prepare next frame header
+                buFrameHeaderCnt = 0;
+                for (int p = offset + pFrameSize; p < TS_SIZE && buFrameHeaderCnt < 3; p++) {
+                    buFrameHeader[buFrameHeaderCnt++] = data[p];
+                    }
+                }
+            // append to payload buffer
+            memcpy(plBuffer + plBufferCnt, data + offset, pFrameSize);
+            plBufferCnt += pFrameSize;
+            //---
+            rdsl = GetLatmRdsDSE(plBuffer, plBufferCnt);
+            rdsData = rdsChunk;
+            offset = rdsl + 1;
+            afdl = -4; // payload start of imaginary TS packet
+            }
+        else { // pFrameSize > payloadLen
+            if ((pFrameSize - payloadLen) < RDS_CHUNKSIZE) { // save payload
+                memcpy(plBuffer, data + offset, payloadLen);
+                plBufferCnt = payloadLen;
+                }
+            }
+        }
+    else if (streamType == st_MPEG) {
+        if (pFrameSize <= payloadLen) { // end of frame
+            int o = offset + pFrameSize;
+            int l = data[o - 2];
+            if (data[o - 1] == 0xFD && l > 0) {
+                rdsData = data;
+                offset = o - 1;
+                rdsl = l;
+                //dsyslog("MPEG RDS:"); hexdump(data + o - l - 2, l + 2);
+                }
+            if (pPesLen > payloadLen) // more frames - prepare for next frame header
+                pFrameSize += frameSize; // use last PUSI frameSize
+            }
+        else { // pFrameSize > payloadLen
+            for (int i = TS_SIZE - 1, ii = 0; i > 3; i--) {  // save payload of last frame
+                lastframe[ii++] = data[i];
+                }
+            }
+        }
+    pPesLen -= payloadLen;
+    pFrameSize -= payloadLen;
+
+    if (pPesLen < 0 || (pPesLen == 0 && pFrameSize != 0)) {
+        dsyslog("ERROR - invalid PesLen or FrameSize missmatch: PayoadLen:%d PesLen:%d FrameSize:%d", payloadLen, pPesLen, pFrameSize);
+        pesfound = 0;
+        return;
+        }
+
+    if (rdsl <= 0)
+        return;
 
     // RDS data
+    int i, ii, val;
     for (i = offset - 2, ii = 0; i > offset - 2 - rdsl; i--) { // <-- data reverse, from end to start
         if (i > afdl + 3) {
-            val = data[i];
+            val = rdsData[i];
         } else if (ii < TS_SIZE - 5) {
             val = lastframe[ii++];
         } else {
@@ -837,7 +1010,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                     }
                 }
             }
-            if (index >= mframel) {     // max. rdslength, garbage ?
+            if (index >= MSG_SIZE) {     // max. rdslength, garbage ?
                 if ((S_Verbose & 0x0f) >= 1) {
                     printf("RDS-Error(TS): too long, garbage ?\n");
                 }
@@ -855,6 +1028,9 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                     printf("RDS-Error(TS): too short -> garbage ?\n");
                 }
             } else {
+                if ((S_Verbose & 0x0f) >= 1) {
+                    dsyslog("-- RDS %d --", index+1); hexdump(mtext, index+1);
+                    }
                 // crc16-check
                 unsigned short crc16 = crc16_ccitt(mtext, index - 3, 1);
                 if (crc16 != (mtext[index - 2] << 8) + mtext[index - 1]) {

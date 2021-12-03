@@ -97,9 +97,13 @@ private:
     int first_packets;
     int audiopid;
     bool bratefound;
+    #define RDS_CHUNKSIZE 128 // assumed max. size of splitted RDS chunks in AAC-LATM frames
+    uchar rdsChunk[RDS_CHUNKSIZE];
     //Radiotext
     cDevice *rdsdevice;
     void RadiotextCheckPES(const uchar *Data, int Length);
+    bool ParseMpaFrameInfo(const uchar *Data, uint32_t *mpaFrameInfo, int *frameSize);
+    int GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt);
     void RadiotextCheckTS(const uchar *Data, int Length);
     void AudioRecorderService(void);
     void RassDecode(uchar *Data, int Length);
