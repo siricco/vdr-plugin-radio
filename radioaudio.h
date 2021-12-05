@@ -45,6 +45,7 @@ extern int S_RassText;
 extern int S_RockAnt;
 extern uint32_t rt_color[9];
 extern int S_Verbose;
+extern int S_NoPicture;
 //Radiotext
 #define RT_MEL 65
 extern char RT_Text[5][RT_MEL];
@@ -66,8 +67,7 @@ private:
     bool enabled;
     int first_packets;
     int audiopid;
-    bool bratefound;
-    #define RDS_CHUNKSIZE 128 // assumed max. size of splitted RDS chunks in AAC-LATM frames
+    #define RDS_CHUNKSIZE 128 // assumed max. size of splitted RDS chunks in MPEG and AAC-LATM frames
     uchar rdsChunk[RDS_CHUNKSIZE];
     //Radiotext
     cDevice *rdsdevice;
