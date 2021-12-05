@@ -58,6 +58,7 @@ int S_ExtInfo = 0;
 uint32_t rt_color[9];
 int S_Verbose = 1;
 int S_Encrypted = 0;
+int S_NoPicture = 0;
 // Radiotext
 char RT_Text[5][RT_MEL];
 char RTP_Artist[RT_MEL], RTP_Title[RT_MEL];
@@ -468,11 +469,12 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
             { "replay",     required_argument, NULL, 'r' },
             { "encrypted",  required_argument, NULL, 'e' },
             { "verbose",    required_argument, NULL, 'v' },
+            { "nopicture",  no_argument      , NULL, 'x' },
             { NULL }
     };
 
     int c;
-    while ((c = getopt_long(argc, argv, "f:d:l:r:e:v:", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:d:l:r:e:v:x", long_options, NULL)) != -1) {
     switch (c) {
         case 'f':
                 printf("vdr-radio: arg files-dir = %s\n", optarg);
@@ -503,6 +505,10 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
                 printf("vdr-radio: arg encrypted = %s\n", optarg);
                 if (isnumber(optarg))
                     S_Encrypted = atoi(optarg);
+                break;
+        case 'x':
+                printf("vdr-radio: arg nopicture\n");
+                S_NoPicture = 1;
                 break;
         default:
                 printf("vdr-radio: arg char = %c\n", c);

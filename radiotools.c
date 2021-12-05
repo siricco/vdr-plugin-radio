@@ -241,9 +241,10 @@ char *rtrim(char *text)
 
 /* ----------------------------------------------------------------------------------------------------------- */
 
-bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize) {
+bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize, char *bitRate) {
     uint32_t info = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
-    if (info == *mpaFrameInfo)
+
+    if ((info & ~0x1FF) == (*mpaFrameInfo & ~0x1FF))
         return false; // unchanged
 
     int A = (info >> 21) & 0x7FF;
@@ -264,7 +265,6 @@ bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSi
     int mpa_br22[16] = { 0,  8, 16, 24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, 0 };
 
     //dsyslog("%08X : A=%X B=%d C=%d D=%d E=%d F=%d G=%d", info, A, B, C, D, E, F, G);
-    int ver = (B == 0) ? 25 : (B == 2) ? 20 : (B == 3) ? 10 : 0;
 
     int MPver = 4 - B; // 1,2,x,2.5
     int MPlay = 4 - C; // 1,2,3,x
@@ -277,13 +277,18 @@ bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSi
     if      (B == 2) { SR /= 2; }
     else if (B == 0) { SR /= 4; }
 
-    int FrameSize = BR ? (MPlay == 1) ? (12 * BR * 1000 / SR + G) * 4 : (144 * BR * 1000 / SR + G) : 0; // Ver.1,Lay.2 -> 960 bytes
-    dsyslog("MPEG V %d L %d BR %d SR %d FSize %d", MPver, MPlay, BR, SR, FrameSize);
+    int FrameSize = (BR && SR) ? (MPlay == 1) ? (12 * BR * 1000 / SR + G) * 4 : (144 * BR * 1000 / SR + G) : 0;
+
+    if ((info & ~0x3FF) != (*mpaFrameInfo & ~0x3FF)) // changed, not only padding bit
+        dsyslog("MPEG V %d L %d BR %d SR %d FSize %d", MPver, MPlay, BR, SR, FrameSize);
+
+    free(bitRate);
+    asprintf(&bitRate, "%dk", BR);
 
     *mpaFrameInfo = info;
     *frameSize = FrameSize;
 
-    return true;
+    return true; // changed
 }
 
 const char *bitrates[5][16] = {
