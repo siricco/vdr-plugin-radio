@@ -20,6 +20,9 @@ extern int S_HMEntry;
 
 cMenuSetupRadio::cMenuSetupRadio(void)
 {
+    T_StillPic[0] = tr("Use PlayPes-function");
+    T_StillPic[1] = tr("Use StillPicture-Function");
+    T_StillPic[2] = tr("Off");
     T_RtFunc[0] = tr("Off");
     T_RtFunc[1] = tr("only Text");
     T_RtFunc[2] = tr("Text+TagInfo");
@@ -71,7 +74,7 @@ cMenuSetupRadio::cMenuSetupRadio(void)
     newS_ExtInfo = S_ExtInfo;
 
     Add(new cMenuEditBoolItem( tr("Activate"),                      &newS_Activate));
-    Add(new cMenuEditBoolItem( tr("Use StillPicture-Function"),     &newS_StillPic));
+    Add(new cMenuEditStraItem( tr("StillPicture"),                  &newS_StillPic, 3, T_StillPic));
     Add(new cMenuEditBoolItem( tr("Hide MainMenuEntry"),            &newS_HMEntry));
     Add(new cMenuEditStraItem( tr("RDSText Function"),              &newS_RtFunc, 3, T_RtFunc));
     Add(new cMenuEditStraItem( tr("RDSText OSD-Position"),          &newS_RtOsdPos, 2, T_RtOsdPos));

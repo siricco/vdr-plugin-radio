@@ -45,7 +45,6 @@ extern int S_RassText;
 extern int S_RockAnt;
 extern uint32_t rt_color[9];
 extern int S_Verbose;
-extern int S_NoPicture;
 //Radiotext
 #define RT_MEL 65
 extern char RT_Text[5][RT_MEL];

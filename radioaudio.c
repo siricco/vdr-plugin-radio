@@ -426,6 +426,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
     static int mec = 0;
 
     static int streamType = st_NONE;
+    static int lastStreamType = st_NONE;
     static int pPesLen = 0;
     static int frameSize = 0;
     static int pFrameSize = 0;
@@ -489,8 +490,11 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                     pFrameSize = frameSize + hl; // from payload start
                     }
                 }
-            else
-                dsyslog("%s: unhandled audiostram 0x%02X%02X", __func__, data[i], data[i + 1] & 0xE0);
+            if (lastStreamType != streamType) {
+                if (streamType == st_NONE)
+                    dsyslog("%s: unhandled audiostream <%02X %02X %02X>", __func__, data[i], data[i+1], data[i+2]);
+                lastStreamType = streamType;
+                }
             }
         pesfound = (streamType != st_NONE && frameSize > 0);
         }

@@ -31,6 +31,7 @@ private:
     //int newS_RtpMemNo;
     int newS_RassText;
     int newS_ExtInfo;
+    const char *T_StillPic[3];
     const char *T_RtFunc[3];
     const char *T_RtOsdTags[3];
     const char *T_RtOsdPos[2];

@@ -63,7 +63,7 @@ void cRadioImage::Show(const char *file) {
     struct stat st;
     struct video_still_picture sp;
 
-    if (S_NoPicture) // required for xineliboutput -> no stillpicture, but sound
+    if (S_StillPic > 1) // use with xineliboutput -> no stillpicture, but sound
         return;
 
     if ((fd = open(file, O_RDONLY)) >= 0) {
