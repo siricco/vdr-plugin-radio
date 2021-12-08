@@ -58,7 +58,6 @@ int S_ExtInfo = 0;
 uint32_t rt_color[9];
 int S_Verbose = 1;
 int S_Encrypted = 0;
-int S_NoPicture = 0;
 // Radiotext
 char RT_Text[5][RT_MEL];
 char RTP_Artist[RT_MEL], RTP_Title[RT_MEL];
@@ -254,6 +253,7 @@ private:
     //int newS_RtpMemNo;
     int newS_RassText;
     int newS_ExtInfo;
+    const char *T_StillPic[3];
     const char *T_RtFunc[3];
     const char *T_RtOsdTags[3];
     const char *T_RtOsdPos[2];
@@ -271,6 +271,9 @@ public:
 
 cMenuSetupRadio::cMenuSetupRadio(void)
 {
+    T_StillPic[0] = tr("Use PlayPes-function");
+    T_StillPic[1] = tr("Use StillPicture-Function");
+    T_StillPic[2] = tr("Off");
     T_RtFunc[0] = tr("Off");
     T_RtFunc[1] = tr("only Text");
     T_RtFunc[2] = tr("Text+TagInfo");
@@ -322,7 +325,7 @@ cMenuSetupRadio::cMenuSetupRadio(void)
     newS_ExtInfo = S_ExtInfo;
 
     Add(new cMenuEditBoolItem( tr("Activate"),                      &newS_Activate));
-    Add(new cMenuEditBoolItem( tr("Use StillPicture-Function"),     &newS_StillPic));
+    Add(new cMenuEditStraItem( tr("StillPicture"),                  &newS_StillPic, 3, T_StillPic));
     Add(new cMenuEditBoolItem( tr("Hide MainMenuEntry"),            &newS_HMEntry));
     Add(new cMenuEditStraItem( tr("RDSText Function"),              &newS_RtFunc, 3, T_RtFunc));
     Add(new cMenuEditStraItem( tr("RDSText OSD-Position"),          &newS_RtOsdPos, 2, T_RtOsdPos));
@@ -469,12 +472,11 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
             { "replay",     required_argument, NULL, 'r' },
             { "encrypted",  required_argument, NULL, 'e' },
             { "verbose",    required_argument, NULL, 'v' },
-            { "nopicture",  no_argument      , NULL, 'x' },
             { NULL }
     };
 
     int c;
-    while ((c = getopt_long(argc, argv, "f:d:l:r:e:v:x", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:d:l:r:e:v:", long_options, NULL)) != -1) {
     switch (c) {
         case 'f':
                 printf("vdr-radio: arg files-dir = %s\n", optarg);
@@ -505,10 +507,6 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
                 printf("vdr-radio: arg encrypted = %s\n", optarg);
                 if (isnumber(optarg))
                     S_Encrypted = atoi(optarg);
-                break;
-        case 'x':
-                printf("vdr-radio: arg nopicture\n");
-                S_NoPicture = 1;
                 break;
         default:
                 printf("vdr-radio: arg char = %c\n", c);
