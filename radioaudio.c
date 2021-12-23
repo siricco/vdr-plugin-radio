@@ -385,7 +385,7 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt) {
                 uchar eCh = (tmp >> rs) & 0xFF;
                 rdsChunk[i] = eCh;
 
-                if (i < 0xF && (eCh & 0xF) == i && (eCh & 0x70) == 0x60 && eCnt == 0) { // potential short <FIL>, 7-bit header
+                if (eCnt == 0 && i < 0xF && !fill && (eCh & 0xF) == i && (eCh & 0x70) == 0x60) { // potential short <FIL>, 7-bit header
                     fill = p;
                     //dsyslog("%s: <FIL> (ID-byte %02X)", __func__, eCh & 0x7F); hexdump(rdsChunk, i + 1);
                     }
