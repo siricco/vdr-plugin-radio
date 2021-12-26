@@ -102,8 +102,9 @@ private:
     cDevice *rdsdevice;
     void RadiotextCheckPES(const uchar *Data, int Length);
     bool ParseMpaFrameInfo(const uchar *Data, uint32_t *mpaFrameInfo, int *frameSize);
-    int GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt);
+    int GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_start);
     void RadiotextCheckTS(const uchar *Data, int Length);
+    bool RadiotextParseTS(const uchar *RdsData, int RdsLen);
     void AudioRecorderService(void);
     void RassDecode(uchar *Data, int Length);
 protected:
