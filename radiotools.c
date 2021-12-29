@@ -280,7 +280,7 @@ bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSi
     int FrameSize = (BR && SR) ? (MPlay == 1) ? (12 * BR * 1000 / SR + G) * 4 : (144 * BR * 1000 / SR + G) : 0;
 
     if ((info & ~0x3FF) != (*mpaFrameInfo & ~0x3FF)) // changed, not only padding bit
-        dsyslog("MPEG V %d L %d BR %d SR %d FSize %d", MPver, MPlay, BR, SR, FrameSize);
+        dsyslog("MPEG-%d L%d BR %d SR %d FSize %d", MPver, MPlay, BR, SR, FrameSize);
 
     free(bitRate);
     asprintf(&bitRate, "%dk", BR);
