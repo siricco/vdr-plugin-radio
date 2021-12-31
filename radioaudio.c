@@ -438,7 +438,7 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
 
 cRadioAudio::cRadioAudio() :
         cAudio(), enabled(false), first_packets(0), audiopid(0),
-        rdsdevice(NULL), bitrate(NULL) {
+        rdsdevice(NULL), bitrate(NULL), rdsSeen(false) {
     RadioAudio = this;
     dsyslog("radio: new cRadioAudio");
 }
@@ -786,7 +786,6 @@ enum eStreamType
 void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
     static bool pesfound = false;
     static int streamType = 0;
-    static int lastStreamType = 0;
     static int pPesLen = 0;
     static int pFrameSize = 0;
     static int frameSize = 0; // static for mpaFrameInfo
@@ -801,6 +800,8 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
     static int lastApid = -1;
     static bool rt_start = false;
     static uchar ccn = 0;
+    #define RDS_SCAN_TIMEOUT 60 // seconds before considering audiostream has no RDS data
+    static time_t rdsScan = 0;
 
     // verify TS
     if (data[0] != 0x47) {
@@ -812,14 +813,19 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
 
     // audio track
     if (TsPid(data) != lastApid) {
-        dsyslog("%s: %s audio track - pid %d", __func__, lastApid < 0 ? "Set" : "New", TsPid(data));
-        lastApid = TsPid(data);
-        lastStreamType = 0;
+        dsyslog("%s: new audio track - Pid %d", __func__, TsPid(data));
+        pesfound = false;
+        streamType = 0;
         mpaFrameInfo = 0;
+        lastApid = TsPid(data);
         rt_start = RadiotextParseTS(NULL, 0); // reset RDS parser
         ccn = TsContinuityCounter(data);
-        pesfound = false;
+        rdsScan = time(NULL);
+        rdsSeen = false;
         }
+
+    if (!rdsScan)
+        return;
 
     if ((S_Verbose & 0x0f) >= 3) {
         dsyslog("TS-Data(%d):", len);
@@ -838,7 +844,6 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
 
     int pOffset = TsPayloadOffset(data); // TS-Header+ADFL
     int payloadLen = TS_SIZE - pOffset;
-    int pFrameOfs = 0;
 
     if (TsPayloadStart(data)) {
         pesfound = false;
@@ -851,8 +856,11 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
             pesfound = true;
 
             int headerLen = 8 + data[pOffset + 8] + 1; // PES headerlen
-            pFrameSize = headerLen; // from payload start
-            pFrameOfs = headerLen;
+            pOffset += headerLen; // from frame start
+            pPesLen -= headerLen;
+            payloadLen -= headerLen;
+
+            pFrameSize = 0;
             buFrameHeaderCnt = 0; // start of frame
             }
         }
@@ -865,33 +873,32 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
     while (payloadLen > 0 && payloadLen <= pPesLen) {
         if (buFrameHeaderCnt >= 0) { // start of frame
             // read (remaining) frameheader
-            for (int p = pOffset + pFrameOfs; p < TS_SIZE && buFrameHeaderCnt < HEADER_SIZE; p++) {
+            for (int p = pOffset; p < TS_SIZE && buFrameHeaderCnt < HEADER_SIZE; p++) {
                 buFrameHeader[buFrameHeaderCnt++] = data[p];
                 }
             if (buFrameHeaderCnt < HEADER_SIZE) {
                 break; // need more data
                 }
-
             buFrameHeaderCnt = -1;
             plBufferCnt = 0; // reset payload buffer
-            streamType = st_NONE;
 
+            int hdStreamType = st_NONE;
             if (buFrameHeader[0] == 0x56 && (buFrameHeader[1] & 0xE0) == 0xE0) {
-                streamType = st_LATM;
+                hdStreamType = st_LATM;
                 frameSize = ((buFrameHeader[1] & 0x1F) << 8) + buFrameHeader[2];
-                pFrameSize += frameSize + 3; // from payload start
+                pFrameSize += frameSize + 3; // from frame start
                 }
             else if (buFrameHeader[0] == 0xFF && (buFrameHeader[1] & 0xE0) == 0xE0) {
                 ParseMpaFrameHeader(buFrameHeader, &mpaFrameInfo, &frameSize, bitrate);
-                streamType = st_MPEG;
-                pFrameSize += frameSize; // from payload start
+                hdStreamType = st_MPEG;
+                pFrameSize += frameSize; // from frame start
                 }
 
             if (frameSize <= 0 || pFrameSize > pPesLen)
-                streamType = st_NONE;
+                hdStreamType = st_NONE;
 
-            if (lastStreamType != streamType) {
-                lastStreamType = streamType;
+            if (streamType != hdStreamType) {
+                streamType = hdStreamType;
                 if ((S_Verbose & 0x0f) >= 1) {
                     if (streamType != st_NONE)
                         dsyslog("%s: audioformat: %s", __func__, streamType == st_LATM ? "AAC-LC" : "MPEG-1");
@@ -906,12 +913,12 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                 }
 #if 1
             if (pFrameSize <= payloadLen && (S_Verbose & 0x0f) >= 1) // frame start and end within one TS
-                dsyslog("%s: short frame - len %d, payload %d", __func__, pFrameSize, payloadLen);
+                { dsyslog("%s: short frame - len %d/0x%02X, payload %d, peslen %d", __func__, pFrameSize, pFrameSize, payloadLen, pPesLen); hexdump(data, len); }
 #endif
             }
         if (pFrameSize <= payloadLen) { // end of frame
             // copy into payload buffer
-            memcpy(plBuffer + plBufferCnt, data + pOffset + pFrameOfs, pFrameSize);
+            memcpy(plBuffer + plBufferCnt, data + pOffset, pFrameSize);
             plBufferCnt += pFrameSize;
 
             //--- RDS
@@ -933,7 +940,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
             //---
 
             if (pPesLen > pFrameSize) { // more frames in PES - goto next frame header
-                pFrameOfs += pFrameSize;
+                pOffset += pFrameSize;
                 buFrameHeaderCnt = 0;
                 }
             payloadLen -= pFrameSize;
@@ -950,10 +957,18 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
         }
     pFrameSize -= payloadLen;
     pPesLen -= payloadLen;
+    pesfound = (pPesLen > 0);
 
     if (pPesLen < 0 || (pPesLen == 0 && pFrameSize != 0))
         if ((S_Verbose & 0x0f) >= 1) dsyslog("%s: ERROR - invalid PesLen or FrameSize missmatch: PayloadLen:%d PesLen:%d FrameSize:%d", __func__, payloadLen, pPesLen, pFrameSize);
-    pesfound = (pPesLen > 0);
+
+    if (!rdsSeen) {
+        if ((time(NULL) - rdsScan) > RDS_SCAN_TIMEOUT) {
+            dsyslog("%s: no RDS data after %d seconds - disable RDS scan", __func__, RDS_SCAN_TIMEOUT);
+            rdsScan = 0;
+            rdsSeen = true; // no more checks
+            }
+        }
 }
 
 bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
@@ -1013,7 +1028,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                     break;
                 default:
                     if ((S_Verbose & 0x0f) >= 1)
-                        dsyslog("RDS-Error(TS): invalid Bytestuffing at [%d]: %d, garbage ?", index, val);
+                        dsyslog("RDS-Error(TS): invalid Bytestuffing at [%d]: 0x%02x, garbage ?", index, val);
                     rt_start = 0;
                     break;
                 }
@@ -1052,7 +1067,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             else if (index == 4) // MFL
                 stop_index = stv + 7;
 
-            if (index > stop_index || (index == stop_index && val != 0xff)) { //  wrong rdslength, garbage ?
+            if (index >= stop_index && !(index == stop_index && val == 0xff)) { //  wrong rdslength, garbage ?
                 if ((S_Verbose & 0x0f) >= 1)
                     dsyslog("RDS-Error(TS): invalid RDS length: index %d, stop %d, val %02x, garbage ?", index, stop_index, val);
                 rt_start = 0;
@@ -1065,7 +1080,9 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 printf("(RDS-End)\n");
             }
             rt_start = 0;
-            dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1);
+            rdsSeen = true;
+            if ((S_Verbose & 0x0f) >= 1)
+                dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1);
 
             if (index < 9) {		//  min. rdslength, garbage ?
                 if ((S_Verbose & 0x0f) >= 1) {
@@ -1076,8 +1093,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 unsigned short crc16 = crc16_ccitt(mtext, index - 3, 1);
                 if (crc16 != (mtext[index - 2] << 8) + mtext[index - 1]) {
                     if ((S_Verbose & 0x0f) >= 1) {
-                        dsyslog(
-                                "RDS-Error(TS): wrong CRC # calc = %04x <> transmit = %02x%02x\n",
+                        dsyslog("RDS-Error(TS): wrong CRC # calc = %04x <> transmit = %02x%02x\n",
                                 crc16, mtext[index - 2], mtext[index - 1]);
                     }
                 } else {

@@ -116,6 +116,7 @@ public:
     cRadioAudio(void);
     virtual ~cRadioAudio(void);
     char *bitrate;
+    bool rdsSeen;
     void EnableRadioTextProcessing(const char *Titel, int apid, bool replay = false);
     void DisableRadioTextProcessing();
     void RadiotextDecode(uchar *Data, int Length);
