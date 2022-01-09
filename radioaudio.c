@@ -726,11 +726,11 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
     while (!(tmp & 0x20)) { tmp >>= 1; rs++; }
 
     if ((tmp & 0xFF) == 0xE0) { // <TERM> -> search for <DSE>, 8-bit header
-        int eLen, eCnt = -1;
+        int eCnt = -1;
 
         while (p > plBuffer) {
             const uchar *eFIL = NULL;
-            eLen = -2;
+            int eLen = -2;
             eCnt++;
 
             if (rs < 0)
@@ -754,10 +754,15 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                         if ((S_Verbose & 0x0f) >= 1) dsyslog("%s: skip MPEG-4 ancillary data (sync %02X, len %d.)", __func__, rdsChunk[i-2], eLen);
                         break;// skip this known <DSE> and search next
                         }
-                    if (rt_start || (eLen > 0 && rdsChunk[i-2] == 0xFE)) {
+                    if (rt_start || (eLen > 0 && rdsChunk[i-2] == 0xFE && (eLen < 2 || rdsChunk[i-3] == 0x00))) { // check 4 bytes "0x80, eLen, 0xfe, 0x00"
                         //dsyslog("%s: <DSE>[%d]", __func__, eCnt); hexdump(rdsChunk, eLen + 2);
                         return eLen; // <DSE> found
                         }
+                    }
+                // simple plausibilty checks - invalid 'rt_stop','rt_start' or 'stuffing'
+                if ((i > 0 && (eCh == 0xFF && rdsChunk[i-1] != 0xFE) || (eCh == 0xFD && rdsChunk[i-1] > 2)) || (i > 1 && rdsChunk[i-2] == 0xFE && rdsChunk[i-1] != 0xFF)) {
+                    //dsyslog("%s: <--->[%d/%d] invalid start/stop/stuffing %02X,%02X", __func__, eCnt, i, eCh, rdsChunk[i-1]);
+                    i = RDS_CHUNKSIZE; // retry with <FIL> or return
                     }
                 eLen = eCh;
                 }
@@ -911,7 +916,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                 pesfound = false;
                 return;
                 }
-#if 1
+#if 0
             if (pFrameSize <= payloadLen && (S_Verbose & 0x0f) >= 1) // frame start and end within one TS
                 { dsyslog("%s: short frame - len %d/0x%02X, payload %d, peslen %d", __func__, pFrameSize, pFrameSize, payloadLen, pPesLen); hexdump(data, len); }
 #endif
@@ -987,7 +992,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
         rt_lastVal = 0xff;
 
     // RDS data
-    int stop_index = (index >= 4) ? mtext[4] + 7 : MSG_SIZE - 1;
+    int stop_index = (rt_start && index >= 4) ? mtext[4] + 7 : MSG_SIZE - 1;
     for (const uchar *p = RdsData + RdsLen - 1; p >= RdsData; p--) { // <-- data reverse, from end to start
         int val = *p;
         if (val == 0xfe ) { // Start
@@ -1012,7 +1017,6 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             if ((S_Verbose & 0x0f) >= 2) {
                 printf("%02x ", val);
             }
-
             // byte-stuffing reverse: 0xfd00->0xfd, 0xfd01->0xfe, 0xfd02->0xff
             int stv = val;
             if (rt_bstuff == 1) {
@@ -1039,7 +1043,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 stv = mtext[index]; // stuffed value
             } else {
                 mtext[++index] = val;
-                if (val == 0xfd && index > 0) {      // stuffing found
+                if (val == 0xfd) { // stuffing found
                     rt_bstuff = 1;
                     continue;
                 }
@@ -1067,7 +1071,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             else if (index == 4) // MFL
                 stop_index = stv + 7;
 
-            if (index >= stop_index && !(index == stop_index && val == 0xff)) { //  wrong rdslength, garbage ?
+            if (val == 0xff ? index != stop_index : index == stop_index ) { // wrong rdslength or rt_stop, garbage ?
                 if ((S_Verbose & 0x0f) >= 1)
                     dsyslog("RDS-Error(TS): invalid RDS length: index %d, stop %d, val %02x, garbage ?", index, stop_index, val);
                 rt_start = 0;
