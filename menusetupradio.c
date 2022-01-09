@@ -20,7 +20,7 @@ extern int S_HMEntry;
 
 cMenuSetupRadio::cMenuSetupRadio(void)
 {
-    T_StillPic[0] = tr("Use PlayPes-function");
+    T_StillPic[0] = tr("Use PlayPes-Function");
     T_StillPic[1] = tr("Use StillPicture-Function");
     T_StillPic[2] = tr("Off");
     T_RtFunc[0] = tr("Off");
