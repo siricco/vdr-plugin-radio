@@ -894,7 +894,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                 pFrameSize += frameSize + 3; // from frame start
                 }
             else if (buFrameHeader[0] == 0xFF && (buFrameHeader[1] & 0xE0) == 0xE0) {
-                ParseMpaFrameHeader(buFrameHeader, &mpaFrameInfo, &frameSize, bitrate);
+                ParseMpaFrameHeader(buFrameHeader, &mpaFrameInfo, &frameSize, &bitrate);
                 hdStreamType = st_MPEG;
                 pFrameSize += frameSize; // from frame start
                 }
