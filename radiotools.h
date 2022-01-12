@@ -15,7 +15,7 @@ void hexdump(const void *Data, int Len);
 char *rds_entitychar(char *text);
 char *xhtml2text(char *text);
 char *rtrim(char *text);
-bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize, char *bitRate);
+bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize, char **bitRate);
 char *audiobitrate(const unsigned char *data);
 const char* ptynr2string(int nr);
 

@@ -241,7 +241,7 @@ char *rtrim(char *text)
 
 /* ----------------------------------------------------------------------------------------------------------- */
 
-bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize, char *bitRate) {
+bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize, char **bitRate) {
     uint32_t info = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
 
     if ((info & ~0x1FF) == (*mpaFrameInfo & ~0x1FF))
@@ -282,8 +282,8 @@ bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSi
     if ((info & ~0x3FF) != (*mpaFrameInfo & ~0x3FF)) // changed, not only padding bit
         dsyslog("MPEG-%d L%d BR %d SR %d FSize %d", MPver, MPlay, BR, SR, FrameSize);
 
-    free(bitRate);
-    asprintf(&bitRate, "%dk", BR);
+    free(*bitRate);
+    asprintf(bitRate, "%dk", BR);
 
     *mpaFrameInfo = info;
     *frameSize = FrameSize;
