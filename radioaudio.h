@@ -16,6 +16,7 @@
 #include <vdr/osd.h>
 #include <vdr/menu.h>
 #include <vdr/receiver.h>
+#include "rdspatpmt.h"
 
 extern char *ConfigDir;
 extern char *DataDir;
@@ -100,6 +101,7 @@ private:
     uchar rdsChunk[RDS_CHUNKSIZE];
     //Radiotext
     cDevice *rdsdevice;
+    cRdsPidFilter rdsPidFilter;
     void RadiotextCheckPES(const uchar *Data, int Length);
     bool ParseMpaFrameInfo(const uchar *Data, uint32_t *mpaFrameInfo, int *frameSize);
     int GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_start);
@@ -115,6 +117,11 @@ protected:
 public:
     cRadioAudio(void);
     virtual ~cRadioAudio(void);
+    void EnableRdsPidFilter(int Sid);
+    void DisableRdsPidFilter(void);
+    void EnableRdsReceiver(int Pid);
+    void DisableRdsReceiver(void);
+    void HandleRdsPids(const int *RdsPids, int NumRdsPids);
     char *bitrate;
     bool rdsSeen;
     void EnableRadioTextProcessing(const char *Titel, int apid, bool replay = false);

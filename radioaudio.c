@@ -233,6 +233,8 @@ cRDSReceiver::cRDSReceiver(int Pid) {
 
     pid = Pid;
     rt_start = rt_bstuff = false;
+    SetPids(NULL);
+    AddPid(pid);
 }
 
 cRDSReceiver::~cRDSReceiver() {
@@ -259,12 +261,8 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
     int offset;
     if (Data[1] & 0x40) {                      // 1.TS-Frame, payload-unit-start
         offset = (Data[3] & 0x20) ? Data[4] + 11 : 10; // Header + ADFL + 6 byte: PES-Startcode, -StreamID, -PacketLength
-        if (Data[offset - 3] == 0xbd) { // StreamID = Private stream 1 (for rds)
-            offset += 3;                     // 3 byte: Extension + Headerlength
-            offset += Data[offset - 1];
-        } else {
-            return;
-        }
+        offset += 3;                     // 3 byte: Extension + Headerlength
+        offset += Data[offset - 1];
     } else {
         offset = (Data[3] & 0x20) ? Data[4] + 5 : 4;    // Header + ADFL
     }
@@ -274,17 +272,9 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
     }
     // print TS-RawData with RDS
     if ((S_Verbose & 0x0f) >= 3) {
-        printf("\n\nTS-Data(%d):\n", Length);
-        int cnt = 0;
-        for (int a = 0; a < Length; a++) {
-            printf("%02x ", Data[a]);
-            cnt++;
-            if (cnt > 15) {
-                cnt = 0;
-                printf("\n");
-            }
-        }
-        printf("(End)\n");
+        dsyslog("TS-Data(%d):", Length);
+        hexdump(Data, Length);
+        dsyslog("(TS-End)");
     }
 
     for (int i = 0, val = 0; i < (TS_SIZE - offset); i++) {
@@ -367,6 +357,8 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
                     printf("RDS-Error: too short -> garbage ?\n");
                 }
             } else {
+                if ((S_Verbose & 0x0f) >= 1)
+                    { dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1); }
                 // crc16-check
                 unsigned short crc16 = crc16_ccitt(mtext, index - 3, true);
                 if (crc16 != (mtext[index - 2] << 8) + mtext[index - 1]) {
@@ -453,6 +445,8 @@ void cRadioAudio::Play(const uchar *Data, int Length, uchar Id) {
     if (!enabled) {
         return;
     }
+    if (RDSReceiver)
+        return;
     if (Id < 0xc0 || Id > 0xdf) {
         return;
     }
@@ -489,6 +483,8 @@ void cRadioAudio::PlayTs(const uchar *Data, int Length) {
     if (!enabled) {
         return;
     }
+    if (RDSReceiver)
+        return;
 
     // Rass-Images Slideshow
     if (S_RassText > 0 && Rass_Archiv == -1 && Rass_Show == 1) {
@@ -1086,7 +1082,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             rt_start = 0;
             rdsSeen = true;
             if ((S_Verbose & 0x0f) >= 1)
-                dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1);
+                { dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1); }
 
             if (index < 9) {		//  min. rdslength, garbage ?
                 if ((S_Verbose & 0x0f) >= 1) {
@@ -1915,44 +1911,66 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid,
         return;
     }
 
-    // RDS-Receiver for seperate Data-PIDs, only Livemode, hardcoded Astra_19E + Hotbird 13E
-    int pid = 0;
+    // RDS-Receiver for seperate Data-PIDs, only Livemode
     if (!replay) {
-        switch (chan->Tid()) {
-        case 1113:
-            switch (pid = chan->Apid(0)) {  // Astra_19.2E - 12633 GHz
-            /*  case 0x161: pid = 0x229;    //  radio top40
-             break; */
-            case 0x400:                 //  Hitradio FFH
-            case 0x406:                 //  planet radio
-            case 0x40c:
-                pid += 1;       //  harmony.ffm
-                break;
-            default:
-                return;
-            }
-            break;
-        case 5300:
-            switch (pid = chan->Apid(0)) { // Hotbird_13E - 11747 GHz, no Radiotext @ moment, only TMC + MECs 25/26
-            case 0xdc3:             //  Radio 1
-            case 0xdd3:             //  Radio 3
-            case 0xddb:             //  Radio 5
-            case 0xde3:             //  Radio Exterior
-            case 0xdeb:
-                pid += 1;   //  Radio 4
-                break;
-            default:
-                return;
-            }
-            break;
-        default:
-            return;
-        }
-        RDSReceiver = new cRDSReceiver(pid);
         rdsdevice = cDevice::ActualDevice();
+        EnableRdsPidFilter(chan->Sid());
+    }
+}
+
+void cRadioAudio::EnableRdsPidFilter(int Sid) {
+    if (rdsdevice) {
+        rdsdevice->AttachFilter(&rdsPidFilter);
+        rdsPidFilter.Trigger(Sid);
+    }
+}
+
+void cRadioAudio::DisableRdsPidFilter(void) {
+    if (rdsdevice) {
+        rdsPidFilter.Trigger();
+        rdsdevice->Detach(&rdsPidFilter);
+    }
+}
+
+void cRadioAudio::EnableRdsReceiver(int Pid) {
+    if (rdsdevice) {
+        if (RDSReceiver)
+            DisableRdsReceiver();
+        RDSReceiver = new cRDSReceiver(Pid);
         rdsdevice->AttachReceiver(RDSReceiver);
     }
+}
 
+void cRadioAudio::DisableRdsReceiver(void) {
+    if (rdsdevice) {
+        if (RDSReceiver) {
+            rdsdevice->Detach(RDSReceiver);
+            delete RDSReceiver;
+            RDSReceiver = NULL;
+        }
+    }
+}
+
+void cRadioAudio::HandleRdsPids(const int *RdsPids, int NumRdsPids) {
+    if (chan) {
+        const int *a = chan->Apids();
+        const int *d = chan->Dpids();
+
+        for (int i = 0; i < NumRdsPids; i++) {
+            int pid = RdsPids[i];
+            bool found = false;
+            for (int j = 0; !found && a[i]; i++)
+                found = (a[i] == pid);
+            for (int j = 0; !found && d[i]; i++)
+                found = (d[i] == pid);
+            if ((S_Verbose & 0x0f) >= 1)
+                dsyslog("%s: RDS Pid %d - in %s-stream", __func__, pid, found ? "Audio" : "separate Data");
+            if (!found) { // seperate RDS-stream
+                EnableRdsReceiver(pid);
+                break;
+            }
+        }
+    }
 }
 
 void cRadioAudio::DisableRadioTextProcessing() {
@@ -1968,10 +1986,9 @@ void cRadioAudio::DisableRadioTextProcessing() {
         RadioTextOsd->Hide();
     }
 
-    if (RDSReceiver != NULL) {
-        rdsdevice->Detach(RDSReceiver);
-        delete RDSReceiver;
-        RDSReceiver = NULL;
+    if (rdsdevice) { // live
+        DisableRdsReceiver();
+        DisableRdsPidFilter();
         rdsdevice = NULL;
     }
 }
