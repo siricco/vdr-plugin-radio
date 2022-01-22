@@ -164,7 +164,7 @@ const char *cPluginRadio::CommandLineHelp(void)
            "  -l file,  --live=file      use file as default mpegfile in livemode (default: <dir>/radio.mpg)\n"
            "  -r file,  --replay=file    use file as default mpegfile in replaymode (default: <dir>/replay.mpg)\n"
            "  -e 1,     --encrypted=1    use transfermode/backgroundimage @ encrypted radiochannels     \n"
-           "  -v level, --verbose=level  set verbose level (default = 1, 0 = Off, 1 = RDS-Text+Tags,    \n"
+           "  -v level, --verbose=level  set verbose level (default = 0, 0 = Off, 1 = RDS-Text+Tags,    \n"
            "                                                2 = +RDS-Telegram/Debug, 3 = +RawData 0xfd, \n"
            "                                                += 16 = Rass-Info, +=32 = TMC-Info)         \n";
 }

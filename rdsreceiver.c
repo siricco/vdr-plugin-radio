@@ -18,6 +18,8 @@ cRDSReceiver::cRDSReceiver(int Pid) {
 
     pid = Pid;
     rt_start = rt_bstuff = false;
+    SetPids(NULL);
+    AddPid(pid);
 }
 
 cRDSReceiver::~cRDSReceiver() {
@@ -44,12 +46,8 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
     int offset;
     if (Data[1] & 0x40) {                               // 1.TS-Frame, payload-unit-start
         offset = (Data[3] & 0x20) ? Data[4] + 11 : 10;  // Header + ADFL + 6 byte: PES-Startcode, -StreamID, -PacketLength
-        if (Data[offset - 3] == 0xbd) {                 // StreamID = Private stream 1 (for rds)
-            offset += 3;                                // 3 byte: Extension + Headerlength
-            offset += Data[offset - 1];
-        } else {
-            return;
-        }
+        offset += 3;                     // 3 byte: Extension + Headerlength
+        offset += Data[offset - 1];
     } else {
         offset = (Data[3] & 0x20) ? Data[4] + 5 : 4;    // Header + ADFL
     }
@@ -59,17 +57,9 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
     }
     // print TS-RawData with RDS
     if ((S_Verbose & 0x0f) >= 3) {
-        printf("\n\nTS-Data(%d):\n", Length);
-        int cnt = 0;
-        for (int a = 0; a < Length; a++) {
-            printf("%02x ", Data[a]);
-            cnt++;
-            if (cnt > 15) {
-                cnt = 0;
-                printf("\n");
-            }
-        }
-        printf("(End)\n");
+        dsyslog("TS-Data(%d):", Length);
+        hexdump(Data, Length);
+        dsyslog("(TS-End)");
     }
 
     for (int i = 0, val = 0; i < (TS_SIZE - offset); i++) {
@@ -152,6 +142,8 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
                     printf("rdsreceiver: RDS-Error: too short -> garbage ?\n");
                 }
             } else {
+                if ((S_Verbose & 0x0f) >= 1)
+                    { dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1); }
                 // crc16-check
                 unsigned short crc16 = crc16_ccitt(mtext, index - 3, true);
                 if (crc16 != (mtext[index - 2] << 8) + mtext[index - 1]) {

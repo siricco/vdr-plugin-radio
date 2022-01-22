@@ -62,7 +62,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"' \
 
 OBJS = $(PLUGIN).o radioaudio.o radioskin.o radiotools.o radioepg.o inforx.o \
        radiotextosd.o rtplusosd.o rtpluslist.o rdsreceiver.o radioimage.o \
-       menusetupradio.o radiocheck.o
+       menusetupradio.o radiocheck.o rdspatpmt.o
 
 ### The main target:
 
