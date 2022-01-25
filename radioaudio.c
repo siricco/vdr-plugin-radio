@@ -1570,10 +1570,10 @@ void cRadioAudio::HandleRdsPids(const int *RdsPids, int NumRdsPids) {
         for (int i = 0; i < NumRdsPids; i++) {
             int pid = RdsPids[i];
             bool found = false;
-            for (int j = 0; !found && a[i]; i++)
-                found = (a[i] == pid);
-            for (int j = 0; !found && d[i]; i++)
-                found = (d[i] == pid);
+            for (int j = 0; !found && a[j]; j++)
+                found = (a[j] == pid);
+            for (int j = 0; !found && d[j]; j++)
+                found = (d[j] == pid);
             if ((S_Verbose & 0x0f) >= 1)
                 dsyslog("%s: RDS Pid %d - in %s-stream", __func__, pid, found ? "Audio" : "separate Data");
             if (!found) { // seperate RDS-stream
