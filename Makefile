@@ -55,6 +55,11 @@ SOFILE = libvdr-$(PLUGIN).so
 
 INCLUDES +=
 
+### fix (or hack) for gentoo's 'libsi' include directory
+ifneq (,$(wildcard /usr/include/vdr/libsi/*.h))
+INCLUDES += -I/usr/include/vdr
+endif
+
 DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"' \
 	$(if $(GIT_REV), -DGIT_REV='"$(GIT_REV)"')
 
