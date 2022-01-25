@@ -2,7 +2,7 @@
  * rdspatpmt.c: PAT section filter
  */
 
-#include <vdr/libsi/descriptor.h>
+#include <libsi/descriptor.h>
 #include "rdspatpmt.h"
 #include "radioaudio.h"
 
