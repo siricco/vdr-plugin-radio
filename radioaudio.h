@@ -97,8 +97,9 @@ private:
     bool enabled;
     int first_packets;
     int audiopid;
-    #define RDS_CHUNKSIZE 128 // assumed max. size of splitted RDS chunks in MPEG and AAC-LATM frames
+    #define RDS_CHUNKSIZE 64 // assumed max. size of splitted RDS chunks in MPEG and AAC-LATM frames
     uchar rdsChunk[RDS_CHUNKSIZE];
+    int maxRdsChunkIndex;
     //Radiotext
     cDevice *rdsdevice;
     cRdsPidFilter rdsPidFilter;

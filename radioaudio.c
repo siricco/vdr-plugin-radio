@@ -430,7 +430,7 @@ void cRDSReceiver::Receive(const uchar *Data, int Length)
 
 cRadioAudio::cRadioAudio() :
         cAudio(), enabled(false), first_packets(0), audiopid(0),
-        rdsdevice(NULL), bitrate(NULL), rdsSeen(false) {
+        rdsdevice(NULL), bitrate(NULL), rdsSeen(false), maxRdsChunkIndex(RDS_CHUNKSIZE - 1) {
     RadioAudio = this;
     dsyslog("radio: new cRadioAudio");
 }
@@ -728,6 +728,8 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
             const uchar *eFIL = NULL;
             int eLen = -2;
             eCnt++;
+            if (!rt_start)
+                maxRdsChunkIndex = RDS_CHUNKSIZE - 1;
 
             if (rs < 0)
                 rs += 8; // data is at current byte-pos
@@ -735,7 +737,7 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                 p--;     // data is at byte-pos -1
 
             int i;
-            for (i = 0; i < RDS_CHUNKSIZE && p > plBuffer; i++, p--) { // store reversed, as in MPEG-1 TS
+            for (i = 0; i <= maxRdsChunkIndex && p > plBuffer; i++, p--) { // store reversed, as in MPEG-1 TS
                 tmp = (p[-1] << 8) | p[0];
                 uchar eCh = (tmp >> rs) & 0xFF;
                 rdsChunk[i] = eCh;
@@ -750,15 +752,22 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                         if ((S_Verbose & 0x0f) >= 1) dsyslog("%s: skip MPEG-4 ancillary data (sync %02X, len %d.)", __func__, rdsChunk[i-2], eLen);
                         break;// skip this known <DSE> and search next
                         }
-                    if (rt_start || (eLen > 0 && rdsChunk[i-2] == 0xFE && (eLen < 2 || rdsChunk[i-3] == 0x00))) { // check 4 bytes "0x80, eLen, 0xfe, 0x00"
+                    if (rt_start) { // continued
+                        if (i == maxRdsChunkIndex || rdsChunk[0] == 0xFF) {
+                            //dsyslog("%s: <DSE>[%d] <<<", __func__, eCnt); hexdump(rdsChunk, eLen + 2);
+                            return eLen; // <DSE> found
+                        }
+                    }
+                    else if (eLen > 0 && rdsChunk[i-2] == 0xFE && (eLen < 2 || rdsChunk[i-3] == 0x00)) { // check 4 bytes "0x80, eLen, 0xfe, 0x00"
                         //dsyslog("%s: <DSE>[%d]", __func__, eCnt); hexdump(rdsChunk, eLen + 2);
+                        maxRdsChunkIndex = i;
                         return eLen; // <DSE> found
                         }
                     }
                 // simple plausibilty checks - invalid 'rt_stop','rt_start' or 'stuffing'
                 if ((i > 0 && (eCh == 0xFF && rdsChunk[i-1] != 0xFE) || (eCh == 0xFD && rdsChunk[i-1] > 2)) || (i > 1 && rdsChunk[i-2] == 0xFE && rdsChunk[i-1] != 0xFF)) {
                     //dsyslog("%s: <--->[%d/%d] invalid start/stop/stuffing %02X,%02X", __func__, eCnt, i, eCh, rdsChunk[i-1]);
-                    i = RDS_CHUNKSIZE; // retry with <FIL> or return
+                    i = maxRdsChunkIndex; // retry with <FIL> or return
                     }
                 eLen = eCh;
                 }
@@ -767,7 +776,7 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                 p = eFIL;
                 rs--; // adjust shift
                 }
-            else if (i >= RDS_CHUNKSIZE)
+            else if (i > maxRdsChunkIndex)
                 break;
             }
         }
