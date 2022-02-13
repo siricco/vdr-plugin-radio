@@ -2028,7 +2028,7 @@ cBitmap cRadioTextOsd::bok(bok_xpm);
 cBitmap cRadioTextOsd::pageE(pageE_xpm);
 
 cRadioTextOsd::cRadioTextOsd() :
-        cCharSetConv((RT_Charset == 0) ? "ISO-8859-1" : NULL) {
+        cCharSetConv((RT_Charset == 0) ? "ISO-8859-1" : NULL, cCharSetConv::SystemCharacterTable()) {
     RadioTextOsd = this;
     osd = NULL;
     qosd = NULL;
@@ -2822,8 +2822,7 @@ eOSState cRadioTextOsd::ProcessKey(eKeys Key) {
 // --- cRTplusOsd ------------------------------------------------------
 
 cRTplusOsd::cRTplusOsd(void) :
-        cOsdMenu(RTp_Titel, 3, 12), cCharSetConv(
-                (RT_Charset == 0) ? "ISO-8859-1" : NULL) {
+        cOsdMenu(RTp_Titel, 3, 12), cCharSetConv((RT_Charset == 0) ? "ISO-8859-1" : NULL, cCharSetConv::SystemCharacterTable()) {
     RTplus_Osd = false;
 
     bcount = helpmode = 0;
@@ -3316,8 +3315,7 @@ eOSState cRTplusOsd::ProcessKey(eKeys Key) {
 // --- cRTplusList ------------------------------------------------------
 
 cRTplusList::cRTplusList(int Typ) :
-        cOsdMenu(RTp_Titel, 4), cCharSetConv(
-                (RT_Charset == 0) ? "ISO-8859-1" : NULL) {
+        cOsdMenu(RTp_Titel, 4), cCharSetConv((RT_Charset == 0) ? "ISO-8859-1" : NULL, cCharSetConv::SystemCharacterTable()) {
     typ = Typ;
     refresh = false;
 

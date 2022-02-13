@@ -642,7 +642,7 @@ bool cPluginRadio::Service(const char *Id, void *Data)
     }
     else if ((strcmp(Id, RADIO_TEXT_SERVICE1) == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
         if (Data) {
-            cCharSetConv conf(RT_Charset == 0 ? "ISO-8859-1" : 0);
+            cCharSetConv conf(RT_Charset == 0 ? "ISO-8859-1" : 0, cCharSetConv::SystemCharacterTable());
             RadioTextService_v1_1 *data = (RadioTextService_v1_1*)Data;
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
             data->rds_pty = RT_PTY;
