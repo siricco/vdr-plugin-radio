@@ -1,12 +1,12 @@
 /*
- * rtplusosd.h
+ * rtplusosd.h - part of radio.c, a plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-#ifndef __RTPLUSOSD_H_
-#define __RTPLUSOSD_H_
+#ifndef __RTPLUSOSD_H
+#define __RTPLUSOSD_H
 
 #include <vdr/osdbase.h>
 
@@ -14,9 +14,9 @@ class cRTplusOsd : public cOsdMenu, public cCharSetConv {
 private:
     int bcount;
     int helpmode;
-    const char *listtyp[7];
-    char *btext[7];
-    int rtptyp(char *btext);
+    const char *listtyp[8];
+    const char *btext[8];
+    int rtptyp(const char *btext);
     void rtp_fileprint(void);
 public:
     cRTplusOsd(void);
@@ -26,5 +26,4 @@ public:
     virtual eOSState ProcessKey(eKeys Key);
 };
 
-
-#endif /* RTPLUSOSD_H_ */
+#endif //__RTPLUSOSD_H

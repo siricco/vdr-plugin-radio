@@ -1,3 +1,10 @@
+/*
+ * radioimage.h - part of radio.c, a plugin for the Video Disk Recorder
+ *
+ * See the README file for copyright information and how to reach the author.
+ *
+ */
+
 #ifndef __RADIO_IMAGE_H
 #define __RADIO_IMAGE_H
 
@@ -21,4 +28,4 @@ public:
     void SetBackgroundImage(const char *Image);
 };
 
-#endif
+#endif //__RADIO_IMAGE_H

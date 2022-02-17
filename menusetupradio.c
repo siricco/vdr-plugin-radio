@@ -1,22 +1,18 @@
-#include <vdr/plugin.h>
-#include <vdr/status.h>
-#include <vdr/config.h>
-#include <vdr/interface.h>
-#include <vdr/transfer.h>
-#include <string>
-#include "getopt.h"
-#include "radioaudio.h"
-#include "radiotools.h"
-#include "radioepg.h"
-#include "inforx.h"
-#include "service.h"
-#include "menusetupradio.h"
+/*
+ * menusetupradio.c: A plugin for the Video Disk Recorder
+ *
+ * See the README file for copyright information and how to reach the author.
+ *
+ */
 
-// --- cMenuSetupRadio -------------------------------------------------------
+#include "radioaudio.h"
+#include "menusetupradio.h"
 
 extern int S_Activate;
 extern int S_ExtInfo;
 extern int S_HMEntry;
+
+// --- cMenuSetupRadio -------------------------------------------------------
 
 cMenuSetupRadio::cMenuSetupRadio(void)
 {
@@ -79,7 +75,7 @@ cMenuSetupRadio::cMenuSetupRadio(void)
     Add(new cMenuEditStraItem( tr("RDSText Function"),              &newS_RtFunc, 3, T_RtFunc));
     Add(new cMenuEditStraItem( tr("RDSText OSD-Position"),          &newS_RtOsdPos, 2, T_RtOsdPos));
     Add(new cMenuEditBoolItem( tr("RDSText OSD-Titlerow"),          &newS_RtOsdTitle));
-    Add(new cMenuEditIntItem(  tr("RDSText OSD-Rows (1-5)"),        &newS_RtOsdRows, 1, 5));
+    Add(new cMenuEditIntItem(  tr("RDSText OSD-Rows (1-5)"),        &newS_RtOsdRows, 1, RT_ROWS));
     Add(new cMenuEditStraItem( tr("RDSText OSD-Scrollmode"),        &newS_RtOsdLoop, 2, T_RtOsdLoop));
     Add(new cMenuEditStraItem( tr("RDSText OSD-Taginfo"),           &newS_RtOsdTags, 3, T_RtOsdTags));
     Add(new cMenuEditBoolItem( tr("RDSText OSD-Skincolors used"),   &newS_RtSkinColor));

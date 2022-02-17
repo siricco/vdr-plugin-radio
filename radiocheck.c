@@ -1,33 +1,26 @@
 /*
- * radiocheck.c
+ * radiocheck.c: A plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-// --- cRadioCheck -------------------------------------------------------
-
-#include <vdr/plugin.h>
-#include <vdr/status.h>
-#include <vdr/config.h>
-#include <vdr/interface.h>
-#include <vdr/transfer.h>
+#include <stdio.h>
+#include <vdr/osdbase.h>
+#include <vdr/remote.h>
 #include "radiocheck.h"
 #include "radioepg.h"
 #include "inforx.h"
 
-extern int IsRadioOrReplay;
 extern int S_Verbose;
+extern const cChannel *chan;
 extern int InfoTimeout;
 
-extern bool DoInfoReq, InfoRequest;
-extern const cChannel *chan;
+// --- cRadioCheck -------------------------------------------------------
 
 cRadioCheck *cRadioCheck::RadioCheck = NULL;
 
-cRadioCheck::cRadioCheck(void)
-: cThread("radiocheck")
-{
+cRadioCheck::cRadioCheck(void) : cThread("radiocheck") {
     IsRadioOrReplay = 0;
 }
 
@@ -67,8 +60,7 @@ void cRadioCheck::Action(void)
         // check Live-Radio
         if ((IsRadioOrReplay == 1) && (chan != NULL)) {
             if (chan->Vpid()) {
-                isyslog("radio: channnel '%s' got Vpid= %d", chan->Name(),
-                        chan->Vpid());
+                isyslog("radio: channnel '%s' got Vpid= %d", chan->Name(), chan->Vpid());
                 IsRadioOrReplay = 0;
 #if VDRVERSNUM >= 20300
                 LOCK_CHANNELS_READ
@@ -129,13 +121,11 @@ void cRadioCheck::Action(void)
                                     InfoRequest = true;
                                 }
                                 else {
-                                    dsyslog("radio: no event.present (Tid= %d, Apid= %d)",
-                                            chtid, chan->Apid(0));
+                                    dsyslog("radio: no event.present (Tid= %d, Apid= %d)", chtid, chan->Apid(0));
                                 }
                             }
                             else {
-                                dsyslog("radio: no schedule (Tid= %d, Apid= %d)",
-                                        chtid, chan->Apid(0));
+                                dsyslog("radio: no schedule (Tid= %d, Apid= %d)", chtid, chan->Apid(0));
                             }
                         }
                     }
@@ -150,6 +140,7 @@ void cRadioCheck::Action(void)
 
         // temp. OSD-CloseTimeout
         (RT_OsdTOTemp > 0) ? RT_OsdTOTemp -= 2 : RT_OsdTOTemp = 0; // in sec like this cycletime
+
         // Radiotext-Autodisplay
         if ((S_RtDispl == 2) && (RT_Info >= 0) && !RT_OsdTO
                 && (RT_OsdTOTemp == 0) && RT_ReOpen && !Skins.IsOpen()
@@ -162,4 +153,3 @@ void cRadioCheck::Action(void)
         printf("vdr-radio: background-checking ends\n");
     }
 }
-

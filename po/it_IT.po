@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-05-27 14:19+0200\n"
+"POT-Creation-Date: 2022-02-26 19:57+0100\n"
 "PO-Revision-Date: 2008-06-15 22:39+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Immagine sfondo per Radio/Testo RDS"
+msgid "Use PlayPes-Function"
+msgstr ""
 
-msgid "Show RDS-Radiotext"
-msgstr "Mostra testi RDS"
+msgid "Use StillPicture-Function"
+msgstr "Utilizza funz. immagine princ."
 
 msgid "Off"
 msgstr "Disattivo"
@@ -94,8 +94,8 @@ msgstr "Rass+testo misto"
 msgid "Activate"
 msgstr "Attiva"
 
-msgid "Use StillPicture-Function"
-msgstr "Utilizza funz. immagine princ."
+msgid "StillPicture"
+msgstr ""
 
 msgid "Hide MainMenuEntry"
 msgstr "Nascondi voce menu principale"
@@ -145,6 +145,12 @@ msgstr "Funzione Rass testo RDS"
 msgid "External Info-Request"
 msgstr "Richiesta info esterna"
 
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Immagine sfondo per Radio/Testo RDS"
+
+msgid "Show RDS-Radiotext"
+msgstr "Mostra testi RDS"
+
 msgid "ext. Info"
 msgstr "Info esterne"
 
@@ -157,11 +163,23 @@ msgstr "Radio testo"
 msgid "  [waiting ...]"
 msgstr "  [attendere ...]"
 
-msgid "Title :"
-msgstr "Titolo  :"
+msgid "Composer :"
+msgstr ""
+
+msgid "Conductor :"
+msgstr ""
+
+msgid "Band :"
+msgstr ""
+
+msgid "Album :"
+msgstr ""
 
 msgid "Artist :"
 msgstr "Artista :"
+
+msgid "Title :"
+msgstr "Titolo  :"
 
 msgid "Records"
 msgstr "Archivio"
@@ -226,104 +244,119 @@ msgstr "Classica seria"
 msgid "Other music"
 msgstr "Altra musica"
 
+msgid "Weather"
+msgstr "Meteo"
+
+msgid "Finance"
+msgstr ""
+
+msgid "Children's programmes"
+msgstr ""
+
+msgid "Social Affairs"
+msgstr ""
+
+msgid "Religion"
+msgstr ""
+
+msgid "Phone In"
+msgstr ""
+
+msgid "Travel"
+msgstr ""
+
+msgid "Leisure"
+msgstr ""
+
+msgid "Jazz Music"
+msgstr ""
+
+msgid "Country Music"
+msgstr ""
+
+msgid "National Music"
+msgstr ""
+
+msgid "Oldies Music"
+msgstr ""
+
+msgid "Folk Music"
+msgstr ""
+
+msgid "Documentary"
+msgstr ""
+
+msgid "Alarm Test"
+msgstr ""
+
 msgid "Alarm"
 msgstr "Allarme"
 
-msgid "last seen Radiotext"
-msgstr "ultimo radio testo letto"
-
-msgid "Playlist"
-msgstr "Lista esecuzione"
-
-msgid "Time"
-msgstr "Ora"
+msgid "dummy_Class"
+msgstr ""
 
 msgid "Title"
 msgstr "Titolo"
 
+msgid "Album"
+msgstr ""
+
+msgid "Track"
+msgstr ""
+
 msgid "Artist"
 msgstr "Artista"
 
-msgid "Sports"
-msgstr "Sport"
+msgid "Composition"
+msgstr ""
+
+msgid "Movement"
+msgstr ""
+
+msgid "Conductor"
+msgstr ""
+
+msgid "Composer"
+msgstr ""
+
+msgid "Band"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Genre"
+msgstr ""
+
+msgid "NewsLocal"
+msgstr "Notizie locali"
+
+msgid "Stock"
+msgstr ""
 
 msgid "Lottery"
 msgstr "Lotteria"
 
-msgid "Weather"
-msgstr "Meteo"
+msgid "Horoskope"
+msgstr ""
 
-msgid "Stockmarket"
-msgstr "Borse"
+msgid "DailyDiversion"
+msgstr ""
 
-msgid "Other"
-msgstr "Altro"
+msgid "Health"
+msgstr ""
 
-msgid "Refresh Off"
-msgstr "Disattiva aggiornamenti"
+msgid "Event"
+msgstr ""
 
-msgid "Refresh On"
-msgstr "Attiva aggiornamenti"
+msgid "Scene"
+msgstr ""
 
-msgid "Back"
-msgstr "Indietro"
+msgid "Cinema"
+msgstr ""
 
-msgid "extra Info  since"
-msgstr "Info extra  da"
-
-msgid "RTplus Memory  since"
-msgstr "Memoria RTplus da"
-
-msgid "Programme"
-msgstr "Programma"
-
-msgid "Stat.Short"
-msgstr "Brevi statistiche"
-
-msgid "Station"
-msgstr "Stazione"
-
-msgid "Now"
-msgstr "Adesso"
-
-msgid "...Part"
-msgstr "...Dettaglio"
-
-msgid "Next"
-msgstr "Prossimo"
-
-msgid "Host"
-msgstr "Animatore"
-
-msgid "Edit.Staff"
-msgstr "Staff"
-
-msgid "Homepage"
-msgstr "Pagina princ."
-
-msgid "Interactivity"
-msgstr "Interattività"
-
-msgid "Phone-Hotline"
-msgstr "Telefono assistenza"
-
-msgid "Phone-Studio"
-msgstr "Telefono studio"
-
-msgid "SMS-Studio"
-msgstr "SMS studio"
-
-msgid "Email-Hotline"
-msgstr "Email assistenza"
-
-msgid "Email-Studio"
-msgstr "Email studio"
-
-msgid "Info"
-msgstr "Informazioni"
-
-msgid "NewsLocal"
-msgstr "Notizie locali"
+msgid "Television"
+msgstr ""
 
 msgid "DateTime"
 msgstr "Data-Ora"
@@ -337,6 +370,120 @@ msgstr "Pubblicità"
 msgid "Url"
 msgstr "Sito web"
 
+msgid "Other"
+msgstr "Altro"
+
+msgid "Stat.Short"
+msgstr "Brevi statistiche"
+
+msgid "Station"
+msgstr "Stazione"
+
+msgid "Now"
+msgstr "Adesso"
+
+msgid "Next"
+msgstr "Prossimo"
+
+msgid "...Part"
+msgstr "...Dettaglio"
+
+msgid "Host"
+msgstr "Animatore"
+
+msgid "Edit.Staff"
+msgstr "Staff"
+
+msgid "Frequency"
+msgstr ""
+
+msgid "Homepage"
+msgstr "Pagina princ."
+
+msgid "Subchnnel"
+msgstr ""
+
+msgid "Phone-Hotline"
+msgstr "Telefono assistenza"
+
+msgid "Phone-Studio"
+msgstr "Telefono studio"
+
+msgid "Phone-Other"
+msgstr ""
+
+msgid "SMS-Studio"
+msgstr "SMS studio"
+
+msgid "SMS-Other"
+msgstr ""
+
+msgid "Email_Hotline"
+msgstr "Email assistenza"
+
+msgid "Email_Studio"
+msgstr "Email studio"
+
+msgid "Email_Other"
+msgstr ""
+
+msgid "MMS_Other"
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Chat-Centre"
+msgstr ""
+
+msgid "Vote-Question"
+msgstr ""
+
+msgid "VoteCentre"
+msgstr ""
+
+msgid "last seen Radiotext"
+msgstr "ultimo radio testo letto"
+
+msgid "Playlist"
+msgstr "Lista esecuzione"
+
+msgid "Time"
+msgstr "Ora"
+
+msgid "Refresh Off"
+msgstr "Disattiva aggiornamenti"
+
+msgid "Refresh On"
+msgstr "Attiva aggiornamenti"
+
+msgid "Back"
+msgstr "Indietro"
+
+msgid "Sports"
+msgstr "Sport"
+
+msgid "Stockmarket"
+msgstr "Borse"
+
+msgid "extra Info  since"
+msgstr "Info extra  da"
+
+msgid "RTplus Memory  since"
+msgstr "Memoria RTplus da"
+
+msgid "Item"
+msgstr ""
+
+msgid "Programme"
+msgstr "Programma"
+
+msgid "Interactivity"
+msgstr "Interattività"
+
+msgid "Info"
+msgstr "Informazioni"
+
 msgid "Exit"
 msgstr "Esci"
 
@@ -345,6 +492,3 @@ msgstr "Info file salvate"
 
 msgid "RTplus-File saved"
 msgstr "File RTplus salvato"
-
-#~ msgid "with <0>"
-#~ msgstr "con <0>"

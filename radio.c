@@ -7,21 +7,20 @@
 
 #include <vdr/plugin.h>
 #include <vdr/status.h>
-#include <vdr/config.h>
 #include <vdr/interface.h>
 #include <vdr/transfer.h>
 #include <string>
 #include "getopt.h"
 #include "radioaudio.h"
+#include "radioimage.h"
+#include "radiotextosd.h"
+#include "rtplusosd.h"
+#include "menusetupradio.h"
+#include "radiocheck.h"
 #include "radiotools.h"
 #include "radioepg.h"
 #include "inforx.h"
 #include "service.h"
-#include "menusetupradio.h"
-#include "radiocheck.h"
-#include "radioimage.h"
-#include "radiotextosd.h"
-#include "rtplusosd.h"
 
 #if VDRVERSNUM < 10737
     #error This version of radio-plugin requires vdr >= 1.7.37
@@ -65,7 +64,8 @@ int S_Verbose = 0;
 int S_Encrypted = 0;
 // Radiotext
 char RT_Text[5][RT_MEL];
-char RTP_Artist[RT_MEL], RTP_Title[RT_MEL];
+char RTP_Artist[RT_MEL], RTP_Title[RT_MEL], RTP_Composer[RT_MEL];
+char RTP_Album[RT_MEL], RTP_Conductor[RT_MEL], RTP_Band[RT_MEL];
 int RT_Info, RT_Index, RT_PTY;
 time_t RTP_Starttime;
 bool RT_OsdTO = false, RTplus_Osd = false, RT_ReOpen = false;
@@ -78,9 +78,7 @@ int IsRadioOrReplay;
 bool DoInfoReq = false, InfoRequest = false;
 int InfoTimeout = 3;
 
-
 // --- cPluginRadio -------------------------------------------------------
-
 
 class cRadioImage;
 class cRadioAudio;
@@ -208,9 +206,8 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
                 break;
         case 'v':
                 isyslog("vdr-radio: arg verbose = %s", optarg);
-                if (isnumber(optarg)) {
+                if (isnumber(optarg))
                     S_Verbose = atoi(optarg);
-                }
                 break;
         case 'e':
                 isyslog("vdr-radio: arg encrypted = %s", optarg);
@@ -218,7 +215,7 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
                     S_Encrypted = atoi(optarg);
                 break;
         default:
-                isyslog("vdr-radio: arg char = %c\n", c);
+                isyslog("vdr-radio: arg char = %c", c);
                 return false;
         }
     }
@@ -229,7 +226,7 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
 bool cPluginRadio::Start(void)
 {
     // Start any background activities the plugin shall perform.
-    isyslog("vdr-radio: Radio-Plugin Backgr.Image/RDS-Text starts...\n");
+    isyslog("vdr-radio: Radio-Plugin Backgr.Image/RDS-Text starts...");
 
     radioImage = new cRadioImage;
     if (!radioImage)
@@ -279,8 +276,7 @@ cOsdObject *cPluginRadio::MainMenuAction(void)
 /*  if (!cDevice::PrimaryDevice()->Transferring() && !cDevice::PrimaryDevice()->Replaying()) {
         //cRemote::CallPlugin("radio"); // try again later <-- disabled, looping if activate over menu @ tv in dvb-livemode
         }   */
-    if (S_Activate > 0 && S_RtFunc > 0 && S_RtDispl > 0
-            && IsRadioOrReplay > 0) {
+    if (S_Activate > 0 && S_RtFunc > 0 && S_RtDispl > 0 && IsRadioOrReplay > 0) {
         if (!RTplus_Osd) {
             cRadioTextOsd *rtosd = new cRadioTextOsd();
             return rtosd;
@@ -311,7 +307,7 @@ bool cPluginRadio::SetupParse(const char *Name, const char *Value)
     else if (!strcasecmp(Name, "RDSText-OsdPosition"))    S_RtOsdPos = atoi(Value);
     else if (!strcasecmp(Name, "RDSText-OsdRows")) {
        S_RtOsdRows = atoi(Value);
-       if (S_RtOsdRows > 5)  S_RtOsdRows = 5;
+       if (S_RtOsdRows > RT_ROWS)  S_RtOsdRows = RT_ROWS;
        }
     else if (!strcasecmp(Name, "RDSText-OsdLooping"))     S_RtOsdLoop = atoi(Value);
     else if (!strcasecmp(Name, "RDSText-OsdSkinColor"))   S_RtSkinColor = atoi(Value);
@@ -351,7 +347,7 @@ bool cPluginRadio::Service(const char *Id, void *Data)
     }
     else if ((strcmp(Id, RADIO_TEXT_SERVICE1) == 0) && (S_Activate > 0) && (S_RtFunc >= 1)) {
         if (Data) {
-            cCharSetConv conf(RT_Charset == 0 ? "ISO-8859-1" : 0);
+            cCharSetConv conf(RT_Charset == 0 ? "ISO-8859-1" : 0, cCharSetConv::SystemCharacterTable());
             RadioTextService_v1_1 *data = (RadioTextService_v1_1*)Data;
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
             data->rds_pty = RT_PTY;
@@ -391,9 +387,7 @@ cString cPluginRadio::SVDRPCommand(const char *Command, const char *Option, int 
         // we use the default reply code here
         if (RT_Info == 2) {
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
-            return cString::sprintf(
-                    " Radiotext: %s\n RT-Title : %s\n RT-Artist: %s\n",
-                    RT_Text[ind], RTP_Title, RTP_Artist);
+            return cString::sprintf(" Radiotext: %s\n RT-Title : %s\n RT-Artist: %s\n RT-Composer: %s\n", RT_Text[ind], RTP_Title, RTP_Artist, RTP_Composer);
         } else if (RT_Info == 1) {
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
             return cString::sprintf(" Radiotext: %s\n", RT_Text[ind]);
@@ -416,8 +410,7 @@ cString cPluginRadio::SVDRPCommand(const char *Command, const char *Option, int 
     return NULL;
 }
 
-void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber,
-                                 bool LiveView) {
+void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber, bool LiveView) {
     if (Device != cDevice::PrimaryDevice()) {
         return;
     }
@@ -441,17 +434,14 @@ void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber,
         if (chan != NULL && chan->Vpid() == 0 && chan->Apid(0) > 0) {
             asprintf(&image, "%s/%s.mpg", ConfigDir, chan->Name());
             if (!file_exists(image)) {
-                dsyslog("radio: channel-image not found '%s' (Channelname= %s)",
-                        image, chan->Name());
+                dsyslog("radio: channel-image not found '%s' (Channelname= %s)", image, chan->Name());
                 free(image);
                 asprintf(&image, "%s", LiveFile);
                 if (!file_exists(image)) {
-                    dsyslog("radio: live-image not found '%s' (Channelname= %s)",
-                            image, chan->Name());
+                    dsyslog("radio: live-image not found '%s' (Channelname= %s)", image, chan->Name());
                 }
             }
-            dsyslog("radio: [ChannelSwitch # Apid= %d, Ca= %d] channelname '%s', use image '%s'",
-                    chan->Apid(0), chan->Ca(0), chan->Name(), image);
+            dsyslog("radio: [ChannelSwitch # Apid= %d, Ca= %d] channelname '%s', use image '%s'", chan->Apid(0), chan->Ca(0), chan->Name(), image);
             if ((Radio_CA = chan->Ca(0)) == 0 || S_Encrypted == 1) {
                 cDevice::PrimaryDevice()->ForceTransferMode();
             }
@@ -464,8 +454,7 @@ void cPluginRadio::ChannelSwitch(const cDevice *Device, int ChannelNumber,
     }
 }
 
-void cPluginRadio::Replaying(const cControl *Control, const char *Name,
-        const char *FileName, bool On) {
+void cPluginRadio::Replaying(const cControl *Control, const char *Name, const char *FileName, bool On) {
     IsRadioOrReplay = 0;
     radioAudio->DisableRadioTextProcessing();
 

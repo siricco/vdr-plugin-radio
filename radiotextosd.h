@@ -1,12 +1,12 @@
 /*
- * radiotextosd.h
+ * radiotextosd.h - part of radio.c, a plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-#ifndef __RADIOTEXTOSD_H_
-#define __RADIOTEXTOSD_H_
+#ifndef __RADIOTEXTOSD_H
+#define __RADIOTEXTOSD_H
 
 #include <vdr/osdbase.h>
 
@@ -32,17 +32,15 @@ public:
     ~cRadioTextOsd();
     virtual void Hide(void);
     virtual void Show(void);
-    void ShowText(void);
-    void RTOsdClose(void);
+    virtual void ShowText(void);
+    virtual void RTOsdClose(void);
     int RassImage(int QArchiv, int QKey, bool DirUp);
-    void RassOsd(void);
-    void RassOsdTip(void);
-    void RassOsdClose(void);
-    void RassImgSave(const char *size, int pos);
+    virtual void RassOsd(void);
+    virtual void RassOsdTip(void);
+    virtual void RassOsdClose(void);
+    virtual void RassImgSave(const char *size, int pos);
     virtual eOSState ProcessKey(eKeys Key);
-    virtual bool IsMenu(void) const { return false; }
+    virtual bool IsInteractive(void) { return false; }
 };
 
-
-
-#endif /* RADIOTEXTOSD_H_ */
+#endif //__RADIOTEXTOSD_H

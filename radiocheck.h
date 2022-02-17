@@ -1,14 +1,14 @@
 /*
- * radiocheck.h
+ * radiocheck.h: A plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-#ifndef RADIOCHECK_H_
-#define RADIOCHECK_H_
+#ifndef __RADIOCHECK_H
+#define __RADIOCHECK_H
 
-#include <vdr/plugin.h>
+#include <vdr/tools.h>
 
 class cRadioCheck: public cThread {
 private:
@@ -23,5 +23,4 @@ public:
     static void Exit(void);
 };
 
-
-#endif /* RADIOCHECK_H_ */
+#endif // __RADIOCHECK_H

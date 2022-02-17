@@ -1,19 +1,18 @@
-#include <vdr/remote.h>
-#include <vdr/status.h>
-#include <vdr/plugin.h>
+/*
+ * radioimage.c - part of radio.c, a plugin for the Video Disk Recorder
+ *
+ * See the README file for copyright information and how to reach the author.
+ *
+ */
+
 #include "radioimage.h"
 #include "radioaudio.h"
-#include "radioskin.h"
-#include "radiotools.h"
-#include "service.h"
-#include <math.h>
 
 extern cRadioImage *RadioImage;
 
 // --- cRadioImage -------------------------------------------------------
 
-cRadioImage::cRadioImage(void) :
-        cThread("radioimage") {
+cRadioImage::cRadioImage(void) : cThread("radioimage") {
     imagepath = 0;
     imageShown = false;
     RadioImage = this;
@@ -116,8 +115,7 @@ void cRadioImage::send_pes_packet(unsigned char *data, int len, int timestamp) {
         }
 
         memcpy(&pes_header[6 + ptslen], data, payload_size);
-        cDevice::PrimaryDevice()->PlayPes(pes_header,
-                6 + ptslen + payload_size);
+        cDevice::PrimaryDevice()->PlayPes(pes_header, 6 + ptslen + payload_size);
         len -= payload_size;
         data += payload_size;
         ptslen = 1;
@@ -133,4 +131,3 @@ void cRadioImage::SetBackgroundImage(const char *Image) {
         asprintf(&imagepath, "%s", Image);
     }
 }
-

@@ -1,14 +1,12 @@
 /*
- * menusetupradio.h
+ * menusetupradio.c: A plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-#ifndef MENUSETUPRADIO_H_
-#define MENUSETUPRADIO_H_
-
-#include <vdr/plugin.h>
+#ifndef __MENUSETUPRADIO_H
+#define __MENUSETUPRADIO_H
 
 class cMenuSetupRadio : public cMenuSetupPage {
 private:
@@ -47,4 +45,4 @@ public:
     cMenuSetupRadio(void);
 };
 
-#endif /* MENUSETUPRADIO_H_ */
+#endif // __MENUSETUPRADIO_H

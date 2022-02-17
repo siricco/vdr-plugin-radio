@@ -1,12 +1,12 @@
 /*
- * rtpluslist.h
+ * rtpluslist.h - part of radio.c, a plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-#ifndef __RTPLUSLIST_H_
-#define __RTPLUSLIST_H_
+#ifndef __RTPLUSLIST_H
+#define __RTPLUSLIST_H
 
 #include <vdr/osdbase.h>
 
@@ -22,4 +22,4 @@ public:
     virtual eOSState ProcessKey(eKeys Key);
 };
 
-#endif /* RTPLUSLIST_H_ */
+#endif //__RTPLUSLIST_H

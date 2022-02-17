@@ -8,8 +8,7 @@
 #include "radioepg.h"
 
 // Premiere-Radio
-int epg_premiere(const char *epgtitle, const char *epgdescr, time_t epgstart,
-        time_t epgend) {
+int epg_premiere(const char *epgtitle, const char *epgdescr, time_t epgstart, time_t epgend) {
     int i;
     const char *p;
     char artist[RT_MEL], titel[RT_MEL], album[RT_MEL], jahr[RT_MEL];
@@ -123,39 +122,32 @@ int epg_premiere(const char *epgtitle, const char *epgdescr, time_t epgstart,
         snprintf(RTP_Title, RT_MEL, "%s", titel);
         RTP_Starttime = epgstart;
         struct tm *ts = localtime_r(&RTP_Starttime, &tm_store);
-        if (++rtp_content.rt_Index >= 2 * MAX_RTPC) {
-            rtp_content.rt_Index = 0;
+        if (++rtp_content.radiotext.index >= 2 * MAX_RTPC) {
+            rtp_content.radiotext.index = 0;
         }
-        asprintf(&rtp_content.radiotext[rtp_content.rt_Index],
-                "%02d:%02d  %s: %s", ts->tm_hour, ts->tm_min, RTP_Artist,
-                RTP_Title);
-        snprintf(RT_Text[RT_Index], RT_MEL, "%s",
-                rtp_content.radiotext[rtp_content.rt_Index]);
+        snprintf(rtp_content.radiotext.Msg[rtp_content.radiotext.index], RT_MEL, "%02d:%02d  %s: %s", ts->tm_hour, ts->tm_min, RTP_Artist, RTP_Title);
+        snprintf(RT_Text[RT_Index], RT_MEL, "%s", rtp_content.radiotext.Msg[rtp_content.radiotext.index]);
         RT_Index += 1;
         if (RT_Index >= S_RtOsdRows) {
             RT_Index = 0;
         }
         if (strcmp(album, "---") != 0) {
-            if (++rtp_content.rt_Index >= 2 * MAX_RTPC) {
-                rtp_content.rt_Index = 0;
+            if (++rtp_content.radiotext.index >= 2 * MAX_RTPC) {
+                rtp_content.radiotext.index = 0;
             }
-            asprintf(&rtp_content.radiotext[rtp_content.rt_Index],
-                    "   ... %s (%s)", album, jahr);
-            snprintf(RT_Text[RT_Index], RT_MEL, "%s",
-                    rtp_content.radiotext[rtp_content.rt_Index]);
+            snprintf(rtp_content.radiotext.Msg[rtp_content.radiotext.index], RT_MEL, "   ... %s (%s)", album, jahr);
+            snprintf(RT_Text[RT_Index], RT_MEL, "%s", rtp_content.radiotext.Msg[rtp_content.radiotext.index]);
             RT_Index += 1;
             if (RT_Index >= S_RtOsdRows) {
                 RT_Index = 0;
             }
         }
-        if (++rtp_content.item_Index >= MAX_RTPC)
-            rtp_content.item_Index = 0;
-        if (rtp_content.item_Index >= 0) {
-            rtp_content.item_Start[rtp_content.item_Index] = RTP_Starttime;
-            asprintf(&rtp_content.item_Artist[rtp_content.item_Index], "%s",
-                    RTP_Artist);
-            asprintf(&rtp_content.item_Title[rtp_content.item_Index], "%s",
-                    RTP_Title);
+        if (++rtp_content.items.index >= MAX_RTPC)
+            rtp_content.items.index = 0;
+        if (rtp_content.items.index >= 0) {
+            rtp_content.items.Item[rtp_content.items.index].start = RTP_Starttime;
+            snprintf(rtp_content.items.Item[rtp_content.items.index].Artist, RT_MEL, "%s", RTP_Artist);
+            snprintf(rtp_content.items.Item[rtp_content.items.index].Title, RT_MEL, "%s", RTP_Title);
         }
         RT_MsgShow = RT_PlusShow = true;
         (RT_Info > 0) ? : RT_Info = 2;
@@ -237,7 +229,7 @@ int epg_kdg(const char *epgdescr, time_t epgstart, time_t epgend) {
     else {
         sprintf(komp, "---");
     }
-    
+
     int nextevent = epgend - time(NULL);
 
     if (strcmp(RTP_Artist, artist) != 0 || strcmp(RTP_Title, titel) != 0) {
@@ -245,39 +237,32 @@ int epg_kdg(const char *epgdescr, time_t epgstart, time_t epgend) {
         snprintf(RTP_Title, RT_MEL, "%s", titel);
         RTP_Starttime = epgstart;
         struct tm *ts = localtime_r(&RTP_Starttime, &tm_store);
-        if (++rtp_content.rt_Index >= 2 * MAX_RTPC) {
-            rtp_content.rt_Index = 0;
+        if (++rtp_content.radiotext.index >= 2 * MAX_RTPC) {
+            rtp_content.radiotext.index = 0;
         }
-        asprintf(&rtp_content.radiotext[rtp_content.rt_Index],
-                "%02d:%02d  %s: %s", ts->tm_hour, ts->tm_min, RTP_Artist,
-                RTP_Title);
-        snprintf(RT_Text[RT_Index], RT_MEL, "%s",
-                rtp_content.radiotext[rtp_content.rt_Index]);
+        snprintf(rtp_content.radiotext.Msg[rtp_content.radiotext.index], RT_MEL, "%02d:%02d  %s: %s", ts->tm_hour, ts->tm_min, RTP_Artist, RTP_Title);
+        snprintf(RT_Text[RT_Index], RT_MEL, "%s", rtp_content.radiotext.Msg[rtp_content.radiotext.index]);
         RT_Index += 1;
         if (RT_Index >= S_RtOsdRows) {
             RT_Index = 0;
         }
         if (strcmp(album, "---") != 0) {
-            if (++rtp_content.rt_Index >= 2 * MAX_RTPC)
-                rtp_content.rt_Index = 0;
-            asprintf(&rtp_content.radiotext[rtp_content.rt_Index],
-                    "   ... %s (%s)", album, komp);
-            snprintf(RT_Text[RT_Index], RT_MEL, "%s",
-                    rtp_content.radiotext[rtp_content.rt_Index]);
+            if (++rtp_content.radiotext.index >= 2 * MAX_RTPC)
+                rtp_content.radiotext.index = 0;
+            snprintf(rtp_content.radiotext.Msg[rtp_content.radiotext.index], RT_MEL, "   ... %s (%s)", album, komp);
+            snprintf(RT_Text[RT_Index], RT_MEL, "%s", rtp_content.radiotext.Msg[rtp_content.radiotext.index]);
             RT_Index += 1;
             if (RT_Index >= S_RtOsdRows) {
                 RT_Index = 0;
             }
         }
-        if (++rtp_content.item_Index >= MAX_RTPC) {
-            rtp_content.item_Index = 0;
+        if (++rtp_content.items.index >= MAX_RTPC) {
+            rtp_content.items.index = 0;
         }
-        if (rtp_content.item_Index >= 0) {
-            rtp_content.item_Start[rtp_content.item_Index] = RTP_Starttime;
-            asprintf(&rtp_content.item_Artist[rtp_content.item_Index], "%s",
-                    RTP_Artist);
-            asprintf(&rtp_content.item_Title[rtp_content.item_Index], "%s",
-                    RTP_Title);
+        if (rtp_content.items.index >= 0) {
+            rtp_content.items.Item[rtp_content.items.index].start = RTP_Starttime;
+            snprintf(rtp_content.items.Item[rtp_content.items.index].Artist, RT_MEL, "%s", RTP_Artist);
+            snprintf(rtp_content.items.Item[rtp_content.items.index].Title, RT_MEL, "%s", RTP_Title);
         }
         RT_MsgShow = RT_PlusShow = true;
         (RT_Info > 0) ? : RT_Info = 2;
@@ -295,8 +280,7 @@ int epg_kdg(const char *epgdescr, time_t epgstart, time_t epgend) {
 int epg_unitymedia(const char *epgdescr, time_t epgstart, time_t epgend) {
     int i;
     const char *p;
-    char artist[RT_MEL], titel[RT_MEL], album[RT_MEL], jahr[RT_MEL],
-            komp[RT_MEL];
+    char artist[RT_MEL], titel[RT_MEL], album[RT_MEL], jahr[RT_MEL], komp[RT_MEL];
     struct tm tm_store;
 
     // EPG not actual
@@ -411,39 +395,32 @@ int epg_unitymedia(const char *epgdescr, time_t epgstart, time_t epgend) {
         snprintf(RTP_Title, RT_MEL, "%s", titel);
         RTP_Starttime = epgstart;
         struct tm *ts = localtime_r(&RTP_Starttime, &tm_store);
-        if (++rtp_content.rt_Index >= 2 * MAX_RTPC) {
-            rtp_content.rt_Index = 0;
+        if (++rtp_content.radiotext.index >= 2 * MAX_RTPC) {
+            rtp_content.radiotext.index = 0;
         }
-        asprintf(&rtp_content.radiotext[rtp_content.rt_Index],
-                "%02d:%02d  %s: %s", ts->tm_hour, ts->tm_min, RTP_Artist,
-                RTP_Title);
-        snprintf(RT_Text[RT_Index], RT_MEL, "%s",
-                rtp_content.radiotext[rtp_content.rt_Index]);
+        snprintf(rtp_content.radiotext.Msg[rtp_content.radiotext.index], RT_MEL, "%02d:%02d  %s: %s", ts->tm_hour, ts->tm_min, RTP_Artist, RTP_Title);
+        snprintf(RT_Text[RT_Index], RT_MEL, "%s", rtp_content.radiotext.Msg[rtp_content.radiotext.index]);
         RT_Index += 1;
         if (RT_Index >= S_RtOsdRows) {
             RT_Index = 0;
         }
         if (strcmp(album, "---") != 0) {
-            if (++rtp_content.rt_Index >= 2 * MAX_RTPC)
-                rtp_content.rt_Index = 0;
-            asprintf(&rtp_content.radiotext[rtp_content.rt_Index],
-                    "   ... %s (%s)", album, jahr);
-            snprintf(RT_Text[RT_Index], RT_MEL, "%s",
-                    rtp_content.radiotext[rtp_content.rt_Index]);
+            if (++rtp_content.radiotext.index >= 2 * MAX_RTPC)
+                rtp_content.radiotext.index = 0;
+            snprintf(rtp_content.radiotext.Msg[rtp_content.radiotext.index], RT_MEL, "   ... %s (%s)", album, jahr);
+            snprintf(RT_Text[RT_Index], RT_MEL, "%s", rtp_content.radiotext.Msg[rtp_content.radiotext.index]);
             RT_Index += 1;
             if (RT_Index >= S_RtOsdRows) {
                 RT_Index = 0;
             }
         }
-        if (++rtp_content.item_Index >= MAX_RTPC) {
-            rtp_content.item_Index = 0;
+        if (++rtp_content.items.index >= MAX_RTPC) {
+            rtp_content.items.index = 0;
         }
-        if (rtp_content.item_Index >= 0) {
-            rtp_content.item_Start[rtp_content.item_Index] = RTP_Starttime;
-            asprintf(&rtp_content.item_Artist[rtp_content.item_Index], "%s",
-                    RTP_Artist);
-            asprintf(&rtp_content.item_Title[rtp_content.item_Index], "%s",
-                    RTP_Title);
+        if (rtp_content.items.index >= 0) {
+            rtp_content.items.Item[rtp_content.items.index].start = RTP_Starttime;
+            snprintf(rtp_content.items.Item[rtp_content.items.index].Artist, RT_MEL, "%s", RTP_Artist);
+            snprintf(rtp_content.items.Item[rtp_content.items.index].Title, RT_MEL, "%s", RTP_Title);
         }
         RT_Charset = 1; // UTF8 ?!?
         RT_MsgShow = RT_PlusShow = true;

@@ -1,21 +1,20 @@
-#include <vdr/remote.h>
-#include <vdr/status.h>
-#include <vdr/plugin.h>
-#include "radioaudio.h"
-#include "radioskin.h"
-#include "radiotools.h"
-#include "rtpluslist.h"
-#include "service.h"
-#include <math.h>
+/*
+ * rtpluslist.c - part of radio.c, a plugin for the Video Disk Recorder
+ *
+ * See the README file for copyright information and how to reach the author.
+ *
+ */
 
-extern char *RTp_Titel;
+#include "rtpluslist.h"
+#include "radioaudio.h"
+
+extern char RTp_Titel[80];
 extern rtp_classes rtp_content;
 
 // --- cRTplusList ------------------------------------------------------
 
 cRTplusList::cRTplusList(int Typ) :
-        cOsdMenu(RTp_Titel, 4), cCharSetConv(
-                (RT_Charset == 0) ? "ISO-8859-1" : NULL) {
+        cOsdMenu(RTp_Titel, 4), cCharSetConv((RT_Charset == 0) ? "ISO-8859-1" : NULL, cCharSetConv::SystemCharacterTable()) {
     typ = Typ;
     refresh = false;
 
@@ -28,34 +27,32 @@ cRTplusList::~cRTplusList() {
 }
 
 void cRTplusList::Load(void) {
-    char text[80];
+    char text[120+10+1];
     struct tm *ts, tm_store;
     int ind, lfd = 0;
     char ctitle[80];
+    struct rtp_info_cache *cCache = NULL;
+    const char *cName = "?";
+
+    cMutexLock MutexLock(&rtp_content.rtpMutex);
 
     ts = localtime_r(&rtp_content.start, &tm_store);
     switch (typ) {
     case 0:
-        snprintf(text, sizeof(text), "-- %s (max. %d) --",
-                tr("last seen Radiotext"), 2 * MAX_RTPC);
+        snprintf(text, sizeof(text), "-- %s (max. %d) --", tr("last seen Radiotext"), 2 * MAX_RTPC);
         Add(new cOsdItem(hk(text)));
         snprintf(text, sizeof(text), "%s", " ");
         Add(new cOsdItem(hk(text)));
-        ind = rtp_content.rt_Index;
-        if (ind < (2 * MAX_RTPC - 1) && rtp_content.radiotext[ind + 1] != NULL) {
-            for (int i = ind + 1; i < 2 * MAX_RTPC; i++) {
-                if (rtp_content.radiotext[i] != NULL) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                            Convert(rtp_content.radiotext[i]));
+
+        if ((ind = rtp_content.radiotext.index) >= 0) {
+            for (int i = ind + 1; true; i++) {
+                if (i >= (2 * MAX_RTPC) || !*rtp_content.radiotext.Msg[i])
+                    i = 0;
+                if (*rtp_content.radiotext.Msg[i]) {
+                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd, rtp_content.radiotext.Msg[i]);
                     Add(new cOsdItem(hk(text)));
                 }
-            }
-        }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.radiotext[i] != NULL) {
-                snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                        Convert(rtp_content.radiotext[i]));
-                Add(new cOsdItem(hk(text)), refresh);
+                if (i == ind) break;
             }
         }
         break;
@@ -63,158 +60,83 @@ void cRTplusList::Load(void) {
         SetCols(6, 19, 1);
         snprintf(text, sizeof(text), "-- %s --", tr("Playlist"));
         Add(new cOsdItem(hk(text)));
-        snprintf(text, sizeof(text), "%s\t%s\t\t%s", tr("Time"), tr("Title"),
-                tr("Artist"));
+        snprintf(text, sizeof(text), "%s\t%s\t\t%s", tr("Time"), tr("Title"), tr("Artist"));
         Add(new cOsdItem(hk(text)));
         snprintf(text, sizeof(text), "%s", " ");
         Add(new cOsdItem(hk(text)));
-        ind = rtp_content.item_Index;
-        if (ind < (MAX_RTPC - 1) && rtp_content.item_Title[ind + 1] != NULL) {
-            for (int i = ind + 1; i < MAX_RTPC; i++) {
-                if (rtp_content.item_Title[i] != NULL
-                        && rtp_content.item_Artist[i] != NULL) {
-                    ts = localtime_r(&rtp_content.item_Start[i], &tm_store);
-                    snprintf(ctitle, sizeof(ctitle), "%s",
-                            Convert(rtp_content.item_Title[i]));
-                    snprintf(text, sizeof(text), "%02d:%02d\t%s\t\t%s",
-                            ts->tm_hour, ts->tm_min, ctitle,
-                            Convert(rtp_content.item_Artist[i]));
+
+        if ((ind = rtp_content.items.index) >= 0) {
+            for (int i = ind + 1; true; i++) {
+                if (i >= MAX_RTPC)
+                    { i = -1; continue; }
+                char *title = rtp_content.items.Item[i].Title;
+                if (!*title) title = rtp_content.items.Item[i].Album;
+
+                char *artist = rtp_content.items.Item[i].Artist;
+                if (!*artist) artist = rtp_content.items.Item[i].Band;
+                if (!*artist) artist = rtp_content.items.Item[i].Composer;
+                if (!*artist) artist = rtp_content.items.Item[i].Conductor;
+
+                if (*title || *artist) {
+                    ts = localtime_r(&rtp_content.items.Item[i].start, &tm_store);
+                    snprintf(ctitle, sizeof(ctitle), "%s", *title ? title : "---");
+                    snprintf(text, sizeof(text), "%02d:%02d\t%s\t\t%s", ts->tm_hour, ts->tm_min, ctitle, *artist ? artist : "---");
                     Add(new cOsdItem(hk(text)));
                 }
-            }
-        }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.item_Title[i] != NULL
-                    && rtp_content.item_Artist[i] != NULL) {
-                ts = localtime_r(&rtp_content.item_Start[i], &tm_store);
-                snprintf(ctitle, sizeof(ctitle), "%s",
-                        Convert(rtp_content.item_Title[i]));
-                snprintf(text, sizeof(text), "%02d:%02d\t%s\t\t%s", ts->tm_hour,
-                        ts->tm_min, ctitle,
-                        Convert(rtp_content.item_Artist[i]));
-                Add(new cOsdItem(hk(text)), refresh);
+                else if (i > ind)
+                    i = -1;
+                if (i == ind) break;
             }
         }
         break;
     case 2:
-        snprintf(text, sizeof(text), "-- %s --", tr("Sports"));
-        Add(new cOsdItem(hk(text)));
-        snprintf(text, sizeof(text), "%s", " ");
-        Add(new cOsdItem(hk(text)));
-        ind = rtp_content.info_SportIndex;
-        if (ind < (MAX_RTPC - 1) && rtp_content.info_Sport[ind + 1] != NULL) {
-            for (int i = ind + 1; i < MAX_RTPC; i++) {
-                if (rtp_content.info_Sport[i] != NULL) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                            Convert(rtp_content.info_Sport[i]));
-                    Add(new cOsdItem(hk(text)));
-                }
-            }
-        }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.info_Sport[i] != NULL) {
-                snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                        Convert(rtp_content.info_Sport[i]));
-                Add(new cOsdItem(hk(text)), refresh);
-            }
-        }
+        cName = "News";
+        cCache = &rtp_content.info_News;
         break;
     case 3:
-        snprintf(text, sizeof(text), "-- %s --", tr("Lottery"));
-        Add(new cOsdItem(hk(text)));
-        snprintf(text, sizeof(text), "%s", " ");
-        Add(new cOsdItem(hk(text)));
-        ind = rtp_content.info_LotteryIndex;
-        if (ind < (MAX_RTPC - 1) && rtp_content.info_Lottery[ind + 1] != NULL) {
-            for (int i = ind + 1; i < MAX_RTPC; i++) {
-                if (rtp_content.info_Lottery[i] != NULL) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                            Convert(rtp_content.info_Lottery[i]));
-                    Add(new cOsdItem(hk(text)));
-                }
-            }
-        }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.info_Lottery[i] != NULL) {
-                snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                        Convert(rtp_content.info_Lottery[i]));
-                Add(new cOsdItem(hk(text)), refresh);
-            }
-        }
+        cName = "Sports";
+        cCache = &rtp_content.info_Sport;
         break;
     case 4:
-        snprintf(text, sizeof(text), "-- %s --", tr("Weather"));
-        Add(new cOsdItem(hk(text)));
-        snprintf(text, sizeof(text), "%s", " ");
-        Add(new cOsdItem(hk(text)));
-        ind = rtp_content.info_WeatherIndex;
-        if (ind < (MAX_RTPC - 1) && rtp_content.info_Weather[ind + 1] != NULL) {
-            for (int i = ind + 1; i < MAX_RTPC; i++) {
-                if (rtp_content.info_Weather[i] != NULL) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                            Convert(rtp_content.info_Weather[i]));
-                    Add(new cOsdItem(hk(text)));
-                }
-            }
-        }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.info_Weather[i] != NULL) {
-                snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                        Convert(rtp_content.info_Weather[i]));
-                Add(new cOsdItem(hk(text)), refresh);
-            }
-        }
+        cName = "Lottery";
+        cCache = &rtp_content.info_Lottery;
         break;
     case 5:
-        snprintf(text, sizeof(text), "-- %s --", tr("Stockmarket"));
-        Add(new cOsdItem(hk(text)));
-        snprintf(text, sizeof(text), "%s", " ");
-        Add(new cOsdItem(hk(text)));
-        ind = rtp_content.info_StockIndex;
-        if (ind < (MAX_RTPC - 1) && rtp_content.info_Stock[ind + 1] != NULL) {
-            for (int i = ind + 1; i < MAX_RTPC; i++) {
-                if (rtp_content.info_Stock[i] != NULL) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                            Convert(rtp_content.info_Stock[i]));
-                    Add(new cOsdItem(hk(text)));
-                }
-            }
-        }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.info_Stock[i] != NULL) {
-                snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                        Convert(rtp_content.info_Stock[i]));
-                Add(new cOsdItem(hk(text)), refresh);
-            }
-        }
+        cName = "Weather";
+        cCache = &rtp_content.info_Weather;
         break;
     case 6:
-        snprintf(text, sizeof(text), "-- %s --", tr("Other"));
+        cName = "Stockmarket";
+        cCache = &rtp_content.info_Stock;
+        break;
+    case 7:
+        cName = "Other";
+        cCache = &rtp_content.info_Other;
+        break;
+    default: ;
+    }
+
+    if (cCache) {
+        SetCols(6, 1);
+        snprintf(text, sizeof(text), "%s\t\t%s", tr("Time"), tr(cName));
         Add(new cOsdItem(hk(text)));
         snprintf(text, sizeof(text), "%s", " ");
         Add(new cOsdItem(hk(text)));
-        ind = rtp_content.info_OtherIndex;
-        if (ind < (MAX_RTPC - 1) && rtp_content.info_Other[ind + 1] != NULL) {
-            for (int i = ind + 1; i < MAX_RTPC; i++) {
-                if (rtp_content.info_Other[i] != NULL) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                            Convert(rtp_content.info_Other[i]));
+
+        if ((ind = cCache->index) >= 0) {
+            for (int i = ind + 1; true; i++) {
+                if (i >= MAX_RTPC || !*cCache->Content[i])
+                    i = 0;
+                if (*cCache->Content[i]) {
+                    ts = localtime_r(&cCache->start[i], &tm_store);
+                    snprintf(text, sizeof(text), "%02d:%02d\t\t%s", ts->tm_hour, ts->tm_min, cCache->Content[i]);
                     Add(new cOsdItem(hk(text)));
                 }
+                if (i == ind) break;
             }
         }
-        for (int i = 0; i <= ind; i++) {
-            if (rtp_content.info_Other[i] != NULL) {
-                snprintf(text, sizeof(text), "%d.\t%s", ++lfd,
-                        Convert(rtp_content.info_Other[i]));
-                Add(new cOsdItem(hk(text)), refresh);
-            }
-        }
-        break;
     }
-
-    SetHelp(NULL, NULL, refresh ? tr("Refresh Off") : tr("Refresh On"),
-            tr("Back"));
+    SetHelp(NULL, NULL, refresh ? tr("Refresh Off") : tr("Refresh On"), tr("Back"));
 }
 
 void cRTplusList::Update(void) {

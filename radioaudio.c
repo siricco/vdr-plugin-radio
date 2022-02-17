@@ -9,18 +9,20 @@
 #include <vdr/status.h>
 #include <vdr/plugin.h>
 #include "radioaudio.h"
+#include "radiotmc.h"
+#include "radioimage.h"
+#include "rdsreceiver.h"
+#include "radiotextosd.h"
 #include "radioskin.h"
 #include "radiotools.h"
-#include "radiotextosd.h"
-#include "rdsreceiver.h"
 #include "service.h"
 #include <math.h>
 
 // Radiotext
-int RTP_ItemToggle = 1, RTP_TToggle = 0;
-bool RT_MsgShow = false, RT_PlusShow = false;
+int RTP_ItemToggle = 1;
+bool RT_MsgShow = false, RT_PlusShow = false, RTP_TToggle = false;
 bool RT_Replay = false;
-char *RT_Titel, *RTp_Titel;
+char RT_Titel[80], RTp_Titel[80];
 rtp_classes rtp_content;
 // RDS rest
 bool RDS_PSShow = false;
@@ -34,9 +36,9 @@ bool ARec_Receive = false, ARec_Record = false;
 int Rass_Show = -1;         // -1=No, 0=Yes, 1=display
 int Rass_Archiv = -1;       // -1=Off, 0=Index, 1000-9990=Slidenr.
 bool Rass_Flags[11][4];     // Slides+Gallery existent
+// ... Gallery (1..999)
 bool Rass_Gallery[RASS_GALMAX + 1];
 int Rass_GalStart, Rass_GalEnd, Rass_GalCount, Rass_SlideFoto;
-// ... Gallery (1..999)
 
 cRadioImage *RadioImage;
 cRDSReceiver *RDSReceiver;
@@ -44,18 +46,15 @@ cRadioAudio *RadioAudio;
 cRadioTextOsd *RadioTextOsd;
 
 // RDS-Chartranslation: 0x80..0xff
-unsigned char rds_addchar[128] = { 0xe1, 0xe0, 0xe9, 0xe8, 0xed, 0xec, 0xf3,
-        0xf2, 0xfa, 0xf9, 0xd1, 0xc7, 0x8c, 0xdf, 0x8e, 0x8f, 0xe2, 0xe4, 0xea,
-        0xeb, 0xee, 0xef, 0xf4, 0xf6, 0xfb, 0xfc, 0xf1, 0xe7, 0x9c, 0x9d, 0x9e,
-        0x9f, 0xaa, 0xa1, 0xa9, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xa3,
-        0xab, 0xac, 0xad, 0xae, 0xaf, 0xba, 0xb9, 0xb2, 0xb3, 0xb1, 0xa1, 0xb6,
-        0xb7, 0xb5, 0xbf, 0xf7, 0xb0, 0xbc, 0xbd, 0xbe, 0xa7, 0xc1, 0xc0, 0xc9,
-        0xc8, 0xcd, 0xcc, 0xd3, 0xd2, 0xda, 0xd9, 0xca, 0xcb, 0xcc, 0xcd, 0xd0,
-        0xcf, 0xc2, 0xc4, 0xca, 0xcb, 0xce, 0xcf, 0xd4, 0xd6, 0xdb, 0xdc, 0xda,
-        0xdb, 0xdc, 0xdd, 0xde, 0xdf, 0xc3, 0xc5, 0xc6, 0xe3, 0xe4, 0xdd, 0xd5,
-        0xd8, 0xde, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xf0, 0xe3, 0xe5, 0xe6,
-        0xf3, 0xf4, 0xfd, 0xf5, 0xf8, 0xfe, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe,
-        0xff };
+unsigned char rds_addchar[128] = {
+        0xe1, 0xe0, 0xe9, 0xe8, 0xed, 0xec, 0xf3, 0xf2, 0xfa, 0xf9, 0xd1, 0xc7, 0x8c, 0xdf, 0x8e, 0x8f,
+        0xe2, 0xe4, 0xea, 0xeb, 0xee, 0xef, 0xf4, 0xf6, 0xfb, 0xfc, 0xf1, 0xe7, 0x9c, 0x9d, 0x9e, 0x9f,
+        0xaa, 0xa1, 0xa9, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xa3, 0xab, 0xac, 0xad, 0xae, 0xaf,
+        0xba, 0xb9, 0xb2, 0xb3, 0xb1, 0xa1, 0xb6, 0xb7, 0xb5, 0xbf, 0xf7, 0xb0, 0xbc, 0xbd, 0xbe, 0xa7,
+        0xc1, 0xc0, 0xc9, 0xc8, 0xcd, 0xcc, 0xd3, 0xd2, 0xda, 0xd9, 0xca, 0xcb, 0xcc, 0xcd, 0xd0, 0xcf,
+        0xc2, 0xc4, 0xca, 0xcb, 0xce, 0xcf, 0xd4, 0xd6, 0xdb, 0xdc, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0xdf,
+        0xc3, 0xc5, 0xc6, 0xe3, 0xe4, 0xdd, 0xd5, 0xd8, 0xde, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xf0,
+        0xe3, 0xe5, 0xe6, 0xf3, 0xf4, 0xfd, 0xf5, 0xf8, 0xfe, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
 // announce text/items for lcdproc & other
 void radioStatusMsg(void) {
@@ -70,15 +69,12 @@ void radioStatusMsg(void) {
         cStatus::MsgOsdTextItem(rtrim(temp), false);
     }
 
-    if ((S_RtMsgItems == 1 || S_RtMsgItems >= 3)
-            && ((S_RtOsdTags == 1 && RT_PlusShow) || S_RtOsdTags >= 2)) {
+    if ((S_RtMsgItems == 1 || S_RtMsgItems >= 3) && ((S_RtOsdTags == 1 && RT_PlusShow) || S_RtOsdTags >= 2)) {
         struct tm tm_store;
         struct tm *ts = localtime_r(&RTP_Starttime, &tm_store);
-        cStatus::MsgOsdProgramme(mktime(ts), RTP_Title, RTP_Artist, 0, NULL,
-                NULL);
+        cStatus::MsgOsdProgramme(mktime(ts), RTP_Title, RTP_Artist, 0, NULL, NULL);
     }
 }
-
 
 // --- cRadioAudio -------------------------------------------------------------
 
@@ -95,7 +91,7 @@ bool cRadioAudio::CrcOk(uchar *data) {
 
 cRadioAudio::cRadioAudio() :
         cAudio(), enabled(false), first_packets(0), audiopid(0),
-        rdsdevice(NULL), bitrate(NULL), rdsSeen(false) {
+        rdsdevice(NULL), bitrate(NULL), rdsSeen(false), maxRdsChunkIndex(RDS_CHUNKSIZE - 1) {
     RadioAudio = this;
     dsyslog("radio: new cRadioAudio");
 }
@@ -185,9 +181,7 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
     int offset = 0;
     while (true) {
 
-        int pesl =
-                (offset + 5 < len) ?
-                        (data[offset + 4] << 8) + data[offset + 5] + 6 : -1;
+        int pesl = (offset + 5 < len) ? (data[offset + 4] << 8) + data[offset + 5] + 6 : -1;
         if ((pesl <= 0) || ((offset + pesl) > len)) {
             return;
         }
@@ -205,8 +199,7 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
                 printf("(End)\n\n");
             }
 
-            int val;
-            for (int i = offset - 3; i > offset - 3 - rdsl; i--) { // <-- data reverse, from end to start
+            for (int i = offset - 3, val; i > offset - 3 - rdsl; i--) { // <-- data reverse, from end to start
                 val = data[i];
 
                 if (val == 0xfe) {  // Start
@@ -214,7 +207,7 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
                     rt_start = true;
                     rt_bstuff = false;
                     if ((S_Verbose & 0x0f) >= 2) {
-                        printf("\nradioaudio: RDS-Start: ");
+                        printf("\nRDS-Start: ");
                     }
                 }
 
@@ -264,14 +257,13 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
                         default:
                             rt_start = false;
                             if ((S_Verbose & 0x0f) >= 2) {
-                                printf("radioaudio: [RDS-MEC '%02x' not used -> End]\n",
-                                        val);
+                                printf("[RDS-MEC '%02x' not used -> End]\n", val);
                             }
                         }
                     }
                     if (index >= mframel) {     // max. rdslength, garbage ?
                         if ((S_Verbose & 0x0f) >= 1) {
-                            printf("radioaudio: RDS-Error(PES): too long, garbage ?\n");
+                            printf("RDS-Error(PES): too long, garbage ?\n");
                         }
                         rt_start = false;
                     }
@@ -279,16 +271,15 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
 
                 if (rt_start && val == 0xff) {  // End
                     if ((S_Verbose & 0x0f) >= 2) {
-                        printf("radioaudio: (RDS-End)\n");
+                        printf("(RDS-End)\n");
                     }
                     rt_start = false;
                     if (index < 9) {        //  min. rdslength, garbage ?
                         if ((S_Verbose & 0x0f) >= 1) {
-                            printf("radioaudio: RDS-Error(PES): too short -> garbage ?\n");
+                            printf("RDS-Error(PES): too short -> garbage ?\n");
                         }
                     } else {
                         // crc16-check
-
                         if (!CrcOk(mtext)) {
                             if ((S_Verbose & 0x0f) >= 1) {
                                 printf("radioaudio: RDS-Error(PES): wrong\n");
@@ -303,20 +294,26 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
                                 case 0x4bd7:
                                     RadioAudio->RadiotextDecode(mtext); // RT+
                                     break;
-
+                                case 0x0d45:
+                                case 0xcd46:
+                                    if ((S_Verbose & 0x20) > 0) {
+                                        unsigned char tmc[6];   // TMC Alert-C
+                                        int i;
+                                        for (i = 9; i <= (index - 3); i++)
+                                            tmc[i - 9] = mtext[i];
+                                        tmc_parser(tmc, i - 8);
+                                    }
+                                    break;
                                 default:
                                     if ((S_Verbose & 0x0f) >= 2) {
-                                        printf(
-                                                "[RDS-ODA AID '%02x%02x' not used -> End]\n",
-                                                mtext[7], mtext[8]);
+                                        printf("[RDS-ODA AID '%02x%02x' not used -> End]\n", mtext[7], mtext[8]);
                                     }
                                 }
                                 break;
                             case 0x07:
                                 RT_PTY = mtext[8];                        // PTY
                                 if ((S_Verbose & 0x0f) >= 1) {
-                                    printf("RDS-PTY set to '%s'\n",
-                                            ptynr2string(RT_PTY));
+                                    printf("RDS-PTY set to '%s'\n", ptynr2string(RT_PTY));
                                 }
                                 break;
                             case 0x3e:
@@ -327,6 +324,16 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
                                 break;
                             case 0xda:
                                 RassDecode(mtext, index);                // Rass
+                                break;
+                            case 0x30:
+                                if ((S_Verbose & 0x20) > 0) {     // TMC Alert-C
+                                    unsigned char tmc[6];
+                                    int i;
+                                    for (i = 7; i <= (index - 3); i++) {
+                                        tmc[i - 7] = mtext[i];
+                                    }
+                                    tmc_parser(tmc, i - 6);
+                                }
                                 break;
                             }
                         }
@@ -370,6 +377,8 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
             const uchar *eFIL = NULL;
             int eLen = -2;
             eCnt++;
+            if (!rt_start)
+                maxRdsChunkIndex = RDS_CHUNKSIZE - 1;
 
             if (rs < 0)
                 rs += 8; // data is at current byte-pos
@@ -377,7 +386,7 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                 p--;     // data is at byte-pos -1
 
             int i;
-            for (i = 0; i < RDS_CHUNKSIZE && p > plBuffer; i++, p--) { // store reversed, as in MPEG-1 TS
+            for (i = 0; i <= maxRdsChunkIndex && p > plBuffer; i++, p--) { // store reversed, as in MPEG-1 TS
                 tmp = (p[-1] << 8) | p[0];
                 uchar eCh = (tmp >> rs) & 0xFF;
                 rdsChunk[i] = eCh;
@@ -392,15 +401,22 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                         if ((S_Verbose & 0x0f) >= 1) dsyslog("%s: skip MPEG-4 ancillary data (sync %02X, len %d.)", __func__, rdsChunk[i-2], eLen);
                         break;// skip this known <DSE> and search next
                         }
-                    if (rt_start || (eLen > 0 && rdsChunk[i-2] == 0xFE && (eLen < 2 || rdsChunk[i-3] == 0x00))) { // check 4 bytes "0x80, eLen, 0xfe, 0x00"
+                    if (rt_start) { // continued
+                        if (i == maxRdsChunkIndex || rdsChunk[0] == 0xFF) {
+                            //dsyslog("%s: <DSE>[%d] <<<", __func__, eCnt); hexdump(rdsChunk, eLen + 2);
+                            return eLen; // <DSE> found
+                        }
+                    }
+                    else if (eLen > 0 && rdsChunk[i-2] == 0xFE && (eLen < 2 || rdsChunk[i-3] == 0x00)) { // check 4 bytes "0x80, eLen, 0xfe, 0x00"
                         //dsyslog("%s: <DSE>[%d]", __func__, eCnt); hexdump(rdsChunk, eLen + 2);
+                        maxRdsChunkIndex = i;
                         return eLen; // <DSE> found
                         }
                     }
                 // simple plausibilty checks - invalid 'rt_stop','rt_start' or 'stuffing'
                 if ((i > 0 && (eCh == 0xFF && rdsChunk[i-1] != 0xFE) || (eCh == 0xFD && rdsChunk[i-1] > 2)) || (i > 1 && rdsChunk[i-2] == 0xFE && rdsChunk[i-1] != 0xFF)) {
                     //dsyslog("%s: <--->[%d/%d] invalid start/stop/stuffing %02X,%02X", __func__, eCnt, i, eCh, rdsChunk[i-1]);
-                    i = RDS_CHUNKSIZE; // retry with <FIL> or return
+                    i = maxRdsChunkIndex; // retry with <FIL> or return
                     }
                 eLen = eCh;
                 }
@@ -409,7 +425,7 @@ int cRadioAudio::GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_s
                 p = eFIL;
                 rs--; // adjust shift
                 }
-            else if (i >= RDS_CHUNKSIZE)
+            else if (i > maxRdsChunkIndex)
                 break;
             }
         }
@@ -490,10 +506,9 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
 
     if (TsPayloadStart(data)) {
         pesfound = false;
-        if (data[pOffset] == 0x00 && data[pOffset + 1] == 0x00
-                && data[pOffset + 2] == 0x01 && // PES-Startcode
+        if (data[pOffset] == 0x00 && data[pOffset + 1] == 0x00 && data[pOffset + 2] == 0x01 && // PES-Startcode
                 data[pOffset + 3] >= 0xc0 && data[pOffset + 3] <= 0xdf) {
-             // PES-Audiostream
+            // PES-Audiostream
             int pesLen = (data[pOffset + 4] << 8) + data[pOffset + 5];
             pPesLen = pesLen + 6; // from payload start
             pesfound = true;
@@ -694,6 +709,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 case 0xda:                  // Rass
                 case 0x07:                  // PTY
                 case 0x3e:                  // PTYN
+                case 0x30:                  // TMC
                 case 0x02:                  // PS
                     mec = stv;
                     RdsLogo = true;
@@ -718,7 +734,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
 
         if (rt_start == 1 && val == 0xff) {	    // End
             if ((S_Verbose & 0x0f) >= 2) {
-                printf("(%02x RDS-End)\n", mec);
+                printf("(RDS-End)\n");
             }
             rt_start = 0;
             rdsSeen = true;
@@ -737,18 +753,26 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 } else {
                     switch (mec) {
                     case 0x0a:
-                        RadiotextDecode(mtext);				// Radiotext
+                        RadiotextDecode(mtext); // Radiotext
                         break;
                     case 0x46:
-                        switch ((mtext[7] << 8) + mtext[8]) {		// ODA-ID
+                        switch ((mtext[7] << 8) + mtext[8]) { // ODA-ID
                         case 0x4bd7:
-                            RadiotextDecode(mtext);	// RT+
+                            RadiotextDecode(mtext); // RT+
+                            break;
+                        case 0x0d45:
+                        case 0xcd46:
+                            if ((S_Verbose & 0x20) > 0) {
+                                unsigned char tmc[6]; // TMC Alert-C
+                                int i;
+                                for (i = 9; i <= (index - 3); i++)
+                                    tmc[i - 9] = mtext[i];
+                                tmc_parser(tmc, i - 8);
+                            }
                             break;
                         default:
                             if ((S_Verbose & 0x0f) >= 2) {
-                                printf(
-                                        "[RDS-ODA AID '%02x%02x' not used -> End]\n",
-                                        mtext[7], mtext[8]);
+                                printf("[RDS-ODA AID '%02x%02x' not used -> End]\n", mtext[7], mtext[8]);
                             }
                         }
                         break;
@@ -767,6 +791,15 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                     case 0xda:
                         RassDecode(mtext, index);					    // Rass
                         break;
+                    case 0x30:
+                        if ((S_Verbose & 0x20) > 0) {			// TMC Alert-C
+                            unsigned char tmc[6];
+                            int i;
+                            for (i = 7; i <= (index - 3); i++) {
+                                tmc[i - 7] = mtext[i];
+                            }
+                            tmc_parser(tmc, i - 6);
+                        }
                     }
                 }
             }
@@ -783,321 +816,240 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
 
     // byte 1+2 = ADD (10bit SiteAdress + 6bit EncoderAdress)
     // byte 3   = SQC (Sequence Counter 0x00 = not used)
-    int leninfo = mtext[4]; // byte 4 = MFL (Message Field Length)
-
-
+    int mfl = mtext[4]; // byte 4 = MFL (Message Field Length)
     // byte 5 = MEC (Message Element Code, 0x0a for RT, 0x46 for RTplus)
     if (mtext[5] == 0x0a) {
         // byte 6+7 = DSN+PSN (DataSetNumber+ProgramServiceNumber,
         //                     ignore here, always 0x00 ?)
         // byte 8   = MEL (MessageElementLength, max. 64+1 byte @ RT)
-        if (mtext[8] == 0 || mtext[8] > RT_MEL || mtext[8] > leninfo - 4) {
+        int mel = mtext[8];
+        if (mel == 0 || mel > mfl - 4) {
             if ((S_Verbose & 0x0f) >= 1) {
-                printf("RT-Error: Length=0 or not correct (MFL= %d, MEL= %d)\n",
-                        mtext[4], mtext[8]);
+                dsyslog("RT-Error: Length not correct (MFL= %d, MEL= %d)", mfl, mel);
             }
             return;
         }
         // byte 9 = RT-Status bitcodet (0=AB-flagcontrol, 1-4=Transmission-Number, 5+6=Buffer-Config,
         //                  ignored, always 0x01 ?)
         char temptext[RT_MEL];
-        memset(temptext, 0x20, RT_MEL - 1);
-        for (int i = 1, ii = 0; i < mtext[8]; i++) {
-            char c = mtext[9 + i];
-            if ((c >= 0x20) && (c <= 0xfe)) {
-                // additional rds-character, see RBDS-Standard, Annex E
-                temptext[ii++] = (c >= 0x80) ? rds_addchar[c - 0x80] : c;
-            }
+        memset(temptext, 0x20, RT_MEL);
+        temptext[RT_MEL - 1] = '\0';
+
+        for (int i = 1, ii = 0; i < mel; i++, ii++) {
+            uchar ch = mtext[9 + i];
+            // additional rds-character, see RBDS-Standard, Annex E
+            temptext[ii] = (ch >= 0x80) ? rds_addchar[ch - 0x80] : ch;
         }
-        memcpy(plustext, temptext, RT_MEL - 1);
+        memcpy(plustext, temptext, RT_MEL);
         rds_entitychar(temptext);
         // check repeats
         bool repeat = false;
-        for (int ind = 0; ind < S_RtOsdRows; ind++) {
-            if (memcmp(RT_Text[ind], temptext, RT_MEL - 1) == 0) {
-                repeat = true;
-                if ((S_Verbose & 0x0f) >= 1) {
-                    printf("RText-Rep[%d]: %s\n", ind, RT_Text[ind]);
-                }
+        for (int ind = 0; !repeat && ind < S_RtOsdRows; ind++) {
+            repeat = (memcmp(RT_Text[ind], temptext, RT_MEL - 1) == 0);
+            if (repeat && (S_Verbose & 0x0f) >= 1) {
+                dsyslog("RText-Rep[%d]: '%s'", ind, RT_Text[ind]);
             }
         }
         if (!repeat) {
-            memcpy(RT_Text[RT_Index], temptext, RT_MEL - 1);
+            memcpy(RT_Text[RT_Index], temptext, RT_MEL);
             // +Memory
-            char *temp;
-            asprintf(&temp, "%s", RT_Text[RT_Index]);
-            if (++rtp_content.rt_Index >= 2 * MAX_RTPC) {
-                rtp_content.rt_Index = 0;
-            }
-            asprintf(&rtp_content.radiotext[rtp_content.rt_Index], "%s",
-                    rtrim(temp));
-            free(temp);
+            rtrim(temptext);
+            if (++rtp_content.radiotext.index >= 2 * MAX_RTPC)
+                rtp_content.radiotext.index = 0;
+            memcpy(rtp_content.radiotext.Msg[rtp_content.radiotext.index], temptext, RT_MEL);
             if ((S_Verbose & 0x0f) >= 1) {
-                printf("Radiotext[%d]: %s\n", RT_Index, RT_Text[RT_Index]);
+                dsyslog("Radiotext[%d/%d]: '%s'", RT_Index, rtp_content.radiotext.index, RT_Text[RT_Index]);
             }
-            RT_Index += 1;
-            if (RT_Index >= S_RtOsdRows) {
+            if (++RT_Index >= S_RtOsdRows)
                 RT_Index = 0;
-            }
         }
-        RTP_TToggle = 0x03;     // Bit 0/1 = Title/Artist
+        RTP_TToggle = true;
         RT_MsgShow = true;
         (RT_Info > 0) ? : RT_Info = 1;
         radioStatusMsg();
     }
-
-    else if (RTP_TToggle > 0 && mtext[5] == 0x46 && S_RtFunc >= 2) { // RTplus tags V2.1, only if RT
-        if (mtext[6] > leninfo - 2 || mtext[6] != 8) { // byte 6 = MEL, only 8 byte for 2 tags
+    else if (RTP_TToggle && mtext[5] == 0x46 && S_RtFunc >= 2) { // RTplus tags V2.1, only if RT
+        int mel = mtext[6];
+        if (mfl != 10 || mel != 8) { // byte 6 = MEL, only 8 byte for 2 tags
             if ((S_Verbose & 0x0f) >= 1) {
-                printf("RTp-Error: Length not correct (MEL= %d)\n",
-                        mtext[6]);
+                dsyslog("RTp-Error: Length not correct (MFL= %d, MEL= %d)", mfl, mel);
             }
             return;
         }
+        char rtp_temptext[RT_MEL];
         uint rtp_typ[2], rtp_start[2], rtp_len[2];
         // byte 7+8 = ApplicationID, always 0x4bd7
         // byte 9   = Applicationgroup Typecode / PTY ?
         // bit 10#4 = Item Togglebit
         // bit 10#3 = Item Runningbit
-        // Tag1: bit 10#2..11#5 = Contenttype, 11#4..12#7 = Startmarker, 12#6..12#1 = Length
-        rtp_typ[0] = (0x38 & mtext[10] << 3) | mtext[11] >> 5;
+
+        // Tag1: bit 10#2..11#5 = Contenttype, 11#4..12#7 = Startmarker, 12#6..12#1 = Length(6bit)
+        rtp_typ[0]   = (0x38 & mtext[10] << 3) | mtext[11] >> 5;
         rtp_start[0] = (0x3e & mtext[11] << 1) | mtext[12] >> 7;
-        rtp_len[0] = 0x3f & mtext[12] >> 1;
+        rtp_len[0]   =  0x3f & mtext[12] >> 1;
         // Tag2: bit 12#0..13#3 = Contenttype, 13#2..14#5 = Startmarker, 14#4..14#0 = Length(5bit)
-        rtp_typ[1] = (0x20 & mtext[12] << 5) | mtext[13] >> 3;
+        rtp_typ[1]   = (0x20 & mtext[12] << 5) | mtext[13] >> 3;
         rtp_start[1] = (0x38 & mtext[13] << 3) | mtext[14] >> 5;
-        rtp_len[1] = 0x1f & mtext[14];
-        if ((S_Verbose & 0x0f) >= 2) {
-            printf(
-                    "RTplus (tag=Typ/Start/Len):  Toggle/Run = %d/%d, tag#1 = %d/%d/%d, tag#2 = %d/%d/%d\n",
-                    (mtext[10] & 0x10) > 0, (mtext[10] & 0x08) > 0,
-                    rtp_typ[0], rtp_start[0], rtp_len[0], rtp_typ[1],
-                    rtp_start[1], rtp_len[1]);
-        }
-        // save info
-        for (int i = 0; i < 2; i++) {
-            if (rtp_start[i] + rtp_len[i] + 1 >= RT_MEL) {  // length-error
-                if ((S_Verbose & 0x0f) >= 1) {
-                    printf(
-                            "RTp-Error (tag#%d = Typ/Start/Len): %d/%d/%d (Start+Length > 'RT-MEL' !)\n",
-                            i + 1, rtp_typ[i], rtp_start[i], rtp_len[i]);
-                }
-            }
-            else {
-                char temptext[RT_MEL];
-                memset(temptext, 0x20, RT_MEL - 1);
-                memmove(temptext, plustext + rtp_start[i], rtp_len[i] + 1);
-                rds_entitychar(temptext);
-                // +Memory
-                memset(rtp_content.temptext, 0x20, RT_MEL - 1);
-                memcpy(rtp_content.temptext, temptext, RT_MEL - 1);
-                switch (rtp_typ[i]) {
-                case 1:     // Item-Title
-                    if ((mtext[10] & 0x08) > 0
-                            && (RTP_TToggle & 0x01) == 0x01) {
-                        RTP_TToggle -= 0x01;
-                        RT_Info = 2;
-                        if (memcmp(RTP_Title, temptext, RT_MEL - 1) != 0
-                                || (mtext[10] & 0x10) != RTP_ItemToggle) {
-                            memcpy(RTP_Title, temptext, RT_MEL - 1);
-                            if (RT_PlusShow && rtp_itime.Elapsed() > 1000) {
-                                rtp_idiffs = (int) rtp_itime.Elapsed()
-                                        / 1000;
-                            }
-                            if (!rtp_content.item_New) {
-                                RTP_Starttime = time(NULL);
-                                rtp_itime.Set(0);
-                                sprintf(RTP_Artist, "---");
-                                if (++rtp_content.item_Index >= MAX_RTPC) {
-                                    rtp_content.item_Index = 0;
-                                }
-                                rtp_content.item_Start[rtp_content.item_Index] =
-                                        time(NULL);    // todo: replay-mode
-                                rtp_content.item_Artist[rtp_content.item_Index] =
-                                        NULL;
-                            }
-                            rtp_content.item_New =
-                                    (!rtp_content.item_New) ? true : false;
-                            if (rtp_content.item_Index >= 0) {
-                                asprintf(
-                                        &rtp_content.item_Title[rtp_content.item_Index],
-                                        "%s", rtrim(rtp_content.temptext));
-                            }
-                            RT_PlusShow = RT_MsgShow = rtp_itoggle = true;
-                        }
-                    }
-                    break;
-                case 4:     // Item-Artist
-                    if ((mtext[10] & 0x08) > 0
-                            && (RTP_TToggle & 0x02) == 0x02) {
-                        RTP_TToggle -= 0x02;
-                        RT_Info = 2;
-                        if (memcmp(RTP_Artist, temptext, RT_MEL - 1) != 0
-                                || (mtext[10] & 0x10) != RTP_ItemToggle) {
-                            memcpy(RTP_Artist, temptext, RT_MEL - 1);
-                            if (RT_PlusShow && rtp_itime.Elapsed() > 1000) {
-                                rtp_idiffs = (int) rtp_itime.Elapsed()
-                                        / 1000;
-                            }
-                            if (!rtp_content.item_New) {
-                                RTP_Starttime = time(NULL);
-                                rtp_itime.Set(0);
-                                sprintf(RTP_Title, "---");
-                                if (++rtp_content.item_Index >= MAX_RTPC) {
-                                    rtp_content.item_Index = 0;
-                                }
-                                rtp_content.item_Start[rtp_content.item_Index] =
-                                        time(NULL);    // todo: replay-mode
-                                rtp_content.item_Title[rtp_content.item_Index] =
-                                        NULL;
-                            }
-                            rtp_content.item_New =
-                                    (!rtp_content.item_New) ? true : false;
-                            if (rtp_content.item_Index >= 0) {
-                                asprintf(
-                                        &rtp_content.item_Artist[rtp_content.item_Index],
-                                        "%s", rtrim(rtp_content.temptext));
-                            }
-                            RT_PlusShow = RT_MsgShow = rtp_itoggle = true;
-                        }
-                    }
-                    break;
-                case 12:    // Info_News
-                    asprintf(&rtp_content.info_News, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 13:    // Info_NewsLocal
-                    asprintf(&rtp_content.info_NewsLocal, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 14:    // Info_Stockmarket
-                    if (++rtp_content.info_StockIndex >= MAX_RTPC) {
-                        rtp_content.info_StockIndex = 0;
-                    }
-                    asprintf(
-                            &rtp_content.info_Stock[rtp_content.info_StockIndex],
-                            "%s", rtrim(rtp_content.temptext));
-                    break;
-                case 15:    // Info_Sport
-                    if (++rtp_content.info_SportIndex >= MAX_RTPC) {
-                        rtp_content.info_SportIndex = 0;
-                    }
-                    asprintf(
-                            &rtp_content.info_Sport[rtp_content.info_SportIndex],
-                            "%s", rtrim(rtp_content.temptext));
-                    break;
-                case 16:    // Info_Lottery
-                    if (++rtp_content.info_LotteryIndex >= MAX_RTPC) {
-                        rtp_content.info_LotteryIndex = 0;
-                    }
-                    asprintf(
-                            &rtp_content.info_Lottery[rtp_content.info_LotteryIndex],
-                            "%s", rtrim(rtp_content.temptext));
-                    break;
-                case 24:    // Info_DateTime
-                    asprintf(&rtp_content.info_DateTime, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 25:    // Info_Weather
-                    if (++rtp_content.info_WeatherIndex >= MAX_RTPC) {
-                        rtp_content.info_WeatherIndex = 0;
-                    }
-                    asprintf(
-                            &rtp_content.info_Weather[rtp_content.info_WeatherIndex],
-                            "%s", rtrim(rtp_content.temptext));
-                    break;
-                case 26:    // Info_Traffic
-                    asprintf(&rtp_content.info_Traffic, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 27:    // Info_Alarm
-                    asprintf(&rtp_content.info_Alarm, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 28:    // Info_Advert
-                    asprintf(&rtp_content.info_Advert, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 29:    // Info_Url
-                    asprintf(&rtp_content.info_Url, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 30:    // Info_Other
-                    if (++rtp_content.info_OtherIndex >= MAX_RTPC) {
-                        rtp_content.info_OtherIndex = 0;
-                    }
-                    asprintf(
-                            &rtp_content.info_Other[rtp_content.info_OtherIndex],
-                            "%s", rtrim(rtp_content.temptext));
-                    break;
-                case 31:    // Programme_Stationname.Short
-                    asprintf(&rtp_content.prog_StatShort, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 32:    // Programme_Stationname.Long
-                    asprintf(&rtp_content.prog_Station, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 33:    // Programme_Now
-                    asprintf(&rtp_content.prog_Now, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 34:    // Programme_Next
-                    asprintf(&rtp_content.prog_Next, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 35:    // Programme_Part
-                    asprintf(&rtp_content.prog_Part, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 36:    // Programme_Host
-                    asprintf(&rtp_content.prog_Host, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 37:    // Programme_EditorialStaff
-                    asprintf(&rtp_content.prog_EditStaff, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 39:    // Programme_Homepage
-                    asprintf(&rtp_content.prog_Homepage, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 41:    // Phone_Hotline
-                    asprintf(&rtp_content.phone_Hotline, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 42:    // Phone_Studio
-                    asprintf(&rtp_content.phone_Studio, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 44:    // SMS_Studio
-                    asprintf(&rtp_content.sms_Studio, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 46:    // Email_Hotline
-                    asprintf(&rtp_content.email_Hotline, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                case 47:    // Email_Studio
-                    asprintf(&rtp_content.email_Studio, "%s",
-                            rtrim(rtp_content.temptext));
-                    break;
-                }
-            }
+        rtp_len[1]   =  0x1f & mtext[14];
+
+        bool rt_bit_toggle  = mtext[10] & 0x10;
+        bool rt_bit_running = mtext[10] & 0x08;
+
+        if ((S_Verbose & 0x0f) >= 1) {
+            dsyslog("RTplus (tag=Typ/Start/Len):  Toggle/Run = %d/%d, tag#1 = %d/%d/%d, tag#2 = %d/%d/%d",
+                    rt_bit_toggle, rt_bit_running,
+                    rtp_typ[0], rtp_start[0], rtp_len[0], rtp_typ[1], rtp_start[1], rtp_len[1]);
         }
 
-        // Title-end @ no Item-Running'
-        if ((mtext[10] & 0x08) == 0) {
-            sprintf(RTP_Title, "---");
-            sprintf(RTP_Artist, "---");
+        struct rtp_item *item = (rtp_content.items.index >= 0) ? &rtp_content.items.Item[rtp_content.items.index] : NULL;
+        if (!item)
+            RTP_ItemToggle = !rt_bit_toggle; // set with first item
+
+        // save item info
+        int plustxtLen = strlen(plustext);
+
+        for (int i = 0; i < 2; i++) {
+            //if (rtp_start[i] + rtp_len[i] + 1 >= RT_MEL) {  // length-error
+            if (rtp_start[i] + rtp_len[i] + 1 > plustxtLen) {  // length-error
+                if ((S_Verbose & 0x0f) >= 1)
+                    dsyslog("RTp-Error (tag#%d = Typ/Start/Len): %d/%d/%d (Start+Length > 'RT-MEL' %d !)", i + 1, rtp_typ[i], rtp_start[i], rtp_len[i], plustxtLen);
+                continue;
+            }
+            if (rtp_typ[i] > RTP_CLASS_MAX) {
+                if ((S_Verbose & 0x0f) >= 1)
+                    dsyslog("rt+: unhandled class %d", rtp_typ[i]);
+                continue;
+            }
+            if (rtp_typ[i]) {
+                // tag string
+                char temptext[RT_MEL];
+                memcpy(temptext, plustext + rtp_start[i], rtp_len[i] + 1);
+                temptext[rtp_len[i] + 1] = '\0';
+                rds_entitychar(temptext);
+                rtrim(temptext);
+
+                if (item && rt_bit_toggle == RTP_ItemToggle) { // check for item-change by content
+                    char *iText = (rtp_typ[i] == item_Title) ? item->Title : (rtp_typ[i] == item_Artist) ? item->Artist : NULL;
+                    RTP_ItemToggle |= iText && *iText && strcmp(iText, temptext);
+                }
+
+                if (rt_bit_toggle != RTP_ItemToggle) { // item-change or first item
+                    if (IS_ITEM_CLASS(rtp_typ[i])) {
+                        for (int i = RTP_CLASS_ITEM_MIN; i <= RTP_CLASS_ITEM_MAX; i++)
+                            rtp_content.rtp_class[i][0] = '\0'; // clear all current item infos
+
+                        if (I_MASK & I_MAP(rtp_typ[i])) { // visible RT+ item
+                            if (!item || item->itemMap) { // first or used item
+                                if (++rtp_content.items.index >= MAX_RTPC)
+                                    rtp_content.items.index = 0;
+                                item = &rtp_content.items.Item[rtp_content.items.index];
+                                // clear old cached item infos
+                                memset(item, 0, sizeof(struct rtp_item));
+                            }
+                            item->start = time(NULL);
+                            // RTP_Title = RTP_Artist = RTP_Album = RTP_Composer = RTP_Conductor = RTP_Band = NULL;
+                            sprintf(RTP_Title, "---");
+                            sprintf(RTP_Artist, "---");
+                            sprintf(RTP_Composer, "");
+                            sprintf(RTP_Album, "");
+                            sprintf(RTP_Conductor, "");
+                            sprintf(RTP_Band, "");
+                        }
+                    }
+                    if (RT_PlusShow && rtp_itime.Elapsed() > 1000)
+                        rtp_idiffs = (int) rtp_itime.Elapsed() / 1000;
+                    rtp_itime.Set(0);
+
+                    dsyslog("RTPlus: Item toggle(%d -> %d) index %d", RTP_ItemToggle, rt_bit_toggle, rtp_content.items.index);
+                    RTP_ItemToggle = rt_bit_toggle;
+                    RTP_Starttime = time(NULL);
+                }
+
+                // store msg in rtp_class
+                char *rtp_class_msg = rtp_content.rtp_class[rtp_typ[i]];
+                strcpy(rtp_class_msg, temptext); // set or update
+
+                if (item) {
+                    char *iMsg;
+                    char *rMsg;
+                    switch (rtp_typ[i]) {
+                    case item_Title:    // 1
+                        iMsg = item->Title;
+                        rMsg = RTP_Title;
+                        break;
+                    case item_Album:    // 2
+                        iMsg = item->Album;
+                        rMsg = RTP_Album;
+                        break;
+                    case item_Artist:   // 4
+                        iMsg = item->Artist;
+                        rMsg = RTP_Artist;
+                        break;
+                    case item_Conductor:// 7
+                        iMsg = item->Conductor;
+                        rMsg = RTP_Conductor;
+                        break;
+                    case item_Composer: // 8
+                        iMsg = item->Composer;
+                        rMsg = RTP_Composer;
+                        break;
+                    case item_Band:     // 9
+                        iMsg = item->Band;
+                        rMsg = RTP_Band;
+                        break;
+                    default: iMsg = rMsg = NULL;
+                    }
+                    if (iMsg) {
+                        strcpy(iMsg, rtp_class_msg);
+                        strcpy(rMsg, rtp_class_msg);
+                        item->itemMap |= I_MAP(rtp_typ[i]);
+                        RT_PlusShow = RT_MsgShow = rtp_itoggle = true;
+                    }
+                }
+                struct rtp_info_cache *cCache;
+                switch (rtp_typ[i]) {
+                case info_News:     // 12
+                    cCache = &rtp_content.info_News;
+                    break;
+                case info_Stock:    // 14
+                    cCache = &rtp_content.info_Stock;
+                    break;
+                case info_Sport:    // 15
+                    cCache = &rtp_content.info_Sport;
+                    break;
+                case info_Lottery:  // 15
+                    cCache = &rtp_content.info_Lottery;
+                    break;
+                case info_Weather:  // 25
+                    cCache = &rtp_content.info_Weather;
+                    break;
+                case info_Other:    // 30
+                    cCache = &rtp_content.info_Other;
+                    break;
+                default: cCache = NULL;
+                }
+                if (cCache) {
+                    if (cCache->index < 0 || (*cCache->Content[cCache->index] && strcmp(cCache->Content[cCache->index], rtp_class_msg))) {
+                        if (++cCache->index >= MAX_RTPC)
+                            cCache->index = 0;
+                        cCache->start[cCache->index] = time(NULL);
+                        strcpy(cCache->Content[cCache->index], rtp_class_msg);
+                    }
+                }
+            }
+        }
+        RTP_TToggle = false;
+        item = NULL; // here item may or may not be NULL - just to clearify
+        // running status - not allways reliable !
+        rtp_content.items.running = rt_bit_running;
+        // Title-end @ no Item-Running
+        if (!rt_bit_running) {
             if (RT_PlusShow) {
-                RT_PlusShow = false;
                 rtp_itoggle = true;
                 rtp_idiffs = (int) rtp_itime.Elapsed() / 1000;
                 RTP_Starttime = time(NULL);
             }
             RT_MsgShow = (RT_Info > 0);
-            rtp_content.item_New = false;
         }
 
         if (rtp_itoggle) {
@@ -1105,26 +1057,18 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
                 struct tm tm_store;
                 struct tm *ts = localtime_r(&RTP_Starttime, &tm_store);
                 if (rtp_idiffs > 0) {
-                    printf(
-                            "  StartTime : %02d:%02d:%02d  (last Title elapsed = %d s)\n",
-                            ts->tm_hour, ts->tm_min, ts->tm_sec,
-                            rtp_idiffs);
+                    dsyslog("  StartTime : %02d:%02d:%02d  (last Title elapsed = %d s)", ts->tm_hour, ts->tm_min, ts->tm_sec, rtp_idiffs);
                 }
                 else {
-                    printf("  StartTime : %02d:%02d:%02d\n", ts->tm_hour,
-                            ts->tm_min, ts->tm_sec);
+                    dsyslog("  StartTime : %02d:%02d:%02d", ts->tm_hour, ts->tm_min, ts->tm_sec);
                 }
-                printf("  RTp-Title : %s\n  RTp-Artist: %s\n", RTP_Title,
-                        RTP_Artist);
+                dsyslog("  RTp-Title : '%s'  RTp-Artist: '%s' RTp-Composer: '%s'", RTP_Title, RTP_Artist, RTP_Composer);
             }
-            RTP_ItemToggle = mtext[10] & 0x10;
             rtp_itoggle = false;
             rtp_idiffs = 0;
             radioStatusMsg();
             AudioRecorderService();
         }
-
-        RTP_TToggle = 0;
     }
 }
 
@@ -1137,22 +1081,17 @@ void cRadioAudio::RDS_PsPtynDecode(bool ptyn, unsigned char *mtext, int len) {
         if (mtext[i] <= 0xfe) {
             // additional rds-character, see RBDS-Standard, Annex E
             if (!ptyn) {
-                RDS_PSText[RDS_PSIndex][i - 8] =
-                        (mtext[i] >= 0x80) ?
-                                rds_addchar[mtext[i] - 0x80] : mtext[i];
+                RDS_PSText[RDS_PSIndex][i - 8] = (mtext[i] >= 0x80) ? rds_addchar[mtext[i] - 0x80] : mtext[i];
             }
             else {
-                RDS_PTYN[i - 8] =
-                        (mtext[i] >= 0x80) ?
-                                rds_addchar[mtext[i] - 0x80] : mtext[i];
+                RDS_PTYN[i - 8] = (mtext[i] >= 0x80) ? rds_addchar[mtext[i] - 0x80] : mtext[i];
             }
         }
     }
 
     if ((S_Verbose & 0x0f) >= 1) {
         if (!ptyn) {
-            printf("RDS-PS  No= %d, Content[%d]= '%s'\n", mtext[7], RDS_PSIndex,
-                    RDS_PSText[RDS_PSIndex]);
+            printf("RDS-PS  No= %d, Content[%d]= '%s'\n", mtext[7], RDS_PSIndex, RDS_PSText[RDS_PSIndex]);
         }
         else {
             printf("RDS-PTYN  No= %d, Content= '%s'\n", mtext[7], RDS_PTYN);
@@ -1180,8 +1119,7 @@ void cRadioAudio::AudioRecorderService(void) {
     cPlugin *p;
 
     arec_service.channel = chan;
-    p = cPluginManager::CallFirstService("Audiorecorder-StatusRtpChannel-v1.0",
-            &arec_service);
+    p = cPluginManager::CallFirstService("Audiorecorder-StatusRtpChannel-v1.0", &arec_service);
     if (p) {
         ARec_Receive = (arec_service.status >= 2);
         ARec_Record = (arec_service.status == 3);
@@ -1196,8 +1134,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
     static uint splfd = 0, spmax = 0, index = 0;
     static uint afiles, slidenumr, slideelem, filemax;
     static int filetype;
-    static bool slideshow = false, slidesave = false, slidecan = false,
-            slidedel = false, start = false;
+    static bool slideshow = false, slidesave = false, slidecan = false, slidedel = false, start = false;
     static uchar daten[65536];  // mpegs-stills defined <= 50kB
     FILE *fd;
 
@@ -1209,9 +1146,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
     // byte 6   = MEL
         if (mtext[6] == 0 || mtext[6] > mtext[4] - 2) {
             if ((S_Verbose & 0x0f) >= 1) {
-                printf(
-                        "Rass-Error: Length=0 or not correct (MFL= %d, MEL= %d)\n",
-                        mtext[4], mtext[6]);
+                printf("Rass-Error: Length=0 or not correct (MFL= %d, MEL= %d)\n", mtext[4], mtext[6]);
             }
             return;
         }
@@ -1243,22 +1178,18 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                 //return;
             }
             // byte 25-28 = Dateilänge, <Item-Length>
-            filemax = mtext[28] | mtext[27] << 8 | mtext[26] << 16
-                    | mtext[25] << 24;
+            filemax = mtext[28] | mtext[27] << 8 | mtext[26] << 16 | mtext[25] << 24;
             if (filemax >= 65536) {
                 if ((S_Verbose & 0x0f) >= 1) {
-                    printf("Rass-Error: Filesize '%d' will be too big !\n",
-                            filemax);
+                    printf("Rass-Error: Filesize '%d' will be too big !\n", filemax);
                 }
                 return;
             }
             // byte 29-31 = Dateioffset Paketnr old, now <rfu>
             // byte 32 = Dateioffset Bytenr old, now <rfu>
             if ((S_Verbose & 0x10) > 0) {
-                printf(
-                        "Rass-Header: afiles= %d, slidenumr= %d, slideelem= %d\n             slideshow= %d, -save= %d, -canschow= %d, -delete= %d\n             filetype= %d, filemax= %d\n",
-                        afiles, slidenumr, slideelem, slideshow, slidesave,
-                        slidecan, slidedel, filetype, filemax);
+                printf("Rass-Header: afiles= %d, slidenumr= %d, slideelem= %d\n             slideshow= %d, -save= %d, -canschow= %d, -delete= %d\n             filetype= %d, filemax= %d\n",
+                        afiles, slidenumr, slideelem, slideshow, slidesave, slidecan, slidedel, filetype, filemax);
                 printf("Rass-Start ...\n");
             }
             start = true;
@@ -1304,16 +1235,11 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                 }
             }
             if (filemax > 0) {      // nothing todo, if 0 byte file
-                if ((S_Verbose & 0x0f) >= 1) {
-                    dsyslog("-- RDS %d --", index+1); hexdump(mtext, index+1);
-                    }
                 // crc-check with bytes 'len-4/3'
                 unsigned short crc16 = crc16_ccitt(daten, filemax, false);
                 if (crc16 != (mtext[len - 4] << 8) + mtext[len - 3]) {
                     if ((S_Verbose & 0x0f) >= 1) {
-                        printf(
-                                "Rass-Error: wrong CRC # calc = %04x <> transmit = %02x%02x\n",
-                                crc16, mtext[len - 4], mtext[len - 3]);
+                        printf("Rass-Error: wrong CRC # calc = %04x <> transmit = %02x%02x\n", crc16, mtext[len - 4], mtext[len - 3]);
                     }
                     start = false;
                     return;
@@ -1335,9 +1261,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                             }
                         }
                         else {
-                            esyslog(
-                                    "radio: ERROR writing Rass-imagefile failed '%s'",
-                                    filepath);
+                            esyslog("radio: ERROR writing Rass-imagefile failed '%s'", filepath);
                         }
                         free(filepath);
                     }
@@ -1345,17 +1269,14 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                 if (slidesave || slidedel || slidenumr < RASS_GALMAX) {
                     // lfd. Fotogallery 100.. ???
                     if (slidenumr >= 100 && slidenumr < RASS_GALMAX) {
-                        (Rass_SlideFoto < RASS_GALMAX) ?
-                                Rass_SlideFoto++ : Rass_SlideFoto = 100;
+                        (Rass_SlideFoto < RASS_GALMAX) ? Rass_SlideFoto++ : Rass_SlideFoto = 100;
                         slidenumr = Rass_SlideFoto;
                     }
                     //
                     char *filepath;
                     (filetype == 2) ?
-                            asprintf(&filepath, "%s/Rass_%d.def", DataDir,
-                                    slidenumr) :
-                            asprintf(&filepath, "%s/Rass_%d.mpg", DataDir,
-                                    slidenumr);
+                            asprintf(&filepath, "%s/Rass_%d.def", DataDir, slidenumr) :
+                            asprintf(&filepath, "%s/Rass_%d.mpg", DataDir, slidenumr);
                     if ((fd = fopen(filepath, "wb")) != NULL) {
                         fwrite(daten, 1, filemax, fd);
                         fclose(fd);
@@ -1373,8 +1294,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                                     int islide = (int) floor(slidenumr / 1000);
                                     for (int i = 3; i >= 0; i--) {
                                         if (fmod(slidenumr, pow(10, i)) == 0) {
-                                            Rass_Flags[islide][3 - i] =
-                                                    !slidedel;
+                                            Rass_Flags[islide][3 - i] = !slidedel;
                                             break;
                                         }
                                     }
@@ -1385,15 +1305,11 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                                 Rass_Gallery[slidenumr] = !slidedel;
                                 if (!slidedel && (int) slidenumr > Rass_GalEnd)
                                     Rass_GalEnd = slidenumr;
-                                if (!slidedel
-                                        && (Rass_GalStart == 0
-                                                || (int) slidenumr
-                                                        < Rass_GalStart))
+                                if (!slidedel && (Rass_GalStart == 0 || (int) slidenumr < Rass_GalStart))
                                     Rass_GalStart = slidenumr;
                                 // counter
                                 Rass_GalCount = 0;
-                                for (int i = Rass_GalStart; i <= Rass_GalEnd;
-                                        i++) {
+                                for (int i = Rass_GalStart; i <= Rass_GalEnd; i++) {
                                     if (Rass_Gallery[i]) {
                                         Rass_GalCount++;
                                     }
@@ -1403,9 +1319,7 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
                         }
                     }
                     else {
-                        esyslog(
-                                "radio: ERROR writing Rass-image/data-file failed '%s'",
-                                filepath);
+                        esyslog("radio: ERROR writing Rass-image/data-file failed '%s'", filepath);
                     }
                     free(filepath);
                 }
@@ -1424,15 +1338,14 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
         start = false;
         splfd = spmax = 0;
         if ((S_Verbose & 0x0f) >= 1) {
-            printf("RDS-Error: [Rass] Length not correct (MFL= %d, len= %d)\n",
-                    mtext[4], len);
+            printf("RDS-Error: [Rass] Length not correct (MFL= %d, len= %d)\n", mtext[4], len);
         }
     }
 }
 
-void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid,
-        bool replay) {
-    asprintf(&RT_Titel, "%s", Titel);
+void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid, bool replay) {
+    RT_Titel[0] = '\0';
+    strncpy(RT_Titel, Titel, sizeof(RT_Titel));
     audiopid = apid;
     RT_Replay = replay;
     ARec_Receive = ARec_Record = false;
@@ -1444,15 +1357,20 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid,
 
     // Radiotext init
     if (S_RtFunc >= 1) {
-        RT_MsgShow = RT_PlusShow = RdsLogo = false;
+        RT_MsgShow = RT_PlusShow = RdsLogo = RTP_TToggle = false;
         RT_ReOpen = true;
         RT_OsdTO = false;
-        RT_Index = RT_PTY = RTP_TToggle = 0;
+        RT_Index = RT_PTY = 0;
         RTP_ItemToggle = 1;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < RT_ROWS; i++)
             memset(RT_Text[i], 0x20, RT_MEL - 1);
         sprintf(RTP_Title, "---");
         sprintf(RTP_Artist, "---");
+        sprintf(RTP_Composer, "");
+        sprintf(RTP_Album, "");
+        sprintf(RTP_Conductor, "");
+        sprintf(RTP_Band, "");
+
         RTP_Starttime = time(NULL);
         RT_Charset = 0;
         //
@@ -1462,46 +1380,18 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid,
             memset(RDS_PSText[i], 0x20, 8);
     }
     // ...Memory
+    memset(&rtp_content, 0, sizeof(rtp_content));
     rtp_content.start = time(NULL);
-    rtp_content.item_New = false;
-    rtp_content.rt_Index = -1;
-    rtp_content.item_Index = -1;
-    rtp_content.info_StockIndex = -1;
-    rtp_content.info_SportIndex = -1;
-    rtp_content.info_LotteryIndex = -1;
-    rtp_content.info_WeatherIndex = -1;
-    rtp_content.info_OtherIndex = -1;
-    for (int i = 0; i < MAX_RTPC; i++) {
-        rtp_content.radiotext[i] = NULL;
-        rtp_content.radiotext[MAX_RTPC + i] = NULL;
-        rtp_content.item_Title[i] = NULL;
-        rtp_content.item_Artist[i] = NULL;
-        rtp_content.info_Stock[i] = NULL;
-        rtp_content.info_Sport[i] = NULL;
-        rtp_content.info_Lottery[i] = NULL;
-        rtp_content.info_Weather[i] = NULL;
-        rtp_content.info_Other[i] = NULL;
-    }
-    rtp_content.info_News = NULL;
-    rtp_content.info_NewsLocal = NULL;
-    rtp_content.info_DateTime = NULL;
-    rtp_content.info_Traffic = NULL;
-    rtp_content.info_Alarm = NULL;
-    rtp_content.info_Advert = NULL;
-    rtp_content.info_Url = NULL;
-    rtp_content.prog_StatShort = NULL;
-    rtp_content.prog_Station = NULL;
-    rtp_content.prog_Now = NULL;
-    rtp_content.prog_Next = NULL;
-    rtp_content.prog_Part = NULL;
-    rtp_content.prog_Host = NULL;
-    rtp_content.prog_EditStaff = NULL;
-    rtp_content.prog_Homepage = NULL;
-    rtp_content.phone_Hotline = NULL;
-    rtp_content.phone_Studio = NULL;
-    rtp_content.sms_Studio = NULL;
-    rtp_content.email_Hotline = NULL;
-    rtp_content.email_Studio = NULL;
+
+    rtp_content.radiotext.index = -1;
+    rtp_content.items.index = -1;
+    rtp_content.items.itemMask = I_MASK;
+    rtp_content.info_News.index = -1;       // 12
+    rtp_content.info_Stock.index = -1;      // 14
+    rtp_content.info_Sport.index = -1;      // 15
+    rtp_content.info_Lottery.index = -1;    // 16
+    rtp_content.info_Weather.index = -1;    // 25
+    rtp_content.info_Other.index = -1;      // 29
 
     // Rass init
     Rass_Show = Rass_Archiv = -1;

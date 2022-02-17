@@ -1,12 +1,12 @@
 /*
- * rdsreceiver.h
+ * rdsreceiver.h - part of radio.c, a plugin for the Video Disk Recorder
  *
- *  Created on: 27.05.2018
- *      Author: uli
+ * See the README file for copyright information and how to reach the author.
+ *
  */
 
-#ifndef __RDSRECEIVER_H_
-#define __RDSRECEIVER_H_
+#ifndef __RDS_RECEIVER_H
+#define __RDS_RECEIVER_H
 
 #include <vdr/receiver.h>
 
@@ -27,5 +27,4 @@ public:
     virtual ~cRDSReceiver(void);
 };
 
-
-#endif /* __RDSRECEIVER_H_ */
+#endif //__RDS_RECEIVER_H

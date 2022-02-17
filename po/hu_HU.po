@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-05-27 14:19+0200\n"
+"POT-Creation-Date: 2022-02-26 19:57+0100\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Füley István\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -15,11 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Rádió háttérkép/RDS-Text"
+msgid "Use PlayPes-Function"
+msgstr ""
 
-msgid "Show RDS-Radiotext"
-msgstr "RDS-Text megjelenítése"
+msgid "Use StillPicture-Function"
+msgstr ""
 
 msgid "Off"
 msgstr "ki"
@@ -93,7 +93,7 @@ msgstr "Text és Rass"
 msgid "Activate"
 msgstr "Aktív"
 
-msgid "Use StillPicture-Function"
+msgid "StillPicture"
 msgstr ""
 
 msgid "Hide MainMenuEntry"
@@ -144,6 +144,12 @@ msgstr "RDS Rass funkció"
 msgid "External Info-Request"
 msgstr ""
 
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Rádió háttérkép/RDS-Text"
+
+msgid "Show RDS-Radiotext"
+msgstr "RDS-Text megjelenítése"
+
 msgid "ext. Info"
 msgstr ""
 
@@ -156,11 +162,23 @@ msgstr "Rádiótext"
 msgid "  [waiting ...]"
 msgstr "[várakozás...]"
 
-msgid "Title :"
-msgstr "Cím :"
+msgid "Composer :"
+msgstr ""
+
+msgid "Conductor :"
+msgstr ""
+
+msgid "Band :"
+msgstr ""
+
+msgid "Album :"
+msgstr ""
 
 msgid "Artist :"
 msgstr "Előadó :"
+
+msgid "Title :"
+msgstr "Cím :"
 
 msgid "Records"
 msgstr "Archívum"
@@ -225,105 +243,119 @@ msgstr "komolyzene"
 msgid "Other music"
 msgstr "egyéb zene"
 
+msgid "Weather"
+msgstr "Időjárás"
+
+msgid "Finance"
+msgstr ""
+
+msgid "Children's programmes"
+msgstr ""
+
+msgid "Social Affairs"
+msgstr ""
+
+msgid "Religion"
+msgstr ""
+
+msgid "Phone In"
+msgstr ""
+
+msgid "Travel"
+msgstr ""
+
+msgid "Leisure"
+msgstr ""
+
+msgid "Jazz Music"
+msgstr ""
+
+msgid "Country Music"
+msgstr ""
+
+msgid "National Music"
+msgstr ""
+
+msgid "Oldies Music"
+msgstr ""
+
+msgid "Folk Music"
+msgstr ""
+
+msgid "Documentary"
+msgstr ""
+
+msgid "Alarm Test"
+msgstr ""
+
 msgid "Alarm"
 msgstr "Riasztó"
 
-msgid "last seen Radiotext"
-msgstr "utoljára vett rádiótext"
-
-msgid "Playlist"
-msgstr "Playlist"
-
-msgid "Time"
-msgstr "Idő"
+msgid "dummy_Class"
+msgstr ""
 
 msgid "Title"
 msgstr "Cím"
 
+msgid "Album"
+msgstr ""
+
+msgid "Track"
+msgstr ""
+
 msgid "Artist"
 msgstr "Előadó"
 
-msgid "Sports"
-msgstr "Sport"
+msgid "Composition"
+msgstr ""
+
+msgid "Movement"
+msgstr ""
+
+msgid "Conductor"
+msgstr ""
+
+msgid "Composer"
+msgstr ""
+
+msgid "Band"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Genre"
+msgstr ""
+
+msgid "NewsLocal"
+msgstr "Helyi hírek"
+
+msgid "Stock"
+msgstr ""
 
 msgid "Lottery"
 msgstr "Lottó"
 
-msgid "Weather"
-msgstr "Időjárás"
-
-msgid "Stockmarket"
-msgstr "Börze"
-
-msgid "Other"
-msgstr "Egyéb"
-
-msgid "Refresh Off"
-msgstr "Frissítés ki"
-
-msgid "Refresh On"
-msgstr "Frissítés be"
-
-msgid "Back"
-msgstr "Vissza"
-
-msgid "extra Info  since"
+msgid "Horoskope"
 msgstr ""
 
-msgid "RTplus Memory  since"
-msgstr "RTplus innen kezdve"
-
-msgid "Programme"
-msgstr "Programinfó"
-
-msgid "Stat.Short"
+msgid "DailyDiversion"
 msgstr ""
 
-msgid "Station"
-msgstr "Rádióadó"
+msgid "Health"
+msgstr ""
 
-msgid "Now"
-msgstr "Most"
+msgid "Event"
+msgstr ""
 
-msgid "...Part"
-msgstr "...rész"
+msgid "Scene"
+msgstr ""
 
-msgid "Next"
-msgstr "Következő"
+msgid "Cinema"
+msgstr ""
 
-msgid "Host"
-msgstr "Müsorvezető"
-
-msgid "Edit.Staff"
-msgstr "Stáb"
-
-msgid "Homepage"
-msgstr "Honlap"
-
-msgid "Interactivity"
-msgstr "Interaktivitás"
-
-msgid "Phone-Hotline"
-msgstr "Telefonos forródrót"
-
-msgid "Phone-Studio"
-msgstr "Telefon studió"
-
-#, fuzzy
-msgid "SMS-Studio"
-msgstr "Telefon studió"
-
-msgid "Email-Hotline"
-msgstr "E-mail forródrót"
-
-msgid "Email-Studio"
-msgstr "E-mail studió"
-
-msgid "Info"
-msgstr "Egyéb információ"
-
-msgid "NewsLocal"
-msgstr "Helyi hírek"
+msgid "Television"
+msgstr ""
 
 msgid "DateTime"
 msgstr "Dátum-óra"
@@ -337,6 +369,120 @@ msgstr "Reklám"
 msgid "Url"
 msgstr "Weblink"
 
+msgid "Other"
+msgstr "Egyéb"
+
+msgid "Stat.Short"
+msgstr ""
+
+msgid "Station"
+msgstr "Rádióadó"
+
+msgid "Now"
+msgstr "Most"
+
+msgid "Next"
+msgstr "Következő"
+
+msgid "...Part"
+msgstr "...rész"
+
+msgid "Host"
+msgstr "Müsorvezető"
+
+msgid "Edit.Staff"
+msgstr "Stáb"
+
+msgid "Frequency"
+msgstr ""
+
+msgid "Homepage"
+msgstr "Honlap"
+
+msgid "Subchnnel"
+msgstr ""
+
+msgid "Phone-Hotline"
+msgstr "Telefonos forródrót"
+
+msgid "Phone-Studio"
+msgstr "Telefon studió"
+
+msgid "Phone-Other"
+msgstr ""
+
+msgid "SMS-Studio"
+msgstr ""
+
+msgid "SMS-Other"
+msgstr ""
+
+msgid "Email_Hotline"
+msgstr "E-mail forródrót"
+
+msgid "Email_Studio"
+msgstr "E-mail studió"
+
+msgid "Email_Other"
+msgstr ""
+
+msgid "MMS_Other"
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Chat-Centre"
+msgstr ""
+
+msgid "Vote-Question"
+msgstr ""
+
+msgid "VoteCentre"
+msgstr ""
+
+msgid "last seen Radiotext"
+msgstr "utoljára vett rádiótext"
+
+msgid "Playlist"
+msgstr "Playlist"
+
+msgid "Time"
+msgstr "Idő"
+
+msgid "Refresh Off"
+msgstr "Frissítés ki"
+
+msgid "Refresh On"
+msgstr "Frissítés be"
+
+msgid "Back"
+msgstr "Vissza"
+
+msgid "Sports"
+msgstr "Sport"
+
+msgid "Stockmarket"
+msgstr "Börze"
+
+msgid "extra Info  since"
+msgstr ""
+
+msgid "RTplus Memory  since"
+msgstr "RTplus innen kezdve"
+
+msgid "Item"
+msgstr ""
+
+msgid "Programme"
+msgstr "Programinfó"
+
+msgid "Interactivity"
+msgstr "Interaktivitás"
+
+msgid "Info"
+msgstr "Egyéb információ"
+
 msgid "Exit"
 msgstr "Kilépés"
 
@@ -345,6 +491,3 @@ msgstr ""
 
 msgid "RTplus-File saved"
 msgstr "RTplus-file elmentve"
-
-#~ msgid "with <0>"
-#~ msgstr "<0> bill."
