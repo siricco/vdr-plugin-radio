@@ -13,6 +13,7 @@
 #include <string>
 #include "getopt.h"
 #include "radioaudio.h"
+#include "radioimage.h"
 #include "radiotools.h"
 #include "radioepg.h"
 #include "inforx.h"
