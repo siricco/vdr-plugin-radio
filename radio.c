@@ -15,6 +15,7 @@
 #include "radioaudio.h"
 #include "radioimage.h"
 #include "radiotextosd.h"
+#include "rtplusosd.h"
 #include "radiotools.h"
 #include "radioepg.h"
 #include "inforx.h"

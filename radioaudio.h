@@ -100,22 +100,6 @@ public:
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
 };
 
-class cRTplusOsd : public cOsdMenu, public cCharSetConv {
-private:
-    int bcount;
-    int helpmode;
-    const char *listtyp[8];
-    const char *btext[8];
-    int rtptyp(const char *btext);
-    void rtp_fileprint(void);
-public:
-    cRTplusOsd(void);
-    virtual ~cRTplusOsd();
-    virtual void Load(void);
-    virtual void Update(void);
-    virtual eOSState ProcessKey(eKeys Key);
-};
-
 class cRTplusList : public cOsdMenu, public cCharSetConv {
 private:
     int typ;

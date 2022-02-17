@@ -66,7 +66,7 @@ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"' \
 ### The object files (add further files here):
 
 OBJS = $(PLUGIN).o radioaudio.o radioskin.o radiotools.o radioepg.o inforx.o rdspatpmt.o radiotmc.o \
-                   radioimage.o rdsreceiver.o radiotextosd.o
+                   radioimage.o rdsreceiver.o radiotextosd.o rtplusosd.o
 ### The main target:
 
 all: $(SOFILE) i18n
