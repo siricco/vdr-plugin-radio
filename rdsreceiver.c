@@ -8,6 +8,7 @@
 #include "rdsreceiver.h"
 #include "radioaudio.h"
 #include "radiotools.h"
+#include "radiotmc.h"
 
 extern bool RdsLogo;
 extern cRadioAudio *RadioAudio;

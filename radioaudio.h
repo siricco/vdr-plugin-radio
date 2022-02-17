@@ -22,6 +22,8 @@ extern char *ConfigDir;
 extern char *DataDir;
 extern char *ReplayFile;
 
+#define RASS_GALMAX 999
+
 //Setup-Params
 extern int S_RtFunc;
 extern int S_StillPic;
@@ -96,39 +98,6 @@ public:
     void DisableRadioTextProcessing();
     void RadiotextDecode(uchar *Data);
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
-};
-
-class cRadioTextOsd : public cOsdObject, public cCharSetConv {
-private:
-    cOsd *osd;
-    cOsd *qosd;
-    cOsd *qiosd;
-    const cFont *ftitel;
-    const cFont *ftext;
-    int fheight;
-    int bheight;
-    eKeys LastKey;
-    cTimeMs osdtimer;
-    void rtp_print(void);
-    bool rtclosed;
-    bool rassclosed;
-    static cBitmap rds, arec, rass, radio;
-    static cBitmap index, marker, page1, pages2, pages3, pages4, pageE;
-    static cBitmap no0, no1, no2, no3, no4, no5, no6, no7, no8, no9, bok;
-public:
-    cRadioTextOsd();
-    ~cRadioTextOsd();
-    virtual void Hide(void);
-    virtual void Show(void);
-    virtual void ShowText(void);
-    virtual void RTOsdClose(void);
-    int RassImage(int QArchiv, int QKey, bool DirUp);
-    virtual void RassOsd(void);
-    virtual void RassOsdTip(void);
-    virtual void RassOsdClose(void);
-    virtual void RassImgSave(const char *size, int pos);
-    virtual eOSState ProcessKey(eKeys Key);
-    virtual bool IsInteractive(void) { return false; }
 };
 
 class cRTplusOsd : public cOsdMenu, public cCharSetConv {
