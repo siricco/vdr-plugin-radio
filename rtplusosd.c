@@ -6,6 +6,7 @@
  */
 
 #include "rtplusosd.h"
+#include "rtpluslist.h"
 #include "radioaudio.h"
 #include "radiotools.h"
 

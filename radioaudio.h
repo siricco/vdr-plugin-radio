@@ -100,19 +100,6 @@ public:
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
 };
 
-class cRTplusList : public cOsdMenu, public cCharSetConv {
-private:
-    int typ;
-    bool refresh;
-public:
-    cRTplusList(int Typ = 0);
-    ~cRTplusList();
-    virtual void Load(void);
-    virtual void Update(void);
-    virtual eOSState ProcessKey(eKeys Key);
-};
-
-
 // Radiotext-Memory RT+Classes 2.1
 enum rtp_class {
     dummy_Class,        // 0
