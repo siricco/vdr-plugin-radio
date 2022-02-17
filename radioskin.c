@@ -330,7 +330,7 @@ int theme_skin(void)
     //printf("vdr-radio: Theme~Skin = %s~%s\n", Setup.OSDTheme, Setup.OSDSkin);
     char *temp;
     int i = 0;
-    
+
     asprintf(&temp, "%s~%s", Setup.OSDTheme, Setup.OSDSkin);
     for (i = eRadioSkinMaxNumber-1; i > 0; i--) {
         if (strstr(temp, radioSkin[i].name) != NULL)

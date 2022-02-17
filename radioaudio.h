@@ -43,8 +43,10 @@ extern uint32_t rt_color[9];
 extern int S_Verbose;
 //Radiotext
 #define RT_MEL 65
-extern char RT_Text[5][RT_MEL];
-extern char RTP_Artist[RT_MEL], RTP_Title[RT_MEL];
+#define RT_ROWS 5
+extern char RT_Text[RT_ROWS][RT_MEL];
+extern char RTP_Artist[RT_MEL], RTP_Title[RT_MEL], RTP_Composer[RT_MEL];
+extern char RTP_Album[RT_MEL], RTP_Conductor[RT_MEL], RTP_Band[RT_MEL];
 extern int RT_Info, RT_Index, RT_PTY;
 extern time_t RTP_Starttime;
 extern bool RT_OsdTO, RTplus_Osd, RT_ReOpen;
@@ -127,7 +129,7 @@ public:
     bool rdsSeen;
     void EnableRadioTextProcessing(const char *Titel, int apid, bool replay = false);
     void DisableRadioTextProcessing();
-    void RadiotextDecode(uchar *Data, int Length);
+    void RadiotextDecode(uchar *Data);
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
 };
 
@@ -168,16 +170,16 @@ class cRTplusOsd : public cOsdMenu, public cCharSetConv {
 private:
     int bcount;
     int helpmode;
-    const char *listtyp[7];
-    char *btext[7];
-    int rtptyp(char *btext);
+    const char *listtyp[8];
+    const char *btext[8];
+    int rtptyp(const char *btext);
     void rtp_fileprint(void);
 public:
     cRTplusOsd(void);
     virtual ~cRTplusOsd();
     virtual void Load(void);
     virtual void Update(void);
-    virtual eOSState ProcessKey(eKeys Key); 
+    virtual eOSState ProcessKey(eKeys Key);
 };
 
 class cRTplusList : public cOsdMenu, public cCharSetConv {
@@ -189,57 +191,140 @@ public:
     ~cRTplusList();
     virtual void Load(void);
     virtual void Update(void);
-    virtual eOSState ProcessKey(eKeys Key); 
+    virtual eOSState ProcessKey(eKeys Key);
 };
 
 
 // Radiotext-Memory RT+Classes 2.1
-#define MAX_RTPC 50
-struct rtp_classes {
-    time_t start;
-    char temptext[RT_MEL];
-    char *radiotext[2*MAX_RTPC];
-    int rt_Index;
+enum rtp_class {
+    dummy_Class,        // 0
     // Item
-    bool item_New;
-    char *item_Title[MAX_RTPC];     // 1
-    char *item_Artist[MAX_RTPC];    // 4    
-    time_t item_Start[MAX_RTPC];
-    int item_Index;
+    item_Title,         // 1
+    item_Album,         // 2
+    item_Track,         // 3
+    item_Artist,        // 4
+    item_Composition,   // 5
+    item_Movement,      // 6
+    item_Conductor,     // 7
+    item_Composer,      // 8
+    item_Band,          // 9
+    item_Comment,       // 10
+    item_Genre,         // 11
     // Info
-    char *info_News;                // 12
-    char *info_NewsLocal;           // 13
-    char *info_Stock[MAX_RTPC];     // 14
-    int info_StockIndex;
-    char *info_Sport[MAX_RTPC];     // 15
-    int info_SportIndex;
-    char *info_Lottery[MAX_RTPC];   // 16
-    int info_LotteryIndex;
-    char *info_DateTime;            // 24
-    char *info_Weather[MAX_RTPC];   // 25
-    int info_WeatherIndex;
-    char *info_Traffic;             // 26
-    char *info_Alarm;               // 27
-    char *info_Advert;              // 28
-    char *info_Url;                 // 29
-    char *info_Other[MAX_RTPC];     // 30
-    int info_OtherIndex;
+    info_News,          // 12
+    info_NewsLocal,     // 13
+    info_Stock,         // 14
+    info_Sport,         // 15
+    info_Lottery,       // 16
+    info_Horoskope,     // 17
+    info_DailyDiversion,// 18
+    info_Health,        // 19
+    info_Event,         // 20
+    info_Scene,         // 21
+    info_Cinema,        // 22
+    info_Tv,            // 23
+    info_DateTime,      // 24
+    info_Weather,       // 25
+    info_Traffic,       // 26
+    info_Alarm,         // 27
+    info_Advert,        // 28
+    info_Url,           // 29
+    info_Other,         // 30
     // Programme
-    char *prog_StatShort;           // 31
-    char *prog_Station;             // 32
-    char *prog_Now;                 // 33
-    char *prog_Next;                // 34
-    char *prog_Part;                // 35
-    char *prog_Host;                // 36
-    char *prog_EditStaff;           // 37
-    char *prog_Homepage;            // 39
+    prog_StatShort,     // 31
+    prog_Station,       // 32
+    prog_Now,           // 33
+    prog_Next,          // 34
+    prog_Part,          // 35
+    prog_Host,          // 36
+    prog_EditStaff,     // 37
+    prog_Frequency,     // 38
+    prog_Homepage,      // 39
+    prog_Subchnnel,     // 40
     // Interactivity
-    char *phone_Hotline;            // 41
-    char *phone_Studio;             // 42
-    char *sms_Studio;               // 44
-    char *email_Hotline;            // 46
-    char *email_Studio;             // 47
-// to be continue...
+    phone_Hotline,      // 41
+    phone_Studio,       // 42
+    phone_Other,        // 43
+    sms_Studio,         // 44
+    sms_Other,          // 45
+    email_Hotline,      // 46
+    email_Studio,       // 47
+    email_Other,        // 48
+    mms_Other,          // 49
+    iact_Chat,          // 50
+    iact_ChatCentre,    // 51
+    iact_VoteQuestion,  // 52
+    iact_VoteCentre     // 53
+    // rfu        54-55
+    // Private    56-58
+    // Descriptor 59-63
+};
+
+extern const char *rtp_class_name[54];
+
+#define RTP_CLASS_ITEM_MIN item_Title
+#define RTP_CLASS_ITEM_MAX item_Genre
+#define IS_ITEM_CLASS(c) ((c) >= RTP_CLASS_ITEM_MIN && (c) <= RTP_CLASS_ITEM_MAX)
+
+#define RTP_CLASS_INFO_MIN info_News
+#define RTP_CLASS_INFO_MAX info_Other
+
+#define RTP_CLASS_PROG_MIN prog_StatShort
+#define RTP_CLASS_PROG_MAX prog_Subchnnel
+
+#define RTP_CLASS_IACT_MIN phone_Hotline
+#define RTP_CLASS_IACT_MAX iact_VoteCentre
+
+#define RTP_CLASS_MAX      iact_VoteCentre
+
+#define MAX_RTPC 50
+struct rt_msg_cache {
+    int index;
+    char Msg[2*MAX_RTPC][RT_MEL];
+};
+
+#define I_MAP(c) (1 << (c))
+#define I_MASK (I_MAP(item_Title) | I_MAP(item_Album) | I_MAP(item_Artist) | I_MAP(item_Conductor) | I_MAP(item_Composer) | I_MAP(item_Band))
+
+struct rtp_item {
+    time_t start;
+    uint32_t itemMap;
+    char Title[RT_MEL];     // 1
+    char Album[RT_MEL];     // 2
+    char Artist[RT_MEL];    // 4
+    char Conductor[RT_MEL]; // 7
+    char Composer[RT_MEL];  // 8
+    char Band[RT_MEL];      // 9
+};
+
+struct rtp_item_cache {
+    int index;
+    uint32_t itemMask;
+    bool running;
+    struct rtp_item Item[MAX_RTPC];
+};
+
+struct rtp_info_cache {
+    int index;
+    time_t start[MAX_RTPC];
+    char Content[MAX_RTPC][RT_MEL];
+};
+
+struct rtp_classes {
+    cMutex rtpMutex;
+    time_t start;
+    struct rt_msg_cache radiotext;
+    //
+    char rtp_class[RTP_CLASS_MAX+1][RT_MEL];
+    //
+    struct rtp_item_cache items;
+    //
+    struct rtp_info_cache info_News;       // 12
+    struct rtp_info_cache info_Stock;      // 14
+    struct rtp_info_cache info_Sport;      // 15
+    struct rtp_info_cache info_Lottery;    // 16
+    struct rtp_info_cache info_Weather;    // 25
+    struct rtp_info_cache info_Other;      // 29
 };
 
 // plugin audiorecorder service

@@ -43,7 +43,7 @@ int epg_kdg(const char *epgdescr, time_t epgstart, time_t epgend);
 #define UMRADIO_TID1 111
 #define UMRADIO_TID2 131
 #define UMRADIO_TID3 141
-#define UMRADIO_TID4 181 
+#define UMRADIO_TID4 181
 #define UMRADIO_TID5 191
 
 // EPG-Info
@@ -51,7 +51,7 @@ int epg_kdg(const char *epgdescr, time_t epgstart, time_t epgend);
 #define UMEPG_ARTIST "Interpret: "
 #define UMEPG_TITEL "Titel: "
 #define UMEPG_ALBUM "Album: "
-#define UMEPG_JAHR "Jahr: "  
+#define UMEPG_JAHR "Jahr: "
 #define UMEPG_WERK "Werk: "
 #define UMEPG_KOMP "Komponist: "
 

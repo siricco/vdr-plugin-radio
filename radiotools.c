@@ -4,7 +4,7 @@
  * See the README file for copyright information and how to reach the author.
  *
  */
- 
+
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
@@ -37,9 +37,7 @@ bool enforce_directory(const char *path)
     }
     else {
         if (!S_ISDIR(sbuf.st_mode)) {
-            esyslog(
-                    "radio: ERROR failed to create directory %s: file exists but is not a directory",
-                    path);
+            esyslog("radio: ERROR failed to create directory %s: file exists but is not a directory", path);
             return false;
         }
     }
@@ -82,7 +80,7 @@ unsigned short crc16_ccitt(unsigned char *daten, int len, bool skipfirst)
 #if crc_timetest
     if (tstart > 0 && gettimeofday(&t, NULL) == 0)
         printf("vdr-radio: crc-calctime = %d usec\n", (int)((t.tv_sec*1000000 + t.tv_usec) - tstart));
-#endif    
+#endif
 
     return ~(crc);
 }
@@ -139,14 +137,14 @@ const char *entitychar[EntityChars] = { "'",        "&",        "\"",      ">", 
                                         "�",        "�",        "�",       "�",        "�",         "�",        "�",      "�",
                                         "�",        "�",        "�",       "�",        "�",         "�",        "�",      "�",
                                         "�",        "�",        "�",       "�",        "�",         "�",        "�",      "�",
-                                        "�",        "�",        "�",       "�",        "�",         "�",        "�",      "�", 
+                                        "�",        "�",        "�",       "�",        "�",         "�",        "�",      "�",
                                         "�",        "�",        "�",       "�",        "�",         "�",        "�",      "�" };
 
 char *rds_entitychar(char *text)
 {
     int i = 0, l, lof, lre, space;
     char *temp;
-    
+
     while (i < EntityChars) {
         if ((temp = strstr(text, entitystr[i])) != NULL) {
             if ((S_Verbose & 0x0f) >= 2)
@@ -183,13 +181,13 @@ const char *xhtmlstr[XhtmlChars]  = {   "&#039;", "&#038;", "&#034;", "&#062;", 
                                         "&#210;", "&#211;", "&#212;", "&#213;", "&#242;", "&#243;", "&#244;", "&#245;",
                                         "&#217;", "&#218;", "&#219;", "&#209;", "&#249;", "&#250;", "&#251;", "&#241;" };
 /*  hex todo:                   "&#x27;", "&#x26;", */
-/*  see *entitychar[] 
+/*  see *entitychar[]
 const char *xhtmlychar[EntityChars] = { "'",    "&",      "\"",     ">",      "<",      "c",      "*",      " ",
                                         "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�",
                                         "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�",
                                         "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�",
                                         "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�",
-                                        "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�", 
+                                        "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�",
                                         "�",    "�",      "�",      "�",      "�",      "�",      "�",      "�" };
 */
 
@@ -232,8 +230,8 @@ char *xhtml2text(char *text)
 
 char *rtrim(char *text)
 {
-    char *s = text + strlen(text) - 1;
-    while (s >= text && (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r')) {
+    uchar *s = (uchar *)text + strlen(text) - 1;
+    while (s >= (uchar *)text && *s <= 0x20) {
         *s-- = 0;
     }
     return text;
@@ -333,7 +331,6 @@ char *audiobitrate(const unsigned char *data)
     else {
         asprintf(&temp, "???");
     }
-
     return temp;
 }
 
@@ -359,7 +356,7 @@ const char *tmc_event[2048] = {
     "..", "..", "..", "..", "..", "..", "..", "..",                 // 10
     "overheight warning system triggered",
     "(Q) accident(s), traffic being directed around accident area",
-    "..", "..", "..", 
+    "..", "..", "..",
     "closed, rescue and recovery work in progress",
     "..", "..", "..",
     "service area overcrowded, drive to another service area",              // 20
@@ -1241,7 +1238,7 @@ const char *tmc_event[2048] = {
     "icy patches (above Q hundred metres)",
     "danger of icy patches (above Q hundred metres)",
     "danger of black ice (above Q hundred metres)",
-    "..", "..",                                     // 1050 
+    "..", "..",                                     // 1050
     "..", "..", "..",
     "slippery due to loose sand on roadway",
     "mud on road. Danger",
@@ -1826,7 +1823,7 @@ const char *tmc_event[2048] = {
     "..", "..", "..", "..", "..", "..", "..", "..",                 // 1990
     "..", "..", "..", "..", "..", "..", "..", "..", "..",
     "closed due to smog alert (until Q)",                       // 2000
-    "..", "..", "..", "..", "..", 
+    "..", "..", "..", "..", "..",
     "closed for vehicles with less than three occupants {not valid for lorries}",
     "closed for vehicles with only one occupant {not valid for lorries}",
     "..", "..", "..",                                   // 2010
@@ -1870,7 +1867,7 @@ const char *tmc_mglabel[16] = {
     "unknown",
 };
 int tmc_mgsize[16] = { 3, 3, 5, 5, 5, 8, 8, 8, 8, 11, 16, 16, 16, 16, 0, 0 };
-    
+
 // TMC, Alert-C Coding
 void tmc_parser(unsigned char *data, int len) {
     static char lastdata[6];
@@ -1907,17 +1904,14 @@ void tmc_parser(unsigned char *data, int len) {
         printf("TMC Multi-Group Message, ");
         if (da == 1) {
             printf("First:\n");
-            printf("    CI: '%d', Direction: %s, Extent: '%d'\n", dp,
-                    tmc_direction[di], ex);
+            printf("    CI: '%d', Direction: %s, Extent: '%d'\n", dp, tmc_direction[di], ex);
             printf("    Event:    '%d' = %s\n", ev, tmc_event[ev]);
             printf("    Location: '%d' > LT not available yet :-(\n", lo);
         }
         else {
             int gsi = (data[2] & 0x30) >> 4;          // GroupSequenceIdentifier
             printf("Subsequent:\n");
-            printf(
-                    "    CI: '%d', 2.GI: '%d', GSI: '%d', Block_0x: '%02x%02x%02x%02x'\n",
-                    dp, di, gsi, data[2] & 0xf, data[3], data[4], data[5]);
+            printf("    CI: '%d', 2.GI: '%d', GSI: '%d', Block_0x: '%02x%02x%02x%02x'\n", dp, di, gsi, data[2] & 0xf, data[3], data[4], data[5]);
             if (di == 0) {
                 printf("    SecondGroupIndicator = 0 -> todo, exit here.\n\n");
                 return;
@@ -1951,8 +1945,7 @@ void tmc_parser(unsigned char *data, int len) {
                         break;
                     case 11:
                     case 13:
-                        printf(", Value '%d' > LT not available yet :-(\n",
-                                val);
+                        printf(", Value '%d' > LT not available yet :-(\n", val);
                         break;
                     case 14:
                     case 15:
@@ -1977,8 +1970,7 @@ void tmc_parser(unsigned char *data, int len) {
         break;
     case 1: // Singlegroup-Message
         printf("TMC Single-Group Message:\n");
-        printf("    Duration: %s, Diversion: '%d', Direction: %s, Extent: '%d'\n",
-                tmc_duration[dp], da, tmc_direction[di], ex);
+        printf("    Duration: %s, Diversion: '%d', Direction: %s, Extent: '%d'\n", tmc_duration[dp], da, tmc_direction[di], ex);
         printf("    Event:    '%d' = %s\n", ev, tmc_event[ev]);
         printf("    Location: '%d' > LT not available yet :-(\n", lo);
         break;
@@ -1987,8 +1979,7 @@ void tmc_parser(unsigned char *data, int len) {
         printf("TMC Tuning/System Information:\n");
         switch (data[1] & 0x0f) {
         case 9:
-            printf("    LTN: '%d', MGS: '%d', SID: '%d' %04x.\n", data[2] >> 2,
-                    (data[2] & 0x03) << 2 | data[3] >> 6, data[3] & 0x3f, lo);
+            printf("    LTN: '%d', MGS: '%d', SID: '%d' %04x.\n", data[2] >> 2, (data[2] & 0x03) << 2 | data[3] >> 6, data[3] & 0x3f, lo);
             break;
         default:
             printf("    todo, exit.\n");
@@ -2031,12 +2022,102 @@ const char* ptynr2string(int nr) {
         return tr("Serious classical");
     case 15:
         return tr("Other music");
-        // 16-30 "Spares"
+    case 16:
+        return tr("Weather");
+    case 17:
+        return tr("Finance");
+    case 18:
+        return tr("Children's programmes");
+    case 19:
+        return tr("Social Affairs");
+    case 20:
+        return tr("Religion");
+    case 21:
+        return tr("Phone In");
+    case 22:
+        return tr("Travel");
+    case 23:
+        return tr("Leisure");
+    case 24:
+        return tr("Jazz Music");
+    case 25:
+        return tr("Country Music");
+    case 26:
+        return tr("National Music");
+    case 27:
+        return tr("Oldies Music");
+    case 28:
+        return tr("Folk Music");
+    case 29:
+        return tr("Documentary");
+    case 30:
+        return tr("Alarm Test");
     case 31:
         return tr("Alarm");
     default:
         return "?";
     }
 }
+
+const char *rtp_class_name[54] {
+    tr("dummy_Class"),   // 0
+    // Item
+    tr("Title"),         // 1
+    tr("Album"),         // 2
+    tr("Track"),         // 3
+    tr("Artist"),        // 4
+    tr("Composition"),   // 5
+    tr("Movement"),      // 6
+    tr("Conductor"),     // 7
+    tr("Composer"),      // 8
+    tr("Band"),          // 9
+    tr("Comment"),       // 10
+    tr("Genre"),         // 11
+    // Info
+    tr("News"),          // 12
+    tr("NewsLocal"),     // 13
+    tr("Stock"),         // 14
+    tr("Sport"),         // 15
+    tr("Lottery"),       // 16
+    tr("Horoskope"),     // 17
+    tr("DailyDiversion"),// 18
+    tr("Health"),        // 19
+    tr("Event"),         // 20
+    tr("Scene"),         // 21
+    tr("Cinema"),        // 22
+    tr("Television"),    // 23
+    tr("DateTime"),      // 24
+    tr("Weather"),       // 25
+    tr("Traffic"),       // 26
+    tr("Alarm"),         // 27
+    tr("Advertising"),   // 28
+    tr("Url"),           // 29
+    tr("Other"),         // 30
+    // Programme
+    tr("Stat.Short"),    // 31
+    tr("Station"),       // 32
+    tr("Now"),           // 33
+    tr("Next"),          // 34
+    tr("...Part"),       // 35
+    tr("Host"),          // 36
+    tr("Edit.Staff"),    // 37
+    tr("Frequency"),     // 38
+    tr("Homepage"),      // 39
+    tr("Subchnnel"),     // 40
+    // Interactivity
+    tr("Phone-Hotline"), // 41
+    tr("Phone-Studio"),  // 42
+    tr("Phone-Other"),   // 43
+    tr("SMS-Studio"),    // 44
+    tr("SMS-Other"),     // 45
+    tr("Email_Hotline"), // 46
+    tr("Email_Studio"),  // 47
+    tr("Email_Other"),   // 48
+    tr("MMS_Other"),     // 49
+    tr("Chat"),          // 50
+    tr("Chat-Centre"),   // 51
+    tr("Vote-Question"), // 52
+    tr("VoteCentre")     // 53
+};
 
 //--------------- End -----------------------------------------------------------------
