@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2022-02-17 23:28+0100\n"
+"POT-Creation-Date: 2022-02-26 19:57+0100\n"
 "PO-Revision-Date: 2007-09-20 15:30+0200\n"
 "Last-Translator: Uwe Hanke <egal@egal-vdr.de>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -15,12 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Hintergr.Bilder/RDS-Text für Radiosender"
-
-msgid "Show RDS-Radiotext"
-msgstr "Zeige RDS-Radiotext"
 
 msgid "Use PlayPes-Function"
 msgstr "PlayPes() Function"
@@ -151,6 +145,12 @@ msgstr "RDSText Rass-Funktion"
 msgid "External Info-Request"
 msgstr "Externe Info-Abfrage"
 
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Hintergr.Bilder/RDS-Text für Radiosender"
+
+msgid "Show RDS-Radiotext"
+msgstr "Zeige RDS-Radiotext"
+
 msgid "ext. Info"
 msgstr "zus. Info"
 
@@ -196,77 +196,11 @@ msgstr "Rass-Bildspeich."
 msgid "Rass-Image failed"
 msgstr "Rass-Bildspeicherfehler"
 
-msgid "Playlist"
-msgstr "Titelliste"
+msgid "unknown program type"
+msgstr "Unbekannte Programmart"
 
 msgid "News"
 msgstr "Nachrichten"
-
-msgid "Sports"
-msgstr "Sport"
-
-msgid "Lottery"
-msgstr "Lotterie"
-
-msgid "Weather"
-msgstr "Wetter"
-
-msgid "Stockmarket"
-msgstr "Bösenkurse"
-
-msgid "Other"
-msgstr "Sonstiges"
-
-msgid "extra Info  since"
-msgstr "zusätzl. Info  seit"
-
-msgid "RTplus Memory  since"
-msgstr "RTplus Speicher  seit"
-
-msgid "Item"
-msgstr ""
-
-msgid "Programme"
-msgstr "Pogramminfo"
-
-msgid "Interactivity"
-msgstr "Interaktiv (tu' was :)"
-
-msgid "Info"
-msgstr "weitere Information"
-
-msgid "Exit"
-msgstr "Beenden"
-
-msgid "Info-File saved"
-msgstr "Info-Datei gespeichert"
-
-msgid "RTplus-File saved"
-msgstr "RTplus-Datei gespeichert"
-
-msgid "last seen Radiotext"
-msgstr "die letzten Radiotexte"
-
-msgid "Time"
-msgstr "Zeit"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "Artist"
-msgstr "Interpret"
-
-msgid "Refresh Off"
-msgstr "Aktualis. Aus"
-
-msgid "Refresh On"
-msgstr "Aktualis. Ein"
-
-msgid "Back"
-msgstr "Zurück"
-
-msgid "unknown program type"
-msgstr "Unbekannte Programmart"
 
 msgid "Current affairs"
 msgstr "Aktuelles"
@@ -309,6 +243,9 @@ msgstr "Ernste Klassik"
 
 msgid "Other music"
 msgstr "Sonstige Musik"
+
+msgid "Weather"
+msgstr "Wetter"
 
 msgid "Finance"
 msgstr ""
@@ -358,11 +295,17 @@ msgstr "Alarm (!)"
 msgid "dummy_Class"
 msgstr ""
 
+msgid "Title"
+msgstr "Titel"
+
 msgid "Album"
 msgstr ""
 
 msgid "Track"
 msgstr ""
+
+msgid "Artist"
+msgstr "Interpret"
 
 msgid "Composition"
 msgstr ""
@@ -390,6 +333,9 @@ msgstr "Nachricht.Lokal"
 
 msgid "Stock"
 msgstr ""
+
+msgid "Lottery"
+msgstr "Lotterie"
 
 msgid "Horoskope"
 msgstr ""
@@ -423,6 +369,9 @@ msgstr "Hinweis/Reklame"
 
 msgid "Url"
 msgstr "Url/Webseite"
+
+msgid "Other"
+msgstr "Sonstiges"
 
 msgid "Stat.Short"
 msgstr "Sender kurz"
@@ -492,3 +441,54 @@ msgstr ""
 
 msgid "VoteCentre"
 msgstr ""
+
+msgid "last seen Radiotext"
+msgstr "die letzten Radiotexte"
+
+msgid "Playlist"
+msgstr "Titelliste"
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "Refresh Off"
+msgstr "Aktualis. Aus"
+
+msgid "Refresh On"
+msgstr "Aktualis. Ein"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Sports"
+msgstr "Sport"
+
+msgid "Stockmarket"
+msgstr "Bösenkurse"
+
+msgid "extra Info  since"
+msgstr "zusätzl. Info  seit"
+
+msgid "RTplus Memory  since"
+msgstr "RTplus Speicher  seit"
+
+msgid "Item"
+msgstr ""
+
+msgid "Programme"
+msgstr "Pogramminfo"
+
+msgid "Interactivity"
+msgstr "Interaktiv (tu' was :)"
+
+msgid "Info"
+msgstr "weitere Information"
+
+msgid "Exit"
+msgstr "Beenden"
+
+msgid "Info-File saved"
+msgstr "Info-Datei gespeichert"
+
+msgid "RTplus-File saved"
+msgstr "RTplus-Datei gespeichert"

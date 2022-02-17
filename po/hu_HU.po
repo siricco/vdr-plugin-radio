@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2022-02-17 23:28+0100\n"
+"POT-Creation-Date: 2022-02-26 19:57+0100\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Füley István\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -14,12 +14,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Rádió háttérkép/RDS-Text"
-
-msgid "Show RDS-Radiotext"
-msgstr "RDS-Text megjelenítése"
 
 msgid "Use PlayPes-Function"
 msgstr ""
@@ -150,6 +144,12 @@ msgstr "RDS Rass funkció"
 msgid "External Info-Request"
 msgstr ""
 
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Rádió háttérkép/RDS-Text"
+
+msgid "Show RDS-Radiotext"
+msgstr "RDS-Text megjelenítése"
+
 msgid "ext. Info"
 msgstr ""
 
@@ -195,77 +195,11 @@ msgstr "Rass-Kép elmentve."
 msgid "Rass-Image failed"
 msgstr "Sikertelen Rass-Kép mentés"
 
-msgid "Playlist"
-msgstr "Playlist"
+msgid "unknown program type"
+msgstr "ismeretlen adástipus"
 
 msgid "News"
 msgstr "Hírek"
-
-msgid "Sports"
-msgstr "Sport"
-
-msgid "Lottery"
-msgstr "Lottó"
-
-msgid "Weather"
-msgstr "Időjárás"
-
-msgid "Stockmarket"
-msgstr "Börze"
-
-msgid "Other"
-msgstr "Egyéb"
-
-msgid "extra Info  since"
-msgstr ""
-
-msgid "RTplus Memory  since"
-msgstr "RTplus innen kezdve"
-
-msgid "Item"
-msgstr ""
-
-msgid "Programme"
-msgstr "Programinfó"
-
-msgid "Interactivity"
-msgstr "Interaktivitás"
-
-msgid "Info"
-msgstr "Egyéb információ"
-
-msgid "Exit"
-msgstr "Kilépés"
-
-msgid "Info-File saved"
-msgstr ""
-
-msgid "RTplus-File saved"
-msgstr "RTplus-file elmentve"
-
-msgid "last seen Radiotext"
-msgstr "utoljára vett rádiótext"
-
-msgid "Time"
-msgstr "Idő"
-
-msgid "Title"
-msgstr "Cím"
-
-msgid "Artist"
-msgstr "Előadó"
-
-msgid "Refresh Off"
-msgstr "Frissítés ki"
-
-msgid "Refresh On"
-msgstr "Frissítés be"
-
-msgid "Back"
-msgstr "Vissza"
-
-msgid "unknown program type"
-msgstr "ismeretlen adástipus"
 
 msgid "Current affairs"
 msgstr "aktuális"
@@ -308,6 +242,9 @@ msgstr "komolyzene"
 
 msgid "Other music"
 msgstr "egyéb zene"
+
+msgid "Weather"
+msgstr "Időjárás"
 
 msgid "Finance"
 msgstr ""
@@ -357,11 +294,17 @@ msgstr "Riasztó"
 msgid "dummy_Class"
 msgstr ""
 
+msgid "Title"
+msgstr "Cím"
+
 msgid "Album"
 msgstr ""
 
 msgid "Track"
 msgstr ""
+
+msgid "Artist"
+msgstr "Előadó"
 
 msgid "Composition"
 msgstr ""
@@ -389,6 +332,9 @@ msgstr "Helyi hírek"
 
 msgid "Stock"
 msgstr ""
+
+msgid "Lottery"
+msgstr "Lottó"
 
 msgid "Horoskope"
 msgstr ""
@@ -422,6 +368,9 @@ msgstr "Reklám"
 
 msgid "Url"
 msgstr "Weblink"
+
+msgid "Other"
+msgstr "Egyéb"
 
 msgid "Stat.Short"
 msgstr ""
@@ -491,3 +440,54 @@ msgstr ""
 
 msgid "VoteCentre"
 msgstr ""
+
+msgid "last seen Radiotext"
+msgstr "utoljára vett rádiótext"
+
+msgid "Playlist"
+msgstr "Playlist"
+
+msgid "Time"
+msgstr "Idő"
+
+msgid "Refresh Off"
+msgstr "Frissítés ki"
+
+msgid "Refresh On"
+msgstr "Frissítés be"
+
+msgid "Back"
+msgstr "Vissza"
+
+msgid "Sports"
+msgstr "Sport"
+
+msgid "Stockmarket"
+msgstr "Börze"
+
+msgid "extra Info  since"
+msgstr ""
+
+msgid "RTplus Memory  since"
+msgstr "RTplus innen kezdve"
+
+msgid "Item"
+msgstr ""
+
+msgid "Programme"
+msgstr "Programinfó"
+
+msgid "Interactivity"
+msgstr "Interaktivitás"
+
+msgid "Info"
+msgstr "Egyéb információ"
+
+msgid "Exit"
+msgstr "Kilépés"
+
+msgid "Info-File saved"
+msgstr ""
+
+msgid "RTplus-File saved"
+msgstr "RTplus-file elmentve"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2022-02-17 23:28+0100\n"
+"POT-Creation-Date: 2022-02-26 19:57+0100\n"
 "PO-Revision-Date: 2007-09-14 16:12+0200\n"
 "Last-Translator: Michaël Nival, Patrice Staudt\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -14,12 +14,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "Radio Background-Image/RDS-Text"
-msgstr "Image de fond pour les radio/RDS-Texte"
-
-msgid "Show RDS-Radiotext"
-msgstr "Afficher RDS"
 
 msgid "Use PlayPes-Function"
 msgstr ""
@@ -150,6 +144,12 @@ msgstr "Fonction Rass de RDSTexte"
 msgid "External Info-Request"
 msgstr "Demande d'infos externe"
 
+msgid "Radio Background-Image/RDS-Text"
+msgstr "Image de fond pour les radio/RDS-Texte"
+
+msgid "Show RDS-Radiotext"
+msgstr "Afficher RDS"
+
 msgid "ext. Info"
 msgstr "Infos externe"
 
@@ -195,77 +195,11 @@ msgstr "Rass-Image sauvegarder"
 msgid "Rass-Image failed"
 msgstr "Rass-Image erreur"
 
-msgid "Playlist"
-msgstr "Playlist"
+msgid "unknown program type"
+msgstr "Type de programme inconnu"
 
 msgid "News"
 msgstr "Informations"
-
-msgid "Sports"
-msgstr "Sports"
-
-msgid "Lottery"
-msgstr "Loterie"
-
-msgid "Weather"
-msgstr "Météo"
-
-msgid "Stockmarket"
-msgstr "Bourse"
-
-msgid "Other"
-msgstr "Autre"
-
-msgid "extra Info  since"
-msgstr "Info extern depuis"
-
-msgid "RTplus Memory  since"
-msgstr "Mémoire de RTplus depuis"
-
-msgid "Item"
-msgstr ""
-
-msgid "Programme"
-msgstr "Programme"
-
-msgid "Interactivity"
-msgstr "Interactivité"
-
-msgid "Info"
-msgstr "D'autres informations"
-
-msgid "Exit"
-msgstr "Sortir"
-
-msgid "Info-File saved"
-msgstr "Sauvegarde du fichier inf"
-
-msgid "RTplus-File saved"
-msgstr "Sauvé fichier TTplus"
-
-msgid "last seen Radiotext"
-msgstr "Dernier Radio-texte"
-
-msgid "Time"
-msgstr "Temps"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Artist"
-msgstr "Artiste"
-
-msgid "Refresh Off"
-msgstr "Arrêter actualisation"
-
-msgid "Refresh On"
-msgstr "Démarrer actualisation"
-
-msgid "Back"
-msgstr "Retour"
-
-msgid "unknown program type"
-msgstr "Type de programme inconnu"
 
 msgid "Current affairs"
 msgstr "Affaires courantes"
@@ -308,6 +242,9 @@ msgstr "Classique sérieux"
 
 msgid "Other music"
 msgstr "Autre musique"
+
+msgid "Weather"
+msgstr "Météo"
 
 msgid "Finance"
 msgstr ""
@@ -357,11 +294,17 @@ msgstr "Alarme"
 msgid "dummy_Class"
 msgstr ""
 
+msgid "Title"
+msgstr "Titre"
+
 msgid "Album"
 msgstr ""
 
 msgid "Track"
 msgstr ""
+
+msgid "Artist"
+msgstr "Artiste"
 
 msgid "Composition"
 msgstr ""
@@ -389,6 +332,9 @@ msgstr "Information local"
 
 msgid "Stock"
 msgstr ""
+
+msgid "Lottery"
+msgstr "Loterie"
 
 msgid "Horoskope"
 msgstr ""
@@ -422,6 +368,9 @@ msgstr "Publicité"
 
 msgid "Url"
 msgstr "Url"
+
+msgid "Other"
+msgstr "Autre"
 
 msgid "Stat.Short"
 msgstr ""
@@ -491,3 +440,54 @@ msgstr ""
 
 msgid "VoteCentre"
 msgstr ""
+
+msgid "last seen Radiotext"
+msgstr "Dernier Radio-texte"
+
+msgid "Playlist"
+msgstr "Playlist"
+
+msgid "Time"
+msgstr "Temps"
+
+msgid "Refresh Off"
+msgstr "Arrêter actualisation"
+
+msgid "Refresh On"
+msgstr "Démarrer actualisation"
+
+msgid "Back"
+msgstr "Retour"
+
+msgid "Sports"
+msgstr "Sports"
+
+msgid "Stockmarket"
+msgstr "Bourse"
+
+msgid "extra Info  since"
+msgstr "Info extern depuis"
+
+msgid "RTplus Memory  since"
+msgstr "Mémoire de RTplus depuis"
+
+msgid "Item"
+msgstr ""
+
+msgid "Programme"
+msgstr "Programme"
+
+msgid "Interactivity"
+msgstr "Interactivité"
+
+msgid "Info"
+msgstr "D'autres informations"
+
+msgid "Exit"
+msgstr "Sortir"
+
+msgid "Info-File saved"
+msgstr "Sauvegarde du fichier inf"
+
+msgid "RTplus-File saved"
+msgstr "Sauvé fichier TTplus"
