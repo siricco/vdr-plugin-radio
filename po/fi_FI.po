@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2018-02-19 13:55+0100\n"
+"POT-Creation-Date: 2022-02-17 23:28+0100\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -16,168 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "ext. Info"
-msgstr ""
-
-msgid "RTplus"
-msgstr "RTplus"
-
-msgid "Radiotext"
-msgstr "Radioteksti"
-
-msgid "  [waiting ...]"
-msgstr "  [odota ...]"
-
-msgid "Title :"
-msgstr "Kappale :"
-
-msgid "Artist :"
-msgstr "Esittäjä :"
-
-msgid "Records"
-msgstr "Rass-tallenteet"
-
-msgid "Rass-Image(s) saved from Archiv "
-msgstr ""
-
-msgid "Rass-Image(s) saved from Gallery"
-msgstr ""
-
-msgid "Rass-Image saved"
-msgstr ""
-
-msgid "Rass-Image failed"
-msgstr ""
-
-msgid "Playlist"
-msgstr "Soittolista"
-
-msgid "Sports"
-msgstr "Urheilu"
-
-msgid "Lottery"
-msgstr "Arvonta"
-
-msgid "Weather"
-msgstr "Sää"
-
-msgid "Stockmarket"
-msgstr "Pörssikurssit"
-
-msgid "Other"
-msgstr "Sekalaiset"
-
-msgid "extra Info  since"
-msgstr ""
-
-msgid "RTplus Memory  since"
-msgstr "RTplus-muisti  alkaen"
-
-msgid "Programme"
-msgstr "Ohjelma"
-
-msgid "Stat.Short"
-msgstr ""
-
-msgid "Station"
-msgstr "Asema"
-
-msgid "Now"
-msgstr "Nyt"
-
-msgid "...Part"
-msgstr "...osa"
-
-msgid "Next"
-msgstr "Seuraavaksi"
-
-msgid "Host"
-msgstr "Juontaja"
-
-msgid "Edit.Staff"
-msgstr "Henkilökunta"
-
-msgid "Homepage"
-msgstr "Kotisivu"
-
-msgid "Interactivity"
-msgstr "Interaktiivinen"
-
-msgid "Phone-Hotline"
-msgstr "Suoralinja puhelimelle"
-
-msgid "Phone-Studio"
-msgstr "Puhelin studioon"
-
-#, fuzzy
-msgid "SMS-Studio"
-msgstr "Puhelin studioon"
-
-msgid "Email-Hotline"
-msgstr "Suoralinja sähköpostille"
-
-msgid "Email-Studio"
-msgstr "Sähköposti studioon"
-
-msgid "Info"
-msgstr "Lisätiedot"
-
-msgid "News"
-msgstr "Uutiset"
-
-msgid "NewsLocal"
-msgstr "Paikallisuutiset"
-
-msgid "DateTime"
-msgstr "Ajankohtaista"
-
-msgid "Traffic"
-msgstr "Liikenne"
-
-msgid "Alarm"
-msgstr "Hälytys"
-
-msgid "Advertising"
-msgstr "Mainos"
-
-msgid "Url"
-msgstr "Linkki"
-
-msgid "Exit"
-msgstr "Lopeta"
-
-msgid "Info-File saved"
-msgstr ""
-
-msgid "RTplus-File saved"
-msgstr "RTplus-tiedosto tallennettu"
-
-msgid "last seen Radiotext"
-msgstr "viimeksi nähty radioteksti"
-
-msgid "Time"
-msgstr "Kellonaika"
-
-msgid "Title"
-msgstr "Kappale"
-
-msgid "Artist"
-msgstr "Esittäjä"
-
-msgid "Refresh Off"
-msgstr "Älä päivitä"
-
-msgid "Refresh On"
-msgstr "Päivitä"
-
-msgid "Back"
-msgstr "Takaisin"
-
 msgid "Radio Background-Image/RDS-Text"
 msgstr "Taustakuva ja RDS-teksti radiokanaville"
 
 msgid "Show RDS-Radiotext"
 msgstr "Näytä RDS-teksti"
+
+msgid "Use PlayPes-Function"
+msgstr ""
+
+msgid "Use StillPicture-Function"
+msgstr ""
 
 msgid "Off"
 msgstr "pois"
@@ -251,7 +100,7 @@ msgstr "Teksti ja Rass"
 msgid "Activate"
 msgstr "Aktiivinen"
 
-msgid "Use StillPicture-Function"
+msgid "StillPicture"
 msgstr ""
 
 msgid "Hide MainMenuEntry"
@@ -302,6 +151,120 @@ msgstr "Käytä RDS-tekstin Rass-toimintoa"
 msgid "External Info-Request"
 msgstr ""
 
+msgid "ext. Info"
+msgstr ""
+
+msgid "RTplus"
+msgstr "RTplus"
+
+msgid "Radiotext"
+msgstr "Radioteksti"
+
+msgid "  [waiting ...]"
+msgstr "  [odota ...]"
+
+msgid "Composer :"
+msgstr ""
+
+msgid "Conductor :"
+msgstr ""
+
+msgid "Band :"
+msgstr ""
+
+msgid "Album :"
+msgstr ""
+
+msgid "Artist :"
+msgstr "Esittäjä :"
+
+msgid "Title :"
+msgstr "Kappale :"
+
+msgid "Records"
+msgstr "Rass-tallenteet"
+
+msgid "Rass-Image(s) saved from Archiv "
+msgstr ""
+
+msgid "Rass-Image(s) saved from Gallery"
+msgstr ""
+
+msgid "Rass-Image saved"
+msgstr ""
+
+msgid "Rass-Image failed"
+msgstr ""
+
+msgid "Playlist"
+msgstr "Soittolista"
+
+msgid "News"
+msgstr "Uutiset"
+
+msgid "Sports"
+msgstr "Urheilu"
+
+msgid "Lottery"
+msgstr "Arvonta"
+
+msgid "Weather"
+msgstr "Sää"
+
+msgid "Stockmarket"
+msgstr "Pörssikurssit"
+
+msgid "Other"
+msgstr "Sekalaiset"
+
+msgid "extra Info  since"
+msgstr ""
+
+msgid "RTplus Memory  since"
+msgstr "RTplus-muisti  alkaen"
+
+msgid "Item"
+msgstr ""
+
+msgid "Programme"
+msgstr "Ohjelma"
+
+msgid "Interactivity"
+msgstr "Interaktiivinen"
+
+msgid "Info"
+msgstr "Lisätiedot"
+
+msgid "Exit"
+msgstr "Lopeta"
+
+msgid "Info-File saved"
+msgstr ""
+
+msgid "RTplus-File saved"
+msgstr "RTplus-tiedosto tallennettu"
+
+msgid "last seen Radiotext"
+msgstr "viimeksi nähty radioteksti"
+
+msgid "Time"
+msgstr "Kellonaika"
+
+msgid "Title"
+msgstr "Kappale"
+
+msgid "Artist"
+msgstr "Esittäjä"
+
+msgid "Refresh Off"
+msgstr "Älä päivitä"
+
+msgid "Refresh On"
+msgstr "Päivitä"
+
+msgid "Back"
+msgstr "Takaisin"
+
 msgid "unknown program type"
 msgstr "tuntematon ohjelmatyyppi"
 
@@ -347,5 +310,185 @@ msgstr "klassista"
 msgid "Other music"
 msgstr "musiikkia"
 
-#~ msgid "with <0>"
-#~ msgstr "'0'-näppäimellä"
+msgid "Finance"
+msgstr ""
+
+msgid "Children's programmes"
+msgstr ""
+
+msgid "Social Affairs"
+msgstr ""
+
+msgid "Religion"
+msgstr ""
+
+msgid "Phone In"
+msgstr ""
+
+msgid "Travel"
+msgstr ""
+
+msgid "Leisure"
+msgstr ""
+
+msgid "Jazz Music"
+msgstr ""
+
+msgid "Country Music"
+msgstr ""
+
+msgid "National Music"
+msgstr ""
+
+msgid "Oldies Music"
+msgstr ""
+
+msgid "Folk Music"
+msgstr ""
+
+msgid "Documentary"
+msgstr ""
+
+msgid "Alarm Test"
+msgstr ""
+
+msgid "Alarm"
+msgstr "Hälytys"
+
+msgid "dummy_Class"
+msgstr ""
+
+msgid "Album"
+msgstr ""
+
+msgid "Track"
+msgstr ""
+
+msgid "Composition"
+msgstr ""
+
+msgid "Movement"
+msgstr ""
+
+msgid "Conductor"
+msgstr ""
+
+msgid "Composer"
+msgstr ""
+
+msgid "Band"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Genre"
+msgstr ""
+
+msgid "NewsLocal"
+msgstr "Paikallisuutiset"
+
+msgid "Stock"
+msgstr ""
+
+msgid "Horoskope"
+msgstr ""
+
+msgid "DailyDiversion"
+msgstr ""
+
+msgid "Health"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Scene"
+msgstr ""
+
+msgid "Cinema"
+msgstr ""
+
+msgid "Television"
+msgstr ""
+
+msgid "DateTime"
+msgstr "Ajankohtaista"
+
+msgid "Traffic"
+msgstr "Liikenne"
+
+msgid "Advertising"
+msgstr "Mainos"
+
+msgid "Url"
+msgstr "Linkki"
+
+msgid "Stat.Short"
+msgstr ""
+
+msgid "Station"
+msgstr "Asema"
+
+msgid "Now"
+msgstr "Nyt"
+
+msgid "Next"
+msgstr "Seuraavaksi"
+
+msgid "...Part"
+msgstr "...osa"
+
+msgid "Host"
+msgstr "Juontaja"
+
+msgid "Edit.Staff"
+msgstr "Henkilökunta"
+
+msgid "Frequency"
+msgstr ""
+
+msgid "Homepage"
+msgstr "Kotisivu"
+
+msgid "Subchnnel"
+msgstr ""
+
+msgid "Phone-Hotline"
+msgstr "Suoralinja puhelimelle"
+
+msgid "Phone-Studio"
+msgstr "Puhelin studioon"
+
+msgid "Phone-Other"
+msgstr ""
+
+msgid "SMS-Studio"
+msgstr ""
+
+msgid "SMS-Other"
+msgstr ""
+
+msgid "Email_Hotline"
+msgstr "Suoralinja sähköpostille"
+
+msgid "Email_Studio"
+msgstr "Sähköposti studioon"
+
+msgid "Email_Other"
+msgstr ""
+
+msgid "MMS_Other"
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Chat-Centre"
+msgstr ""
+
+msgid "Vote-Question"
+msgstr ""
+
+msgid "VoteCentre"
+msgstr ""
