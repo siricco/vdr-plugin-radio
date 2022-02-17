@@ -9,6 +9,7 @@
 #include <vdr/status.h>
 #include <vdr/plugin.h>
 #include "radioaudio.h"
+#include "radiotmc.h"
 #include "radioskin.h"
 #include "radiotools.h"
 #include "service.h"
