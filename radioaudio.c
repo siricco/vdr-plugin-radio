@@ -78,6 +78,17 @@ void radioStatusMsg(void) {
 
 // --- cRadioAudio -------------------------------------------------------------
 
+bool cRadioAudio::CrcOk(uchar *data) {
+        // crc16-check
+        int msglen = data[4] + 4;
+        unsigned short crc16 = crc16_ccitt(data, msglen, true);
+        unsigned short exp = (data[msglen+1] << 8) + data[msglen + 2];
+        if ((crc16 != exp) && ((S_Verbose & 0x0f) >= 1)) {
+            printf("Wrong CRC # calc = %04x <> transmit = %04x Len %d\n", crc16, exp, msglen);
+        }
+        return (crc16 == exp);
+}
+
 cRadioAudio::cRadioAudio() :
         cAudio(), enabled(false), first_packets(0), audiopid(0),
         rdsdevice(NULL), bitrate(NULL), rdsSeen(false), maxRdsChunkIndex(RDS_CHUNKSIZE - 1) {
@@ -269,11 +280,9 @@ void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
                         }
                     } else {
                         // crc16-check
-                        unsigned short crc16 = crc16_ccitt(mtext, index - 3, true);
-                        if (crc16
-                                != (mtext[index - 2] << 8) + mtext[index - 1]) {
+                        if (!CrcOk(mtext)) {
                             if ((S_Verbose & 0x0f) >= 1) {
-                                printf("RDS-Error(PES): wrong CRC # calc = %04x <> transmit = %02x%02x\n", crc16, mtext[index - 2], mtext[index - 1]);
+                                printf("radioaudio: RDS-Error(PES): wrong\n");
                             }
                         } else {
                             switch (mec) {
@@ -737,11 +746,9 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                     dsyslog("RDS-Error(TS): too short: %d -> garbage ?", index);
                 }
             } else if (mec > 0) {
-                // crc16-check
-                unsigned short crc16 = crc16_ccitt(mtext, index - 3, 1);
-                if (crc16 != (mtext[index - 2] << 8) + mtext[index - 1]) {
+                if (!CrcOk(mtext)) {
                     if ((S_Verbose & 0x0f) >= 1) {
-                        dsyslog("RDS-Error(TS): wrong CRC # calc = %04x <> transmit = %02x%02x\n", crc16, mtext[index - 2], mtext[index - 1]);
+                        dsyslog("radioaudio: RDS-Error(TS): wrong CRC\n");
                     }
                 } else {
                     switch (mec) {

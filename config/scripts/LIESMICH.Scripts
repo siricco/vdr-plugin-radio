@@ -2,12 +2,12 @@ vdr-radio plugin: externe script-files
 --------------------------------------
 
 Externe Script- oder Programm-Files haben die Funktion, falls im plugin-Setup
-aktiviert (Externe Info-Abfrage = ja), fehlende Songinfos über externe Quellen 
+aktiviert (Externe Info-Abfrage = ja), fehlende Songinfos Ã¼ber externe Quellen 
 wie Internetabfragen zu holen.
 
-Das Script/Programm muß hierfür im Plugin-Config-Verzeichnis existieren
+Das Script/Programm muÃŸ hierfÃ¼r im Plugin-Config-Verzeichnis existieren
 ($VDRCONFIG/plugins/radio, beachte auch plugin-Startparameter '-f <DIR>'),
-für den vdr ausführbar sein und die folgende Namenssyntax aufweisen:
+fÃ¼r den vdr ausfÃ¼hrbar sein und die folgende Namenssyntax aufweisen:
 
   radioinfo-TID-APID
   (wobei TID = channel-TID, APID = 1.AudioPid entspr. der vdr channels.conf)
@@ -26,7 +26,7 @@ bei leeren Informationen ein "Error, no Songinfo" im OSD angezeigt wird.
 
 
 Folgende Script-Beispiele (www-Abfragen) werden mitgeliefert
-(die Programme bash/wget/grep sowie teilw. tail/tac/iconv werden benötigt):
+(die Programme bash/wget/grep sowie teilw. tail/tac/iconv werden benÃ¶tigt):
 
  [Astra 19.2]
   - Rockantenne			= radioinfo-7-304
@@ -36,7 +36,6 @@ Folgende Script-Beispiele (www-Abfragen) werden mitgeliefert
   - ffn digital			= radioinfo-1113-354
   - Hit Radio FFH		= radioinfo-1113-1024
   - planet radio		= radioinfo-1113-1030
-  - harmony.fm			= radioinfo-1113-1036
   - oe3 orf				= radioinfo-1115-433
   - Truckradio			= radioinfo-1115-442
   - MDR Jump			= radioinfo-1093-541
@@ -54,9 +53,11 @@ Folgende Script-Beispiele (www-Abfragen) werden mitgeliefert
  [Astra 23.5]
   - Truckradio			= radioinfo-15027-5120
 
+Removed:
+#   - harmony.fm			= radioinfo-1113-1036
 
-Weitere erfolgreich getestete Scripte werden gerne übernommen :-)
+Weitere erfolgreich getestete Scripte werden gerne Ã¼bernommen :-)
+Ulrich Eckhardt  <uli-vdr@uli-eckhardt.de>
 
-
-Viel Spaß...
+Viel SpaÃŸ...
 Uwe <egal at egal-vdr dot de>

@@ -79,6 +79,7 @@ private:
     bool RadiotextParseTS(const uchar *RdsData, int RdsLen);
     void AudioRecorderService(void);
     void RassDecode(uchar *Data, int Length);
+    bool CrcOk(uchar *data);
 protected:
     virtual void Play(const uchar *Data, int Length, uchar Id);
     virtual void PlayTs(const uchar *Data, int Length);

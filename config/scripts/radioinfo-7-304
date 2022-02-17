@@ -7,13 +7,13 @@ Name="Rockantenne [www.rockantenne.de]"
 ### 
 
 # get...
-wget -q --tries=2 --timeout=5 -O /tmp/playlist.utf8 "http://www.rockantenne.de/webplayer/#playlist"
+wget -q --tries=2 --timeout=5 -O /tmp/playlist.utf8 "http://www.rockantenne.de/musik/song-suche"
 iconv -c -s -f UTF8 -t ISO8859-1 /tmp/playlist.utf8 -o /tmp/playlist
 
 # last Artist/Title
-all=`grep -m1 -A4 'Rock Nonstop' /tmp/playlist`
-all=${all//*$'class="artist">'/}; artist=${all/$'</span>'*/}
-title=${all/*$'class="title">'/}; title=${title/$'</span>'*/}
+all=`grep -m1 -A2 '<h2 class="song_title">' /tmp/playlist`
+artist=${all//*$'class="artist"'/}; artist=${artist//*$'">'/}; artist=${artist/$'</a>'*/}
+title=${all//*$'title="'/}; title=${title/$'">'*/}
 # temp. no Info
 artist=${artist:='---'}; title=${title:='---'}
 

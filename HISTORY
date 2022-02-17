@@ -1,5 +1,10 @@
 VDR Plugin 'radio' Revision History
 -----------------------------------
+2018-07-15: Version 1.xx
+            Ulrich Eckhardt  <uli-vdr@uli-eckhardt.de>
+- Better CRC check (should help on Harmony FM).
+- Code cleanups.
+
 2018-02-23: Version 1.1.0
             Ulrich Eckhardt  <uli-vdr@uli-eckhardt.de>
 - Enhancements for osd2web by Jörg Wendel

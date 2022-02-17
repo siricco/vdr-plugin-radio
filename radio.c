@@ -185,37 +185,37 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
     while ((c = getopt_long(argc, argv, "f:d:l:r:e:v:", long_options, NULL)) != -1) {
     switch (c) {
         case 'f':
-                printf("vdr-radio: arg files-dir = %s\n", optarg);
+                isyslog("vdr-radio: arg files-dir = %s", optarg);
                 ConfigDir = strdup(optarg);
                 ConfigDirParam = true;
                 break;
         case 'd':
-                printf("vdr-radio: arg data-dir = %s\n", optarg);
+                isyslog("vdr-radio: arg data-dir = %s", optarg);
                 DataDir = strdup(optarg);
                 DataDirParam = true;
                 break;
         case 'l':
-                printf("vdr-radio: arg live-mpeg = %s\n", optarg);
+                isyslog("vdr-radio: arg live-mpeg = %s", optarg);
                 LiveFile = strdup(optarg);
                 LiveFileParam = true;
                 break;
         case 'r':
-                printf("vdr-radio: arg replay-mpeg = %s\n", optarg);
+                isyslog("vdr-radio: arg replay-mpeg = %s", optarg);
                 ReplayFile = strdup(optarg);
                 ReplayFileParam = true;
                 break;
         case 'v':
-                printf("vdr-radio: arg verbose = %s\n", optarg);
+                isyslog("vdr-radio: arg verbose = %s", optarg);
                 if (isnumber(optarg))
                     S_Verbose = atoi(optarg);
                 break;
         case 'e':
-                printf("vdr-radio: arg encrypted = %s\n", optarg);
+                isyslog("vdr-radio: arg encrypted = %s", optarg);
                 if (isnumber(optarg))
                     S_Encrypted = atoi(optarg);
                 break;
         default:
-                printf("vdr-radio: arg char = %c\n", c);
+                isyslog("vdr-radio: arg char = %c", c);
                 return false;
         }
     }
@@ -226,7 +226,7 @@ bool cPluginRadio::ProcessArgs(int argc, char *argv[])
 bool cPluginRadio::Start(void)
 {
     // Start any background activities the plugin shall perform.
-    printf("vdr-radio: Radio-Plugin Backgr.Image/RDS-Text starts...\n");
+    isyslog("vdr-radio: Radio-Plugin Backgr.Image/RDS-Text starts...");
 
     radioImage = new cRadioImage;
     if (!radioImage)

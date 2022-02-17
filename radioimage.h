@@ -10,7 +10,7 @@
 
 #include <vdr/thread.h>
 
-// seperate thread for showing RadioImages
+// Separate thread for showing RadioImages
 class cRadioImage: public cThread {
 private:
     char *imagepath;
