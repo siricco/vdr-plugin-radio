@@ -59,23 +59,6 @@ extern bool InfoRequest;
 
 void radioStatusMsg(void);
 
-// RDS-Receiver for seperate Data-Pids
-class cRDSReceiver : public cReceiver {
-private:
-    int pid;
-    bool rt_start;
-    bool rt_bstuff;
-protected:
-#if VDRVERSNUM >= 20300
-    virtual void Receive(const uchar *Data, int Length);
-#else
-    virtual void Receive(uchar *Data, int Length);
-#endif
-public:
-    cRDSReceiver(int Pid);
-    virtual ~cRDSReceiver(void);
-};
-
 class cRadioAudio : public cAudio {
 private:
     bool enabled;
