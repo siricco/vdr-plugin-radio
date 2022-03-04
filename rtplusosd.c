@@ -47,6 +47,8 @@ void cRTplusOsd::Load(void) {
 
     cMutexLock MutexLock(&rtp_content.rtpMutex);
 
+    SetCols(3, 17);
+
     struct tm *ts = localtime_r(&rtp_content.start, &tm_store);
     snprintf(text, sizeof(text), "%s  %02d:%02d", InfoRequest ? tr("extra Info  since") : tr("RTplus Memory  since"), ts->tm_hour, ts->tm_min);
     Add(new cOsdItem(hk(text)));
@@ -57,7 +59,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_ITEM_MIN; i <= RTP_CLASS_ITEM_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", tr(rtp_class_name[i]), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -68,7 +70,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_PROG_MIN; i <= RTP_CLASS_PROG_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", tr(rtp_class_name[i]), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -79,7 +81,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_IACT_MIN; i <= RTP_CLASS_IACT_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", tr(rtp_class_name[i]), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -90,7 +92,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_INFO_MIN; i <= RTP_CLASS_INFO_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", tr(rtp_class_name[i]), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -173,17 +175,17 @@ void cRTplusOsd::rtp_fileprint(void) {
         fprintf(fd, "--- Programme ---\n");
         for (int i = RTP_CLASS_PROG_MIN; i <= RTP_CLASS_PROG_MAX; i++) {
             if (*rtp_content.rtp_class[i])
-                fprintf(fd, "%18s: %s\n", rtp_class_name[i], rtp_content.rtp_class[i]);
+                fprintf(fd, "%18s: %s\n", class2string(i), rtp_content.rtp_class[i]);
         }
         fprintf(fd, "--- Interactivity ---\n");
         for (int i = RTP_CLASS_IACT_MIN; i <= RTP_CLASS_IACT_MAX; i++) {
             if (*rtp_content.rtp_class[i])
-                fprintf(fd, "%18s: %s\n", rtp_class_name[i], rtp_content.rtp_class[i]);
+                fprintf(fd, "%18s: %s\n", class2string(i), rtp_content.rtp_class[i]);
         }
         fprintf(fd, "--- Info ---\n");
         for (int i = RTP_CLASS_INFO_MIN; i <= RTP_CLASS_INFO_MAX; i++) {
             if (*rtp_content.rtp_class[i])
-                fprintf(fd, "%18s: %s\n", rtp_class_name[i], rtp_content.rtp_class[i]);
+                fprintf(fd, "%18s: %s\n", class2string(i), rtp_content.rtp_class[i]);
         }
 
         if (rtp_content.items.index >= 0) {

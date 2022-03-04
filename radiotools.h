@@ -18,5 +18,6 @@ char *rtrim(char *text);
 bool ParseMpaFrameHeader(const uchar *data, uint32_t *mpaFrameInfo, int *frameSize, char **bitRate);
 char *audiobitrate(const unsigned char *data);
 const char* ptynr2string(int nr);
+const char *class2string(int classnr);
 
 #endif //__RADIO_TOOLS_H

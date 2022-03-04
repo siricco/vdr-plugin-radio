@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2022-02-26 19:57+0100\n"
+"POT-Creation-Date: 2022-03-04 21:26+0100\n"
 "PO-Revision-Date: 2008-06-15 22:39+0100\n"
 "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
 "Language-Team:  <vdr@linuxtv.org>\n"
@@ -162,24 +162,6 @@ msgstr "Radio testo"
 
 msgid "  [waiting ...]"
 msgstr "  [attendere ...]"
-
-msgid "Composer :"
-msgstr ""
-
-msgid "Conductor :"
-msgstr ""
-
-msgid "Band :"
-msgstr ""
-
-msgid "Album :"
-msgstr ""
-
-msgid "Artist :"
-msgstr "Artista :"
-
-msgid "Title :"
-msgstr "Titolo  :"
 
 msgid "Records"
 msgstr "Archivio"
@@ -400,7 +382,7 @@ msgstr ""
 msgid "Homepage"
 msgstr "Pagina princ."
 
-msgid "Subchnnel"
+msgid "Subchannel"
 msgstr ""
 
 msgid "Phone-Hotline"

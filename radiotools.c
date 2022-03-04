@@ -408,65 +408,68 @@ const char* ptynr2string(int nr) {
     }
 }
 
-const char *rtp_class_name[54] {
-    tr("dummy_Class"),   // 0
+const char *class2string(int classnr) {
+    switch (classnr) {
+    case 0: return tr("dummy_Class");
     // Item
-    tr("Title"),         // 1
-    tr("Album"),         // 2
-    tr("Track"),         // 3
-    tr("Artist"),        // 4
-    tr("Composition"),   // 5
-    tr("Movement"),      // 6
-    tr("Conductor"),     // 7
-    tr("Composer"),      // 8
-    tr("Band"),          // 9
-    tr("Comment"),       // 10
-    tr("Genre"),         // 11
+    case  1: return tr("Title");
+    case  2: return tr("Album");
+    case  3: return tr("Track");
+    case  4: return tr("Artist");
+    case  5: return tr("Composition");
+    case  6: return tr("Movement");
+    case  7: return tr("Conductor");
+    case  8: return tr("Composer");
+    case  9: return tr("Band");
+    case 10: return tr("Comment");
+    case 11: return tr("Genre");
     // Info
-    tr("News"),          // 12
-    tr("NewsLocal"),     // 13
-    tr("Stock"),         // 14
-    tr("Sport"),         // 15
-    tr("Lottery"),       // 16
-    tr("Horoskope"),     // 17
-    tr("DailyDiversion"),// 18
-    tr("Health"),        // 19
-    tr("Event"),         // 20
-    tr("Scene"),         // 21
-    tr("Cinema"),        // 22
-    tr("Television"),    // 23
-    tr("DateTime"),      // 24
-    tr("Weather"),       // 25
-    tr("Traffic"),       // 26
-    tr("Alarm"),         // 27
-    tr("Advertising"),   // 28
-    tr("Url"),           // 29
-    tr("Other"),         // 30
+    case 12: return tr("News");
+    case 13: return tr("NewsLocal");
+    case 14: return tr("Stock");
+    case 15: return tr("Sport");
+    case 16: return tr("Lottery");
+    case 17: return tr("Horoskope");
+    case 18: return tr("DailyDiversion");
+    case 19: return tr("Health");
+    case 20: return tr("Event");
+    case 21: return tr("Scene");
+    case 22: return tr("Cinema");
+    case 23: return tr("Television");
+    case 24: return tr("DateTime");
+    case 25: return tr("Weather");
+    case 26: return tr("Traffic");
+    case 27: return tr("Alarm");
+    case 28: return tr("Advertising");
+    case 29: return tr("Url");
+    case 30: return tr("Other");
     // Programme
-    tr("Stat.Short"),    // 31
-    tr("Station"),       // 32
-    tr("Now"),           // 33
-    tr("Next"),          // 34
-    tr("...Part"),       // 35
-    tr("Host"),          // 36
-    tr("Edit.Staff"),    // 37
-    tr("Frequency"),     // 38
-    tr("Homepage"),      // 39
-    tr("Subchnnel"),     // 40
+    case 31: return tr("Stat.Short");
+    case 32: return tr("Station");
+    case 33: return tr("Now");
+    case 34: return tr("Next");
+    case 35: return tr("...Part");
+    case 36: return tr("Host");
+    case 37: return tr("Edit.Staff");
+    case 38: return tr("Frequency");
+    case 39: return tr("Homepage");
+    case 40: return tr("Subchannel");
     // Interactivity
-    tr("Phone-Hotline"), // 41
-    tr("Phone-Studio"),  // 42
-    tr("Phone-Other"),   // 43
-    tr("SMS-Studio"),    // 44
-    tr("SMS-Other"),     // 45
-    tr("Email_Hotline"), // 46
-    tr("Email_Studio"),  // 47
-    tr("Email_Other"),   // 48
-    tr("MMS_Other"),     // 49
-    tr("Chat"),          // 50
-    tr("Chat-Centre"),   // 51
-    tr("Vote-Question"), // 52
-    tr("VoteCentre")     // 53
-};
+    case 41: return tr("Phone-Hotline");
+    case 42: return tr("Phone-Studio");
+    case 43: return tr("Phone-Other");
+    case 44: return tr("SMS-Studio");
+    case 45: return tr("SMS-Other");
+    case 46: return tr("Email_Hotline");
+    case 47: return tr("Email_Studio");
+    case 48: return tr("Email_Other");
+    case 49: return tr("MMS_Other");
+    case 50: return tr("Chat");
+    case 51: return tr("Chat-Centre");
+    case 52: return tr("Vote-Question");
+    case 53: return tr("VoteCentre");
+    default: return "?";
+    }
+}
 
 //--------------- End -----------------------------------------------------------------

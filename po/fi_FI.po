@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2022-02-26 19:57+0100\n"
+"POT-Creation-Date: 2022-03-04 21:26+0100\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -162,24 +162,6 @@ msgstr "Radioteksti"
 
 msgid "  [waiting ...]"
 msgstr "  [odota ...]"
-
-msgid "Composer :"
-msgstr ""
-
-msgid "Conductor :"
-msgstr ""
-
-msgid "Band :"
-msgstr ""
-
-msgid "Album :"
-msgstr ""
-
-msgid "Artist :"
-msgstr "Esittäjä :"
-
-msgid "Title :"
-msgstr "Kappale :"
 
 msgid "Records"
 msgstr "Rass-tallenteet"
@@ -400,7 +382,7 @@ msgstr ""
 msgid "Homepage"
 msgstr "Kotisivu"
 
-msgid "Subchnnel"
+msgid "Subchannel"
 msgstr ""
 
 msgid "Phone-Hotline"

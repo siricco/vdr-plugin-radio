@@ -146,7 +146,7 @@ enum rtp_class {
     prog_EditStaff,     // 37
     prog_Frequency,     // 38
     prog_Homepage,      // 39
-    prog_Subchnnel,     // 40
+    prog_Subchannel,    // 40
     // Interactivity
     phone_Hotline,      // 41
     phone_Studio,       // 42
@@ -166,8 +166,6 @@ enum rtp_class {
     // Descriptor 59-63
 };
 
-extern const char *rtp_class_name[54];
-
 #define RTP_CLASS_ITEM_MIN item_Title
 #define RTP_CLASS_ITEM_MAX item_Genre
 #define IS_ITEM_CLASS(c) ((c) >= RTP_CLASS_ITEM_MIN && (c) <= RTP_CLASS_ITEM_MAX)
@@ -176,7 +174,7 @@ extern const char *rtp_class_name[54];
 #define RTP_CLASS_INFO_MAX info_Other
 
 #define RTP_CLASS_PROG_MIN prog_StatShort
-#define RTP_CLASS_PROG_MAX prog_Subchnnel
+#define RTP_CLASS_PROG_MAX prog_Subchannel
 
 #define RTP_CLASS_IACT_MIN phone_Hotline
 #define RTP_CLASS_IACT_MAX iact_VoteCentre

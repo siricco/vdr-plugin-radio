@@ -258,12 +258,12 @@ void cRadioTextOsd::ShowText(void) {
                     int fwidth = 0;
                     int n = OSD_TAGROWS;
 
-                    if (RTP_Composer[0])  { sprintf(stext[n], "> %s", tr("Composer :"));  fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Composer; }
-                    if (RTP_Conductor[0]) { sprintf(stext[n], "> %s", tr("Conductor :")); fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Conductor; }
-                    if (RTP_Band[0])      { sprintf(stext[n], "> %s", tr("Band :"));      fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Band; }
-                    if (RTP_Album[0])     { sprintf(stext[n], "> %s", tr("Album :"));     fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Album; }
-                    sprintf(stext[n], "> %s", tr("Artist :")); fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Artist;
-                    sprintf(stext[n], "> %s", tr("Title :"));  fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Title;
+                    if (RTP_Composer[0])  { sprintf(stext[n], "> %s :", class2string(item_Composer));  fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Composer; }
+                    if (RTP_Conductor[0]) { sprintf(stext[n], "> %s :", class2string(item_Conductor)); fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Conductor; }
+                    if (RTP_Band[0])      { sprintf(stext[n], "> %s :", class2string(item_Band));      fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Band; }
+                    if (RTP_Album[0])     { sprintf(stext[n], "> %s :", class2string(item_Album));     fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Album; }
+                    sprintf(stext[n], "> %s :", class2string(item_Artist)); fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Artist;
+                    sprintf(stext[n], "> %s :", class2string(item_Title));  fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Title;
                     for (; n > 0; n--)    { sprintf(stext[n], ""); ptext[n] = stext[n]; }
                     fwidth += 15;
 
@@ -561,22 +561,22 @@ void cRadioTextOsd::rtp_print(void) {
     dsyslog("--- Item ---");
     for (int i = RTP_CLASS_ITEM_MIN; i <= RTP_CLASS_ITEM_MAX; i++) {
         if (*rtp_content.rtp_class[i])
-            dsyslog("20%s : %s", rtp_class_name[i], rtp_content.rtp_class[i]);
+            dsyslog("20%s : %s", class2string(i), rtp_content.rtp_class[i]);
     }
     dsyslog("--- Programme ---");
     for (int i = RTP_CLASS_PROG_MIN; i <= RTP_CLASS_PROG_MAX; i++) {
         if (*rtp_content.rtp_class[i])
-            dsyslog("20%s : %s", rtp_class_name[i], rtp_content.rtp_class[i]);
+            dsyslog("20%s : %s", class2string(i), rtp_content.rtp_class[i]);
     }
     dsyslog("--- Interactivity ---");
     for (int i = RTP_CLASS_IACT_MIN; i <= RTP_CLASS_IACT_MAX; i++) {
         if (*rtp_content.rtp_class[i])
-            dsyslog("20%s : %s", rtp_class_name[i], rtp_content.rtp_class[i]);
+            dsyslog("20%s : %s", class2string(i), rtp_content.rtp_class[i]);
     }
     dsyslog("--- Info ---");
     for (int i = RTP_CLASS_INFO_MIN; i <= RTP_CLASS_INFO_MAX; i++) {
         if (*rtp_content.rtp_class[i])
-            dsyslog("20%s : %s", rtp_class_name[i], rtp_content.rtp_class[i]);
+            dsyslog("20%s : %s", class2string(i), rtp_content.rtp_class[i]);
     }
     // no sorting
     for (int i = 0; i < MAX_RTPC; i++)

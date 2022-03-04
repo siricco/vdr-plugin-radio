@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VDR 1.5.7\n"
 "Report-Msgid-Bugs-To: <see README>\n"
-"POT-Creation-Date: 2022-02-26 19:57+0100\n"
+"POT-Creation-Date: 2022-03-04 21:26+0100\n"
 "PO-Revision-Date: 2007-08-13 19:21+0200\n"
 "Last-Translator: Füley István\n"
 "Language-Team: <vdr@linuxtv.org>\n"
@@ -161,24 +161,6 @@ msgstr "Rádiótext"
 
 msgid "  [waiting ...]"
 msgstr "[várakozás...]"
-
-msgid "Composer :"
-msgstr ""
-
-msgid "Conductor :"
-msgstr ""
-
-msgid "Band :"
-msgstr ""
-
-msgid "Album :"
-msgstr ""
-
-msgid "Artist :"
-msgstr "Előadó :"
-
-msgid "Title :"
-msgstr "Cím :"
 
 msgid "Records"
 msgstr "Archívum"
@@ -399,7 +381,7 @@ msgstr ""
 msgid "Homepage"
 msgstr "Honlap"
 
-msgid "Subchnnel"
+msgid "Subchannel"
 msgstr ""
 
 msgid "Phone-Hotline"
