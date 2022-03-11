@@ -96,6 +96,7 @@ cRadioTextOsd::cRadioTextOsd() :
     LastKey = kNone;
     fheight = 0;
     bheight = 0;
+    rtpRows = 0;
 }
 
 cRadioTextOsd::~cRadioTextOsd() {
@@ -132,11 +133,11 @@ cRadioTextOsd::~cRadioTextOsd() {
 void cRadioTextOsd::Show(void) {
     LastKey = kNone;
     RT_OsdTO = false;
+    rtpRows = -1;
+
     osdtimer.Set();
     ftext = cFont::GetFont(fontSml);
     fheight = ftext->Height() + 4;
-    bheight = (S_RtOsdTags >= 1) ? fheight * (S_RtOsdRows + 1 + OSD_TAGROWS) : fheight * (S_RtOsdRows + 1);
-    bheight += 20;
 
     RTp_Titel[0] = '\0';
     snprintf(RTp_Titel, sizeof(RTp_Titel), "%s - %s", InfoRequest ? tr("ext. Info") : tr("RTplus"), RT_Titel);
@@ -159,10 +160,33 @@ void cRadioTextOsd::RTOsdClose(void) {
     }
 }
 
+bool cRadioTextOsd::OsdResize(void) {
+    int r = 0;
+    if (S_RtOsdTags >= 1) {
+        r = 2;
+        if (RTP_Composer[0])  r++;
+        if (RTP_Conductor[0]) r++;
+        if (RTP_Band[0])      r++;
+        if (RTP_Album[0])     r++;
+        if (r < OSD_TAGROWS)  r++; // add spacer
+    }
+    if (r != rtpRows) {
+        dsyslog("%s: rtpRows %d -> %d", __func__, rtpRows, r);
+        rtpRows = r;
+        bheight = fheight * (S_RtOsdRows + 1 + rtpRows);
+        bheight += 20;
+        return true;
+    }
+    return false;
+}
+
 void cRadioTextOsd::ShowText(void) {
     char stext[OSD_TAGROWS + 1][100];
     char *ptext[OSD_TAGROWS + 1];
     int yoff = 17, ii = 1;
+
+    if (OsdResize())
+        RTOsdClose();
 
     if (!osd && !qosd && !Skins.IsOpen() && !cOsd::IsOpen()) {
         if (S_RtOsdPos == 1)
@@ -235,19 +259,19 @@ void cRadioTextOsd::ShowText(void) {
             // RT-Text roundloop
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
             if (S_RtOsdLoop == 1) { // latest bottom
-                for (int i = ind + 1; i < S_RtOsdRows; i++) {
-                    osd->DrawText(5, yoff + fheight * (ii++), RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                for (int i = ind + 1; i < S_RtOsdRows; i++, ii++) {
+                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
-                for (int i = 0; i <= ind; i++) {
-                    osd->DrawText(5, yoff + fheight * (ii++), RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                for (int i = 0; i <= ind; i++, ii++) {
+                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
             }
             else {          // latest top
-                for (int i = ind; i >= 0; i--) {
-                    osd->DrawText(5, yoff + fheight * (ii++), RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                for (int i = ind; i >= 0; i--, ii++) {
+                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
-                for (int i = S_RtOsdRows - 1; i > ind; i--) {
-                    osd->DrawText(5, yoff + fheight * (ii++), RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                for (int i = S_RtOsdRows - 1; i > ind; i--, ii++) {
+                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
             }
             // + RT-Plus or PS-Text = 3 rows
@@ -256,7 +280,7 @@ void cRadioTextOsd::ShowText(void) {
                     || RTP_Composer[0] || RTP_Album[0] || RTP_Conductor[0] || RTP_Band[0]) {
 
                     int fwidth = 0;
-                    int n = OSD_TAGROWS;
+                    int n = rtpRows;
 
                     if (RTP_Composer[0])  { sprintf(stext[n], "> %s :", class2string(item_Composer));  fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Composer; }
                     if (RTP_Conductor[0]) { sprintf(stext[n], "> %s :", class2string(item_Conductor)); fwidth = max(fwidth, ftext->Width(stext[n])); ptext[n--] = RTP_Conductor; }
@@ -273,11 +297,11 @@ void cRadioTextOsd::ShowText(void) {
                     if (!rtp_content.items.running)
                         owidth = ftext->Width(tilde) + 5;
 
-                    for (int j = 6, n = 1; n <= OSD_TAGROWS; j = 3, n++) {
-                        osd->DrawText(4, j + yoff + fheight * (ii), stext[n], fcolor, clrTransparent, ftext, fwidth - 5, ftext->Height());
+                    for (int j = 6, n = 1; n <= rtpRows; j = 3, n++, ii++) {
+                        osd->DrawText(4, j + yoff + fheight * ii, stext[n], fcolor, clrTransparent, ftext, fwidth - 5, ftext->Height());
                         if (owidth && stext[n][0])
-                            osd->DrawText(fwidth, j + yoff + fheight * (ii), tilde, fcolor, clrTransparent, ftext, owidth, ftext->Height());
-                        osd->DrawText(fwidth + owidth, j + yoff + fheight * (ii++), ptext[n], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                            osd->DrawText(fwidth, j + yoff + fheight * ii, tilde, fcolor, clrTransparent, ftext, owidth, ftext->Height());
+                        osd->DrawText(fwidth + owidth, j + yoff + fheight * ii, ptext[n], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                     }
                 }
                 else {

@@ -19,6 +19,7 @@ private:
     const cFont *ftext;
     int fheight;
     int bheight;
+    int rtpRows;
     eKeys LastKey;
     cTimeMs osdtimer;
     void rtp_print(void);
@@ -27,6 +28,7 @@ private:
     static cBitmap rds, arec, rass, radio;
     static cBitmap index, marker, page1, pages2, pages3, pages4, pageE;
     static cBitmap no0, no1, no2, no3, no4, no5, no6, no7, no8, no9, bok;
+    bool OsdResize(void);
 public:
     cRadioTextOsd();
     ~cRadioTextOsd();

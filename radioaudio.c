@@ -948,13 +948,9 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
                                 memset(item, 0, sizeof(struct rtp_item));
                             }
                             item->start = time(NULL);
-                            // RTP_Title = RTP_Artist = RTP_Album = RTP_Composer = RTP_Conductor = RTP_Band = NULL;
                             sprintf(RTP_Title, "---");
                             sprintf(RTP_Artist, "---");
-                            sprintf(RTP_Composer, "");
-                            sprintf(RTP_Album, "");
-                            sprintf(RTP_Conductor, "");
-                            sprintf(RTP_Band, "");
+                            RTP_Composer[0] = RTP_Album[0] = RTP_Conductor[0] = RTP_Band[0] = '\0';
                         }
                     }
                     if (RT_PlusShow && rtp_itime.Elapsed() > 1000)
@@ -1381,10 +1377,7 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid, bool re
             memset(RT_Text[i], 0x20, RT_MEL - 1);
         sprintf(RTP_Title, "---");
         sprintf(RTP_Artist, "---");
-        sprintf(RTP_Composer, "");
-        sprintf(RTP_Album, "");
-        sprintf(RTP_Conductor, "");
-        sprintf(RTP_Band, "");
+        RTP_Composer[0] = RTP_Album[0] = RTP_Conductor[0] = RTP_Band[0] = '\0';
 
         RTP_Starttime = time(NULL);
         RT_Charset = 0;
