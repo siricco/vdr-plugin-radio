@@ -171,7 +171,7 @@ bool cRadioTextOsd::OsdResize(void) {
         if (r < OSD_TAGROWS)  r++; // add spacer
     }
     if (r != rtpRows) {
-        dsyslog("%s: rtpRows %d -> %d", __func__, rtpRows, r);
+        //dsyslog("%s: rtpRows %d -> %d", __func__, rtpRows, r);
         rtpRows = r;
         bheight = fheight * (S_RtOsdRows + 1 + rtpRows);
         bheight += 20;
