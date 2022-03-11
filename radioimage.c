@@ -45,7 +45,7 @@ void cRadioImage::Action(void) {
 
     while (Running()) {
         cCondWait::SleepMs(333);
-        if ((IsRadioOrReplay == 1) && imagepath && !imageShown) { // only live $20090905
+        if (IsRadioOrReplay && imagepath && !imageShown) {
             imageShown = true;
             Show(imagepath);
         }
