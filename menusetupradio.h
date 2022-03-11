@@ -27,6 +27,7 @@ private:
     int newS_RtDispl;
     int newS_RtMsgItems;
     //int newS_RtpMemNo;
+    int newS_RtClearCache;
     int newS_RassText;
     int newS_ExtInfo;
     const char *T_StillPic[3];

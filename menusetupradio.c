@@ -66,6 +66,7 @@ cMenuSetupRadio::cMenuSetupRadio(void)
     newS_RtDispl = (S_RtDispl > 2 ? 2 : S_RtDispl);
     newS_RtMsgItems = S_RtMsgItems;
     //newS_RtpMemNo = S_RtpMemNo;
+    newS_RtClearCache = S_RtClearCache;
     newS_RassText = S_RassText;
     newS_ExtInfo = S_ExtInfo;
 
@@ -88,6 +89,7 @@ cMenuSetupRadio::cMenuSetupRadio(void)
     Add(new cMenuEditStraItem( tr("RDSText OSD-Display"),               &newS_RtDispl, 3, T_RtDisplay));
     Add(new cMenuEditStraItem( tr("RDSText StatusMsg (lcdproc & co)"),  &newS_RtMsgItems, 4, T_RtMsgItems));
     //Add(new cMenuEditIntItem(  tr("RDSplus Memorynumber (10-99)"),    &newS_RtpMemNo, 10, 99));
+    Add(new cMenuEditBoolItem( tr("Clear RDSText cache"),               &newS_RtClearCache));
     Add(new cMenuEditStraItem( tr("RDSText Rass-Function"),             &newS_RassText, 3, T_RassText));
     Add(new cMenuEditBoolItem( tr("External Info-Request"),             &newS_ExtInfo));
 }
@@ -111,6 +113,7 @@ void cMenuSetupRadio::Store(void)
     SetupStore("RDSText-Display",        S_RtDispl = newS_RtDispl);
     SetupStore("RDSText-MsgItems",       S_RtMsgItems = newS_RtMsgItems);
     //SetupStore("RDSplus-MemNumber",    S_RtpMemNo = newS_RtpMemNo);
+    SetupStore("RDSText-ClearCache",     S_RtClearCache = newS_RtClearCache);
     SetupStore("RDSText-Rass",          S_RassText = newS_RassText);
     SetupStore("ExtInfo-Req",           S_ExtInfo = newS_ExtInfo);
 }

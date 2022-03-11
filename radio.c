@@ -57,6 +57,7 @@ int S_RtFgCol = 1;
 int S_RtDispl = 1;
 int S_RtMsgItems = 0;
 //int S_RtpMemNo = 25;
+int S_RtClearCache = 1;
 int S_RassText = 1;
 int S_ExtInfo = 0;
 uint32_t rt_color[9];
@@ -321,6 +322,7 @@ bool cPluginRadio::SetupParse(const char *Name, const char *Value)
     else if (!strcasecmp(Name, "RDSText-Display"))        S_RtDispl = atoi(Value);
     else if (!strcasecmp(Name, "RDSText-MsgItems"))       S_RtMsgItems = atoi(Value);
     //else if (!strcasecmp(Name, "RDSplus-MemNumber"))    S_RtpMemNo = atoi(Value);
+    else if (!strcasecmp(Name, "RDSText-ClearCache"))     S_RtClearCache = atoi(Value);
     else if (!strcasecmp(Name, "RDSText-Rass"))           S_RassText = atoi(Value);
     else if (!strcasecmp(Name, "ExtInfo-Req"))            S_ExtInfo = atoi(Value);
     else

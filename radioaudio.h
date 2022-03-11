@@ -43,6 +43,7 @@ extern int S_RassText;
 extern int S_RockAnt;
 extern uint32_t rt_color[9];
 extern int S_Verbose;
+extern int S_RtClearCache;
 //Radiotext
 #define RT_MEL 65
 #define RT_ROWS 5
@@ -80,6 +81,7 @@ private:
     void AudioRecorderService(void);
     void RassDecode(uchar *Data, int Length);
     bool CrcOk(uchar *data);
+    void ResetRtpCache(void);
 protected:
     virtual void Play(const uchar *Data, int Length, uchar Id);
     virtual void PlayTs(const uchar *Data, int Length);

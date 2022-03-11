@@ -93,6 +93,7 @@ cRadioAudio::cRadioAudio() :
         cAudio(), enabled(false), first_packets(0), audiopid(0),
         rdsdevice(NULL), bitrate(NULL), rdsSeen(false), maxRdsChunkIndex(RDS_CHUNKSIZE - 1) {
     RadioAudio = this;
+    ResetRtpCache();
     dsyslog("radio: new cRadioAudio");
 }
 
@@ -1343,6 +1344,20 @@ void cRadioAudio::RassDecode(unsigned char *mtext, int len) {
     }
 }
 
+void cRadioAudio::ResetRtpCache(void) {
+    memset(&rtp_content, 0, sizeof(rtp_content));
+
+    rtp_content.radiotext.index = -1;
+    rtp_content.items.index = -1;
+    rtp_content.items.itemMask = I_MASK;
+    rtp_content.info_News.index = -1;       // 12
+    rtp_content.info_Stock.index = -1;      // 14
+    rtp_content.info_Sport.index = -1;      // 15
+    rtp_content.info_Lottery.index = -1;    // 16
+    rtp_content.info_Weather.index = -1;    // 25
+    rtp_content.info_Other.index = -1;      // 29
+}
+
 void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid, bool replay) {
     RT_Titel[0] = '\0';
     strncpy(RT_Titel, Titel, sizeof(RT_Titel));
@@ -1379,19 +1394,14 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid, bool re
         for (int i = 0; i < 12; i++)
             memset(RDS_PSText[i], 0x20, 8);
     }
-    // ...Memory
-    memset(&rtp_content, 0, sizeof(rtp_content));
-    rtp_content.start = time(NULL);
-
-    rtp_content.radiotext.index = -1;
-    rtp_content.items.index = -1;
-    rtp_content.items.itemMask = I_MASK;
-    rtp_content.info_News.index = -1;       // 12
-    rtp_content.info_Stock.index = -1;      // 14
-    rtp_content.info_Sport.index = -1;      // 15
-    rtp_content.info_Lottery.index = -1;    // 16
-    rtp_content.info_Weather.index = -1;    // 25
-    rtp_content.info_Other.index = -1;      // 29
+    if (S_RtClearCache)
+       ResetRtpCache();
+    else { // clear only RTplus class messages from last audiostream
+       for (int i = 0; i <= RTP_CLASS_MAX; i++)
+           rtp_content.rtp_class[i][0] = '\0';
+       }
+    if (rtp_content.radiotext.index < 0) // no radiotext seen before
+       rtp_content.start = time(NULL);
 
     // Rass init
     Rass_Show = Rass_Archiv = -1;
