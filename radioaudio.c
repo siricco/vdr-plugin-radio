@@ -877,7 +877,6 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
             }
             return;
         }
-        char rtp_temptext[RT_MEL];
         uint rtp_typ[2], rtp_start[2], rtp_len[2];
         // byte 7+8 = ApplicationID, always 0x4bd7
         // byte 9   = Applicationgroup Typecode / PTY ?
@@ -910,7 +909,6 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
         int plustxtLen = strlen(plustext);
 
         for (int i = 0; i < 2; i++) {
-            //if (rtp_start[i] + rtp_len[i] + 1 >= RT_MEL) {  // length-error
             if (rtp_start[i] + rtp_len[i] + 1 > plustxtLen) {  // length-error
                 if ((S_Verbose & 0x0f) >= 1)
                     dsyslog("RTp-Error (tag#%d = Typ/Start/Len): %d/%d/%d (Start+Length > 'RT-MEL' %d !)", i + 1, rtp_typ[i], rtp_start[i], rtp_len[i], plustxtLen);
@@ -931,7 +929,8 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
 
                 if (item && rt_bit_toggle == RTP_ItemToggle) { // check for item-change by content
                     char *iText = (rtp_typ[i] == item_Title) ? item->Title : (rtp_typ[i] == item_Artist) ? item->Artist : NULL;
-                    RTP_ItemToggle |= iText && *iText && strcmp(iText, temptext);
+                    if (iText && *iText && strcmp(iText, temptext))
+                        RTP_ItemToggle = !rt_bit_toggle; // new Title/Artist
                 }
 
                 if (rt_bit_toggle != RTP_ItemToggle) { // item-change or first item
