@@ -712,6 +712,9 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 case 0x3e:                  // PTYN
                 case 0x30:                  // TMC
                 case 0x02:                  // PS
+                // DAB dynamic labels
+                case 0xaa:                  // DAB_DL_MSG
+                case 0x48:                  // DAB_DL_CMD
                     mec = stv;
                     RdsLogo = true;
                     break;
@@ -754,7 +757,11 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
                 } else {
                     switch (mec) {
                     case 0x0a:
+                    case 0xaa: // DAB_DL_MSG
                         RadiotextDecode(mtext); // Radiotext
+                        break;
+                    case 0x48: // DAB_DL_CMD
+                        RadiotextDecode(mtext); // RT+
                         break;
                     case 0x46:
                         switch ((mtext[7] << 8) + mtext[8]) { // ODA-ID
@@ -813,18 +820,22 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
     static bool rtp_itoggle = false;
     static int rtp_idiffs = 0;
     static cTimeMs rtp_itime;
-    static char plustext[RT_MEL];
+    static char plustext[RT_MEL_DAB];
 
     // byte 1+2 = ADD (10bit SiteAdress + 6bit EncoderAdress)
     // byte 3   = SQC (Sequence Counter 0x00 = not used)
     int mfl = mtext[4]; // byte 4 = MFL (Message Field Length)
     // byte 5 = MEC (Message Element Code, 0x0a for RT, 0x46 for RTplus)
-    if (mtext[5] == 0x0a) {
+    int mec = mtext[5];
+    if (mec == 0x0a || mec == 0xaa) {
         // byte 6+7 = DSN+PSN (DataSetNumber+ProgramServiceNumber,
         //                     ignore here, always 0x00 ?)
         // byte 8   = MEL (MessageElementLength, max. 64+1 byte @ RT)
-        int mel = mtext[8];
-        if (mel == 0 || mel > mfl - 4) {
+        // -- DAB_DL --
+        // byte 6   = MEL (MessageElementLength, max. 128+1 byte @ RT)
+        int pos = (mec == 0x0a) ? 8 : 6;
+        int mel = mtext[pos];
+        if (!mel || mel > (mec == 0x0a ? RT_MEL : RT_MEL_DAB)) {
             if ((S_Verbose & 0x0f) >= 1) {
                 dsyslog("RT-Error: Length not correct (MFL= %d, MEL= %d)", mfl, mel);
             }
@@ -832,32 +843,32 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
         }
         // byte 9 = RT-Status bitcodet (0=AB-flagcontrol, 1-4=Transmission-Number, 5+6=Buffer-Config,
         //                  ignored, always 0x01 ?)
-        char temptext[RT_MEL];
-        memset(temptext, 0x20, RT_MEL);
-        temptext[RT_MEL - 1] = '\0';
+        pos++;
+        char temptext[RT_MEL_DAB];
+        memset(temptext, 0x0, RT_MEL_DAB);
 
         for (int i = 1, ii = 0; i < mel; i++, ii++) {
-            uchar ch = mtext[9 + i];
+            uchar ch = mtext[pos + i];
             // additional rds-character, see RBDS-Standard, Annex E
             temptext[ii] = (ch >= 0x80) ? rds_addchar[ch - 0x80] : ch;
         }
-        memcpy(plustext, temptext, RT_MEL);
+        strcpy(plustext, temptext);
         rds_entitychar(temptext);
+        rtrim(temptext);
         // check repeats
         bool repeat = false;
         for (int ind = 0; !repeat && ind < S_RtOsdRows; ind++) {
-            repeat = (memcmp(RT_Text[ind], temptext, RT_MEL - 1) == 0);
+            repeat = !strcmp(RT_Text[ind], temptext);
             if (repeat && (S_Verbose & 0x0f) >= 1) {
                 dsyslog("RText-Rep[%d]: '%s'", ind, RT_Text[ind]);
             }
         }
         if (!repeat) {
-            memcpy(RT_Text[RT_Index], temptext, RT_MEL);
+            strcpy(RT_Text[RT_Index], temptext);
             // +Memory
-            rtrim(temptext);
             if (++rtp_content.radiotext.index >= 2 * MAX_RTPC)
                 rtp_content.radiotext.index = 0;
-            memcpy(rtp_content.radiotext.Msg[rtp_content.radiotext.index], temptext, RT_MEL);
+            strcpy(rtp_content.radiotext.Msg[rtp_content.radiotext.index], temptext);
             if ((S_Verbose & 0x0f) >= 1) {
                 dsyslog("Radiotext[%d/%d]: '%s'", RT_Index, rtp_content.radiotext.index, RT_Text[RT_Index]);
             }
@@ -869,31 +880,53 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
         (RT_Info > 0) ? : RT_Info = 1;
         radioStatusMsg();
     }
-    else if (RTP_TToggle && mtext[5] == 0x46 && S_RtFunc >= 2) { // RTplus tags V2.1, only if RT
+    else if (RTP_TToggle && (mec == 0x46 || mec == 0x48) && S_RtFunc >= 2) { // RTplus tags V2.1, only if RT
         int mel = mtext[6];
-        if (mfl != 10 || mel != 8) { // byte 6 = MEL, only 8 byte for 2 tags
+        if (mec == 0x46 && (mfl != 10 || mel != 8)) { // byte 6 = MEL, only 8 byte for 2 tags
             if ((S_Verbose & 0x0f) >= 1) {
                 dsyslog("RTp-Error: Length not correct (MFL= %d, MEL= %d)", mfl, mel);
             }
             return;
         }
-        uint rtp_typ[2], rtp_start[2], rtp_len[2];
-        // byte 7+8 = ApplicationID, always 0x4bd7
-        // byte 9   = Applicationgroup Typecode / PTY ?
-        // bit 10#4 = Item Togglebit
-        // bit 10#3 = Item Runningbit
+        uint rtp_typ[MAX_RTP_TAGS], rtp_start[MAX_RTP_TAGS], rtp_len[MAX_RTP_TAGS];
 
-        // Tag1: bit 10#2..11#5 = Contenttype, 11#4..12#7 = Startmarker, 12#6..12#1 = Length(6bit)
-        rtp_typ[0]   = (0x38 & mtext[10] << 3) | mtext[11] >> 5;
-        rtp_start[0] = (0x3e & mtext[11] << 1) | mtext[12] >> 7;
-        rtp_len[0]   =  0x3f & mtext[12] >> 1;
-        // Tag2: bit 12#0..13#3 = Contenttype, 13#2..14#5 = Startmarker, 14#4..14#0 = Length(5bit)
-        rtp_typ[1]   = (0x20 & mtext[12] << 5) | mtext[13] >> 3;
-        rtp_start[1] = (0x38 & mtext[13] << 3) | mtext[14] >> 5;
-        rtp_len[1]   =  0x1f & mtext[14];
+        for (int i = 0; i < MAX_RTP_TAGS; i++) {
+            rtp_typ[i] = rtp_start[i] = rtp_len[i] = 0;
+        }
 
-        bool rt_bit_toggle  = mtext[10] & 0x10;
-        bool rt_bit_running = mtext[10] & 0x08;
+        bool rt_bit_toggle, rt_bit_running;
+        int num_tags = 0;
+
+        if (mec == 0x46) {
+            // byte 7+8 = ApplicationID, always 0x4bd7
+            // byte 9   = Applicationgroup Typecode / PTY ?
+            // bit 10#4 = Item Togglebit
+            // bit 10#3 = Item Runningbit
+            num_tags = 2;
+            rt_bit_toggle  = mtext[10] & 0x10;
+            rt_bit_running = mtext[10] & 0x08;
+
+            // Tag1: bit 10#2..11#5 = Contenttype, 11#4..12#7 = Startmarker, 12#6..12#1 = Length(6bit)
+            rtp_typ[0]   = (0x38 & mtext[10] << 3) | mtext[11] >> 5;
+            rtp_start[0] = (0x3e & mtext[11] << 1) | mtext[12] >> 7;
+            rtp_len[0]   =  0x3f & mtext[12] >> 1;
+            // Tag2: bit 12#0..13#3 = Contenttype, 13#2..14#5 = Startmarker, 14#4..14#0 = Length(5bit)
+            rtp_typ[1]   = (0x20 & mtext[12] << 5) | mtext[13] >> 3;
+            rtp_start[1] = (0x38 & mtext[13] << 3) | mtext[14] >> 5;
+            rtp_len[1]   =  0x1f & mtext[14];
+
+        }
+        else {
+            num_tags = (mtext[8] & 0x03) + 1;
+            rt_bit_toggle  = mtext[8] & 0x08;
+            rt_bit_running = mtext[8] & 0x04;
+
+            for (int i = 0, p = 9; i < num_tags; i++) {
+                rtp_typ[i]   = mtext[p++] & 0x7F;
+                rtp_start[i] = mtext[p++] & 0x7F;
+                rtp_len[i]   = mtext[p++] & 0x7F;
+            }
+        }
 
         if ((S_Verbose & 0x0f) >= 1) {
             dsyslog("RTplus (tag=Typ/Start/Len):  Toggle/Run = %d/%d, tag#1 = %d/%d/%d, tag#2 = %d/%d/%d",
@@ -908,8 +941,8 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
         // save item info
         int plustxtLen = strlen(plustext);
 
-        for (int i = 0; i < 2; i++) {
-            if (rtp_start[i] + rtp_len[i] + 1 > plustxtLen) {  // length-error
+        for (int i = 0; i < num_tags; i++) {
+            if (rtp_typ[i] && rtp_start[i] + rtp_len[i] + 1 > plustxtLen) {  // length-error
                 if ((S_Verbose & 0x0f) >= 1)
                     dsyslog("RTp-Error (tag#%d = Typ/Start/Len): %d/%d/%d (Start+Length > 'RT-MEL' %d !)", i + 1, rtp_typ[i], rtp_start[i], rtp_len[i], plustxtLen);
                 continue;
@@ -921,9 +954,10 @@ void cRadioAudio::RadiotextDecode(unsigned char *mtext) {
             }
             if (rtp_typ[i]) {
                 // tag string
-                char temptext[RT_MEL];
+                char temptext[RT_MEL_DAB];
                 memcpy(temptext, plustext + rtp_start[i], rtp_len[i] + 1);
                 temptext[rtp_len[i] + 1] = '\0';
+                temptext[RT_MEL - 1] = '\0'; // truncate at max. RTplus message length too
                 rds_entitychar(temptext);
                 rtrim(temptext);
 
@@ -1373,7 +1407,7 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid, bool re
         RT_Index = RT_PTY = 0;
         RTP_ItemToggle = 1;
         for (int i = 0; i < RT_ROWS; i++)
-            memset(RT_Text[i], 0x20, RT_MEL - 1);
+            memset(RT_Text[i], 0x0, RT_MEL_DAB);
         sprintf(RTP_Title, "---");
         sprintf(RTP_Artist, "---");
         RTP_Composer[0] = RTP_Album[0] = RTP_Conductor[0] = RTP_Band[0] = '\0';

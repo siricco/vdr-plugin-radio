@@ -27,7 +27,7 @@ cRTplusList::~cRTplusList() {
 }
 
 void cRTplusList::Load(void) {
-    char text[120+10+1];
+    char text[2*RT_MEL+10+1];
     struct tm *ts, tm_store;
     int ind, lfd = 0;
     char ctitle[80];

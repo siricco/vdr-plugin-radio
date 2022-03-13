@@ -45,9 +45,11 @@ extern uint32_t rt_color[9];
 extern int S_Verbose;
 extern int S_RtClearCache;
 //Radiotext
-#define RT_MEL 65
+#define RT_MEL     (64+1)
+#define RT_MEL_DAB (128+1)
 #define RT_ROWS 5
-extern char RT_Text[RT_ROWS][RT_MEL];
+#define MAX_RTP_TAGS 4
+extern char RT_Text[RT_ROWS][RT_MEL_DAB];
 extern char RTP_Artist[RT_MEL], RTP_Title[RT_MEL], RTP_Composer[RT_MEL];
 extern char RTP_Album[RT_MEL], RTP_Conductor[RT_MEL], RTP_Band[RT_MEL];
 extern int RT_Info, RT_Index, RT_PTY;
@@ -186,7 +188,7 @@ enum rtp_class {
 #define MAX_RTPC 50
 struct rt_msg_cache {
     int index;
-    char Msg[2*MAX_RTPC][RT_MEL];
+    char Msg[2*MAX_RTPC][RT_MEL_DAB];
 };
 
 #define I_MAP(c) (1 << (c))

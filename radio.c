@@ -64,7 +64,7 @@ uint32_t rt_color[9];
 int S_Verbose = 0;
 int S_Encrypted = 0;
 // Radiotext
-char RT_Text[5][RT_MEL];
+char RT_Text[5][RT_MEL_DAB];
 char RTP_Artist[RT_MEL], RTP_Title[RT_MEL], RTP_Composer[RT_MEL];
 char RTP_Album[RT_MEL], RTP_Conductor[RT_MEL], RTP_Band[RT_MEL];
 int RT_Info, RT_Index, RT_PTY;
