@@ -173,174 +173,25 @@ void cRadioAudio::PlayTs(const uchar *Data, int Length) {
 
 /* for old pes-recordings */
 void cRadioAudio::RadiotextCheckPES(const uchar *data, int len) {
-    const int mframel = 263; // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
-    static unsigned char mtext[mframel + 1];
-    static bool rt_start = false, rt_bstuff = false;
-    static int index;
-    static int mec = 0;
 
     int offset = 0;
+
     while (true) {
-
         int pesl = (offset + 5 < len) ? (data[offset + 4] << 8) + data[offset + 5] + 6 : -1;
-        if ((pesl <= 0) || ((offset + pesl) > len)) {
-            return;
-        }
-
         offset += pesl;
-        int rdsl = data[offset - 2];  // RDS DataFieldLength
+
+        if (pesl <= 0 || offset > len)
+            return;
+
         // RDS DataSync = 0xfd @ end
-        if ((data[offset - 1] == 0xfd) && (rdsl > 0)) {
-            // print RawData with RDS-Info
-            if ((S_Verbose & 0x0f) >= 3) {
-                printf("\n\nPES-Data(%d/%d): ", pesl, len);
-                for (int a = offset - pesl; a < offset; a++) {
-                    printf("%02x ", data[a]);
-                }
-                printf("(End)\n\n");
-            }
+        if (data[offset - 1] == 0xFD) {
+            int rdsLen = data[offset - 2];  // RDS DataFieldLength
+            const uchar *rdsData = data + offset - (rdsLen + 2);
 
-            for (int i = offset - 3, val; i > offset - 3 - rdsl; i--) { // <-- data reverse, from end to start
-                val = data[i];
+            if ((S_Verbose & 0x0f) >= 3)
+                hexdump(rdsData, rdsLen);
 
-                if (val == 0xfe) {  // Start
-                    index = -1;
-                    rt_start = true;
-                    rt_bstuff = false;
-                    if ((S_Verbose & 0x0f) >= 2) {
-                        printf("\nRDS-Start: ");
-                    }
-                }
-
-                if (rt_start) {
-                    if ((S_Verbose & 0x0f) >= 2) {
-                        printf("%02x ", val);
-                    }
-                    // byte-stuffing reverse: 0xfd00->0xfd, 0xfd01->0xfe, 0xfd02->0xff
-                    if (rt_bstuff) {
-                        switch (val) {
-                        case 0x00:
-                            mtext[index] = 0xfd;
-                            break;
-                        case 0x01:
-                            mtext[index] = 0xfe;
-                            break;
-                        case 0x02:
-                            mtext[index] = 0xff;
-                            break;
-                        default:
-                            mtext[++index] = val;   // should never be
-                        }
-                        rt_bstuff = false;
-                        if ((S_Verbose & 0x0f) >= 2) {
-                            printf("(Bytestuffing -> %02x) ", mtext[index]);
-                        }
-                    } else {
-                        mtext[++index] = val;
-                    }
-                    if (val == 0xfd && index > 0) {  // stuffing found
-                        rt_bstuff = true;
-                    }
-                    // early check for used MEC
-                    if (index == 5) {
-                        //mec = val;
-                        switch (val) {
-                        case 0x0a:              // RT
-                        case 0x46:              // ODA-Data
-                        case 0xda:              // Rass
-                        case 0x07:              // PTY
-                        case 0x3e:              // PTYN
-                        case 0x30:              // TMC
-                        case 0x02:
-                            mec = val;  // PS
-                            RdsLogo = true;
-                            break;
-                        default:
-                            rt_start = false;
-                            if ((S_Verbose & 0x0f) >= 2) {
-                                printf("[RDS-MEC '%02x' not used -> End]\n", val);
-                            }
-                        }
-                    }
-                    if (index >= mframel) {     // max. rdslength, garbage ?
-                        if ((S_Verbose & 0x0f) >= 1) {
-                            printf("RDS-Error(PES): too long, garbage ?\n");
-                        }
-                        rt_start = false;
-                    }
-                }
-
-                if (rt_start && val == 0xff) {  // End
-                    if ((S_Verbose & 0x0f) >= 2) {
-                        printf("(RDS-End)\n");
-                    }
-                    rt_start = false;
-                    if (index < 9) {        //  min. rdslength, garbage ?
-                        if ((S_Verbose & 0x0f) >= 1) {
-                            printf("RDS-Error(PES): too short -> garbage ?\n");
-                        }
-                    } else {
-                        // crc16-check
-                        if (!CrcOk(mtext)) {
-                            if ((S_Verbose & 0x0f) >= 1) {
-                                printf("radioaudio: RDS-Error(PES): wrong\n");
-                            }
-                        } else {
-                            switch (mec) {
-                            case 0x0a:
-                                RadiotextDecode(mtext);      // Radiotext
-                                break;
-                            case 0x46:
-                                switch ((mtext[7] << 8) + mtext[8]) {  // ODA-ID
-                                case 0x4bd7:
-                                    RadioAudio->RadiotextDecode(mtext); // RT+
-                                    break;
-                                case 0x0d45:
-                                case 0xcd46:
-                                    if ((S_Verbose & 0x20) > 0) {
-                                        unsigned char tmc[6];   // TMC Alert-C
-                                        int i;
-                                        for (i = 9; i <= (index - 3); i++)
-                                            tmc[i - 9] = mtext[i];
-                                        tmc_parser(tmc, i - 8);
-                                    }
-                                    break;
-                                default:
-                                    if ((S_Verbose & 0x0f) >= 2) {
-                                        printf("[RDS-ODA AID '%02x%02x' not used -> End]\n", mtext[7], mtext[8]);
-                                    }
-                                }
-                                break;
-                            case 0x07:
-                                RT_PTY = mtext[8];                        // PTY
-                                if ((S_Verbose & 0x0f) >= 1) {
-                                    printf("RDS-PTY set to '%s'\n", ptynr2string(RT_PTY));
-                                }
-                                break;
-                            case 0x3e:
-                                RDS_PsPtynDecode(true, mtext, index);    // PTYN
-                                break;
-                            case 0x02:
-                                RDS_PsPtynDecode(false, mtext, index);     // PS
-                                break;
-                            case 0xda:
-                                RassDecode(mtext, index);                // Rass
-                                break;
-                            case 0x30:
-                                if ((S_Verbose & 0x20) > 0) {     // TMC Alert-C
-                                    unsigned char tmc[6];
-                                    int i;
-                                    for (i = 7; i <= (index - 3); i++) {
-                                        tmc[i - 7] = mtext[i];
-                                    }
-                                    tmc_parser(tmc, i - 6);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
+            RadiotextParseRDS(rdsData, rdsLen);
         }
     }
 }
