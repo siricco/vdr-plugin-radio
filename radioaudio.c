@@ -478,7 +478,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
         streamType = 0;
         mpaFrameInfo = 0;
         lastApid = TsPid(data);
-        rt_start = RadiotextParseTS(NULL, 0); // reset RDS parser
+        rt_start = RadiotextParseRDS(NULL, 0); // reset RDS parser
         ccn = TsContinuityCounter(data);
         rdsScan = time(NULL);
         rdsSeen = false;
@@ -497,7 +497,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
     if (ccc != ccn) {
         dsyslog("CC-ERROR: want %d, got %d", ccn, ccc);
         // reset RDS parser and frame detection
-        rt_start = RadiotextParseTS(NULL, 0);
+        rt_start = RadiotextParseRDS(NULL, 0);
         pesfound = false;
         }
     ccn = (ccc + 1) & 0xF;
@@ -595,7 +595,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
                     }
                 }
             if (rdsLen > 0)
-                rt_start = RadiotextParseTS(rdsData, rdsLen);
+                rt_start = RadiotextParseRDS(rdsData, rdsLen);
             //---
 
             if (pPesLen > pFrameSize) { // more frames in PES - goto next frame header
@@ -630,7 +630,7 @@ void cRadioAudio::RadiotextCheckTS(const uchar *data, int len) {
         }
 }
 
-bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
+bool cRadioAudio::RadiotextParseRDS(const uchar *RdsData, int RdsLen) {
     #define MSG_SIZE 263 // max. 255(MSG)+4(ADD/SQC/MFL)+2(CRC)+2(Start/Stop) of RDS-data
     static unsigned char mtext[MSG_SIZE + 1];
     static int rt_start = 0, rt_bstuff = 0, rt_lastVal = 0xff;
@@ -676,13 +676,9 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             if (rt_bstuff == 1) {
                 switch (val) {
                 case 0x00:
-                    mtext[index] = 0xfd;
-                    break;
                 case 0x01:
-                    mtext[index] = 0xfe;
-                    break;
                 case 0x02:
-                    mtext[index] = 0xff;
+                    mtext[index] += val;
                     break;
                 default:
                     if ((S_Verbose & 0x0f) >= 1)
@@ -728,7 +724,7 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             else if (index == 4) // MFL
                 stop_index = stv + 7;
 
-            if (val == 0xff ? index != stop_index : index == stop_index ) { // wrong rdslength or rt_stop, garbage ?
+            if (val == 0xff ? index > 1 && index != stop_index : index == stop_index ) { // wrong rdslength or rt_stop, garbage ?
                 if ((S_Verbose & 0x0f) >= 1)
                     dsyslog("RDS-Error(TS): invalid RDS length: index %d, stop %d, val %02x, garbage ?", index, stop_index, val);
                 rt_start = 0;
@@ -742,10 +738,10 @@ bool cRadioAudio::RadiotextParseTS(const uchar *RdsData, int RdsLen) {
             }
             rt_start = 0;
             rdsSeen = true;
-            if ((S_Verbose & 0x0f) >= 1)
+            if ((S_Verbose & 0x0f) >= 1 && index >= 5)
                 { dsyslog("-- RDS [%02X] --", mtext[5]); hexdump(mtext, index+1); }
 
-            if (index < 9) {		//  min. rdslength, garbage ?
+            if (index > 1 && index < 9) {		//  min. rdslength, garbage ?
                 if ((S_Verbose & 0x0f) >= 1) {
                     dsyslog("RDS-Error(TS): too short: %d -> garbage ?", index);
                 }
@@ -1395,6 +1391,7 @@ void cRadioAudio::EnableRadioTextProcessing(const char *Titel, int apid, bool re
     ARec_Receive = ARec_Record = false;
 
     first_packets = 0;
+    RadiotextParseRDS(NULL, 0); // reset RDS parser
     enabled = true;
     free(bitrate);
     asprintf(&bitrate, "...");

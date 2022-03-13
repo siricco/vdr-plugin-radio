@@ -79,7 +79,6 @@ private:
     bool ParseMpaFrameInfo(const uchar *Data, uint32_t *mpaFrameInfo, int *frameSize);
     int GetLatmRdsDSE(const uchar *plBuffer, int plBufferCnt, bool rt_start);
     void RadiotextCheckTS(const uchar *Data, int Length);
-    bool RadiotextParseTS(const uchar *RdsData, int RdsLen);
     void AudioRecorderService(void);
     void RassDecode(uchar *Data, int Length);
     bool CrcOk(uchar *data);
@@ -101,6 +100,7 @@ public:
     bool rdsSeen;
     void EnableRadioTextProcessing(const char *Titel, int apid, bool replay = false);
     void DisableRadioTextProcessing();
+    bool RadiotextParseRDS(const uchar *RdsData, int RdsLen);
     void RadiotextDecode(uchar *Data);
     void RDS_PsPtynDecode(bool PTYN, uchar *Data, int Length);
 };
