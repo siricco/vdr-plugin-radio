@@ -15,7 +15,6 @@ class cRDSReceiver : public cReceiver {
 private:
     int pid;
     bool rt_start;
-    bool rt_bstuff;
 protected:
 #if VDRVERSNUM >= 20300
     virtual void Receive(const uchar *Data, int Length);
