@@ -41,24 +41,22 @@ void cRdsPidFilter::ResetPmt(void)
 
 void cRdsPidFilter::SetStatus(bool On)
 {
-  cMutexLock MutexLock(&mutex);
+  mutex.Lock();
   if (On) { // restart PAT or PMT Pid
      if (pid)
         timer.Set(PMT_SCAN_TIMEOUT);
      }
   DBGLOG("RdsPAT filter set status %d, patVersion %d, sid %d, pmtpid %d", On, patVersion, sid, pid);
   cFilter::SetStatus(On);
+  mutex.Unlock();
 }
 
 void cRdsPidFilter::Trigger(int Sid, int Pid)
 {
-  cMutexLock MutexLock(&mutex);
+  mutex.Lock();
   DBGLOG("RdsPAT filter trigger SID %d (%d) PID %d (%d)", Sid, sid, Pid, pid);
 
   SetStatus(false);
-  if (pid > 0)
-     Del(pid, SI::TableIdPMT);
-
   if (Sid < 0) {
      ResetPat();
      ResetPmt();
@@ -71,18 +69,21 @@ void cRdsPidFilter::Trigger(int Sid, int Pid)
      pid = Pid;
      SetStatus(true);
      }
+  mutex.Unlock();
 }
 
 void cRdsPidFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Length)
 {
-  cMutexLock MutexLock(&mutex);
-
+  if (!mutex.TryLock()) {
+     DBGLOG("RdsPAT: Process() *** RdsPidFilter busy ***");
+     return;
+     }
   DBGLOG("RdsPAT: Process(Sid %d) Pid %d Tid %d Len %d", sid, Pid, Tid, Length);
 
   if (Pid == 0x00 && Tid == SI::TableIdPAT) {
      SI::PAT pat(Data, false);
      if (!pat.CheckCRCAndParse())
-        return;
+        goto done;
 #if VDRVERSNUM >= 20502
      if (sectionSyncer.Check(pat.getVersionNumber(), pat.getSectionNumber()))
 #else
@@ -112,7 +113,7 @@ void cRdsPidFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Len
   else if (pid == Pid && Tid == SI::TableIdPMT) {
      SI::PMT pmt(Data, false);
      if (!pmt.CheckCRCAndParse())
-        return;
+        goto done;
 
      if (pmt.getServiceId() == sid) {
         // Scan the stream-specific loop:
@@ -138,4 +139,6 @@ void cRdsPidFilter::Process(u_short Pid, u_char Tid, const u_char *Data, int Len
      DBGLOG("RdsPMT timeout Pid %d", pid);
      Trigger(); // stop PAt+PMT Filter
      }
+done:
+  mutex.Unlock();
 }
