@@ -59,7 +59,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_ITEM_MIN; i <= RTP_CLASS_ITEM_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), Convert(rtp_content.rtp_class[i]));
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -70,7 +70,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_PROG_MIN; i <= RTP_CLASS_PROG_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), Convert(rtp_content.rtp_class[i]));
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -81,7 +81,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_IACT_MIN; i <= RTP_CLASS_IACT_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), Convert(rtp_content.rtp_class[i]));
             Add(new cOsdItem(hk(text)));
         }
     }
@@ -92,7 +92,7 @@ void cRTplusOsd::Load(void) {
     Add(new cOsdItem(hk(text)));
     for (int i = RTP_CLASS_INFO_MIN; i <= RTP_CLASS_INFO_MAX; i++) {
         if (*rtp_content.rtp_class[i]) {
-            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), rtp_content.rtp_class[i]);
+            snprintf(text, sizeof(text), "\t%s:\t%s", class2string(i), Convert(rtp_content.rtp_class[i]));
             Add(new cOsdItem(hk(text)));
         }
     }

@@ -260,18 +260,18 @@ void cRadioTextOsd::ShowText(void) {
             int ind = (RT_Index == 0) ? S_RtOsdRows - 1 : RT_Index - 1;
             if (S_RtOsdLoop == 1) { // latest bottom
                 for (int i = ind + 1; i < S_RtOsdRows; i++, ii++) {
-                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                    osd->DrawText(5, yoff + fheight * ii, Convert(RT_Text[i]), fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
                 for (int i = 0; i <= ind; i++, ii++) {
-                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                    osd->DrawText(5, yoff + fheight * ii, Convert(RT_Text[i]), fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
             }
             else {          // latest top
                 for (int i = ind; i >= 0; i--, ii++) {
-                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                    osd->DrawText(5, yoff + fheight * ii, Convert(RT_Text[i]), fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
                 for (int i = S_RtOsdRows - 1; i > ind; i--, ii++) {
-                    osd->DrawText(5, yoff + fheight * ii, RT_Text[i], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                    osd->DrawText(5, yoff + fheight * ii, Convert(RT_Text[i]), fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                 }
             }
             // + RT-Plus or PS-Text = 3 rows
@@ -301,21 +301,22 @@ void cRadioTextOsd::ShowText(void) {
                         osd->DrawText(4, j + yoff + fheight * ii, stext[n], fcolor, clrTransparent, ftext, fwidth - 5, ftext->Height());
                         if (owidth && stext[n][0])
                             osd->DrawText(fwidth, j + yoff + fheight * ii, tilde, fcolor, clrTransparent, ftext, owidth, ftext->Height());
-                        osd->DrawText(fwidth + owidth, j + yoff + fheight * ii, ptext[n], fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
+                        osd->DrawText(fwidth + owidth, j + yoff + fheight * ii, Convert(ptext[n]), fcolor, clrTransparent, ftext, Setup.OSDWidth - 4, ftext->Height());
                     }
                 }
                 else {
-                    char temp[100];
-                    temp[0] = '\0';
+                    char *temp;
+                    asprintf(&temp, "%s", "");
                     int ind = (RDS_PSIndex == 0) ? 11 : RDS_PSIndex - 1;
                     for (int i = ind + 1; i < 12; i++) {
-                        snprintf(temp, 100, "%s%s ", temp, RDS_PSText[i]);
+                        asprintf(&temp, "%s%s ", temp, Convert(RDS_PSText[i]));
                     }
                     for (int i = 0; i <= ind; i++) {
-                        snprintf(temp, 100, "%s%s ", temp, RDS_PSText[i]);
+                        asprintf(&temp, "%s%s ", temp, Convert(RDS_PSText[i]));
                     }
                     snprintf(stext[1], 6 * 9, "%s", temp);
                     snprintf(stext[2], 6 * 9, "%s", temp + (6 * 9));
+                    free(temp);
 
                     osd->DrawText(6, 6 + yoff + fheight * ii, "[", fcolor, clrTransparent, ftext, 12, ftext->Height());
                     osd->DrawText(Setup.OSDWidth - 12, 6 + yoff + fheight * ii, "]", fcolor, clrTransparent, ftext, Setup.OSDWidth - 6, ftext->Height());

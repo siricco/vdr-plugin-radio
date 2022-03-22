@@ -49,7 +49,7 @@ void cRTplusList::Load(void) {
                 if (i >= (2 * MAX_RTPC) || !*rtp_content.radiotext.Msg[i])
                     i = 0;
                 if (*rtp_content.radiotext.Msg[i]) {
-                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd, rtp_content.radiotext.Msg[i]);
+                    snprintf(text, sizeof(text), "%d.\t%s", ++lfd, Convert(rtp_content.radiotext.Msg[i]));
                     Add(new cOsdItem(hk(text)));
                 }
                 if (i == ind) break;
@@ -79,8 +79,8 @@ void cRTplusList::Load(void) {
 
                 if (*title || *artist) {
                     ts = localtime_r(&rtp_content.items.Item[i].start, &tm_store);
-                    snprintf(ctitle, sizeof(ctitle), "%s", *title ? title : "---");
-                    snprintf(text, sizeof(text), "%02d:%02d\t%s\t\t%s", ts->tm_hour, ts->tm_min, ctitle, *artist ? artist : "---");
+                    snprintf(ctitle, sizeof(ctitle), "%s", *title ? Convert(title) : "---");
+                    snprintf(text, sizeof(text), "%02d:%02d\t%s\t\t%s", ts->tm_hour, ts->tm_min, ctitle, *artist ? Convert(artist) : "---");
                     Add(new cOsdItem(hk(text)));
                 }
                 else if (i > ind)
@@ -129,7 +129,7 @@ void cRTplusList::Load(void) {
                     i = 0;
                 if (*cCache->Content[i]) {
                     ts = localtime_r(&cCache->start[i], &tm_store);
-                    snprintf(text, sizeof(text), "%02d:%02d\t\t%s", ts->tm_hour, ts->tm_min, cCache->Content[i]);
+                    snprintf(text, sizeof(text), "%02d:%02d\t\t%s", ts->tm_hour, ts->tm_min, Convert(cCache->Content[i]));
                     Add(new cOsdItem(hk(text)));
                 }
                 if (i == ind) break;
